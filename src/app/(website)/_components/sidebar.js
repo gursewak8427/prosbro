@@ -43,7 +43,7 @@ const Sidebar = () => {
           </Link>
         ))}
       </ul>
-      <div className="border-t p-2 mt-10  bg-white ">
+      <div className="border-t p-2 mt-10  bg-white float-bottom ">
         <div className="text-sm">
           <h2 className='text-md items-center hover:bg-gray-200 cursor-pointer p-4 rounded-lg'><HelpIcon /> Help</h2>
           <h2 className='text-md items-center hover:bg-gray-200 cursor-pointer p-4 rounded-lg'>< AccountCircleIcon className='text-indigo-500' /> Gurvinder Singh</h2>
