@@ -1,4 +1,4 @@
-import MainContent from "./myprojects/page";
+import MainContent from "./my-projects/page";
 
 export default async function Home() {
 
