@@ -30,21 +30,21 @@ export default function page() {
             name: "Rupundrapal Singh",
             currentStatus: "Clocked Out",
             phoneNumber: "555-8765",
-            jobTitle: "Software Engineer",
+            jobTitle: "-",
             smsReminder: true
         },
         {
             name: "Ajmer Dhillon",
             currentStatus: "Clocked in",
             phoneNumber: "555-4321",
-            jobTitle: "Project Manager",
+            jobTitle: "-",
             smsReminder: false
         },
         {
             name: "Gagandeep Singh",
             currentStatus: "Clocked Out",
             phoneNumber: "555-9876",
-            jobTitle: "Designer",
+            jobTitle: "-",
             smsReminder: true
         }
     ];
