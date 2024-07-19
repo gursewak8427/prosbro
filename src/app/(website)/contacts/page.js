@@ -69,7 +69,7 @@ function page() {
                 </ul>
             </div>
 
-            <div  className='bg-gray-300 rounded-lg inline-block p-1 text-gray-600'>
+            <div  className='bg-gray-300 text-sm rounded-lg inline-block p-1 text-gray-600'>
                 <p>7 Clients</p>
             </div>
 
