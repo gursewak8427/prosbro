@@ -9,7 +9,6 @@ function page() {
             <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                 <div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0">
                     <h1 className="text-2xl font-bold">Daily logs</h1>
-
                 </div>
                 <button
                     className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
