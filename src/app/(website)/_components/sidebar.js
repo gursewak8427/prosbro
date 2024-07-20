@@ -31,19 +31,21 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-60  h-full bg-slate-50">
-      <div className="text-xl font-semibold p-4">Billdr PRO</div>
-      <ul className='px-2 '>
-        {items.map((item, index) => (
-          <Link href={item.href} key={index}>
-            <li className="group flex items-center font-semibold p-4 hover:bg-gray-200 cursor-pointer rounded-lg ">
-              <span className="mr-4 group-hover:text-indigo-500 ">{item.icon}</span>
-              <span>{item.text}</span>
-            </li>
-          </Link>
-        ))}
-      </ul>
-      <div className="border-t p-2 mt-10  bg-white float-bottom ">
+    <div className="w-[270px] max-h-screen h-screen bg-slate-50 fixed top-0 left-0 overflow-scroll flex flex-col justify-between" style={{ overflow: 'auto' }}>
+      <div className="top">
+        <div className="text-xl font-semibold p-4">Billdr PRO</div>
+        <ul className='px-2 '>
+          {items.map((item, index) => (
+            <Link href={item.href} key={index}>
+              <li className="group flex items-center font-semibold p-4 hover:bg-gray-200 cursor-pointer rounded-lg ">
+                <span className="mr-4 group-hover:text-indigo-500 ">{item.icon}</span>
+                <span>{item.text}</span>
+              </li>
+            </Link>
+          ))}
+        </ul>
+      </div>
+      <div className="border-t p-2 mt-10  bg-white">
         <div className="text-sm">
           <h2 className='text-md items-center hover:bg-gray-200 cursor-pointer p-4 rounded-lg'><HelpIcon /> Help</h2>
           <h2 className='text-md items-center hover:bg-gray-200 cursor-pointer p-4 rounded-lg'>< AccountCircleIcon className='text-indigo-500' /> Gurvinder Singh</h2>
