@@ -2,7 +2,7 @@ import React from 'react'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ReportIcon from '@mui/icons-material/Report';
 
-function page1() {
+function Page() {
   return (
     <div className="p-6 flex-1 bg-gray-200 shadow-md">
       <div>
@@ -36,13 +36,7 @@ function page1() {
             <p className='text-xs' >No projects</p>
           </div>
         </div>
-
-
-
-
-
       </div>
-
       <div className='mt-5 mb-5'>
         <h2 className='text-xl font-semibold mt-2 mb-2'>Invoices <ReportIcon className='text-gray-400' /> </h2>
         <div className=" flex gap-4">
@@ -58,9 +52,7 @@ function page1() {
           </select>
           <input type="date" id="date" className="p-2 border rounded-lg " />
         </div>
-
       </div>
-
       <div className='bg-white rounded-lg p-4 '>
         <div className='flex justify-between p-4 gap-4'>
           <div className='w-1/4 p-2'>
@@ -81,19 +73,11 @@ function page1() {
           <div className='w-1/4 p-2'>
             <h2 className='w-2/3 text-center bg-green-200 p-1 rounded-md mt-2 mb-2 font-semibold text-green-600'>Not billed yet</h2>
             <p className='text-xs'><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
-
           </div>
         </div>
-
-
-
-
-
       </div>
-
-
     </div>
   )
 }
 
-export default page1
+export default Page

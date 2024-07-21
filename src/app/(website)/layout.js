@@ -10,7 +10,7 @@ export default function WebsiteLayout({ children }) {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="content pl-[270px]">
+      <div className="content pl-[270px] w-[100%]">
         {children}
       </div>
     </div>
