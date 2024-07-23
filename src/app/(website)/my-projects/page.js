@@ -7,6 +7,7 @@ import GridViewIcon from '@mui/icons-material/GridView';
 import MapIcon from '@mui/icons-material/Map';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import Link from 'next/link';
 
 const createData = (ref, address, tag, date, size, status) => {
   return { ref, address, tag, date, size, status };
@@ -163,18 +164,14 @@ const MainContent = () => {
                   <div className="mt-4 flex justify-between gap-2">
                     <button
                       type="button"
-                      className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline"
+                      className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline-none"
                       onClick={() => setIsModalOpen(false)}
                     >
                       Cancel
                     </button>
-                    <button
-                      type="button"
-                      className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-mediumfocus:outline"
-                      onClick={console.log("Confirm")}
-                    >
+                    <Link href={'/my-projects/new/project-creation'} className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-medium bg-gray-200 text-black hover:bg-indigo-600 hover:text-white focus:outline-none">
                       Confirm
-                    </button>
+                    </Link>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

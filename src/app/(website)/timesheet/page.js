@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import DoneIcon from '@mui/icons-material/Done';
+import Link from 'next/link';
 
 
 const MainContent = () => {
@@ -76,7 +77,7 @@ const MainContent = () => {
                 <div className='flex gap-4'>
                     <button className='text-indigo-600 flex font-semibold justify-center items-center'><span><PeopleAltIcon /> </span>Manage team</button>
                     <button
-                    onClick={() => setIsModalOpen(true)}
+                        onClick={() => setIsModalOpen(true)}
                         className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
                         + Add a team member
                     </button>
@@ -239,8 +240,8 @@ const MainContent = () => {
                                             className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
                                             onClick={() => console.log('Share magic link clicked')}
                                         >
-                                             <h4 className="text-xl font-semibold mb-2">Employee/Subcontractor</h4>
-                                             <p className="text-xs">Access to employee portal (Tasks, timesheet, daily logs)</p>
+                                            <h4 className="text-xl font-semibold mb-2">Employee/Subcontractor</h4>
+                                            <p className="text-xs">Access to employee portal (Tasks, timesheet, daily logs)</p>
                                         </div>
                                     </div>
                                     <div className="mt-4 flex justify-between gap-2">
@@ -251,13 +252,18 @@ const MainContent = () => {
                                         >
                                             Cancel
                                         </button>
-                                        <button
-                                            type="button"
-                                            className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-mediumfocus:outline"
-                                            onClick={console.log("Confirm")}
-                                        >
-                                            Confirm
-                                        </button>
+
+                                        <Link >
+                                            <button
+                                                type="button"
+                                                className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-mediumfocus:outline"
+                                                onClick={console.log("Confirm")}
+                                            >
+                                                Confirm
+                                            </button>
+
+                                        </Link>
+
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>
