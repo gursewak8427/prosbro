@@ -1,52 +1,56 @@
-import React from 'react'
+"use client";
+import React, { useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
 
 const people = [
     {
         name: "Gurvinder ",
         email: "aghreno+test@gmail.com",
         phoneNumber: "555-1234",
-        relatedprojects:"1"
-        
+        relatedprojects: "1"
+
     },
     {
         name: "Hitesg Bedi ",
         email: "aghreno+test@gmail.com",
         phoneNumber: "555-1234",
-        relatedprojects:"3"
+        relatedprojects: "3"
     },
     {
         name: "Muhhamad ",
         email: "aghreno+test@gmail.com",
         phoneNumber: "555-1234",
-        relatedprojects:"1"
+        relatedprojects: "1"
     },
     {
         name: "Rajupal",
         email: "aghreno+test@gmail.com",
         phoneNumber: "",
-        relatedprojects:"2"
+        relatedprojects: "2"
     },
     {
         name: "Rajupal",
         email: "aghreno+test@gmail.com",
         phoneNumber: "555-1234",
-        relatedprojects:""
+        relatedprojects: ""
     },
     {
         name: "Ramandeep",
         email: "aghreno+test@gmail.com",
         phoneNumber: "555-1234",
-        relatedprojects:"2"
+        relatedprojects: "2"
     },
     {
         name: "Ramandeep ",
         email: "aghreno+test@gmail.com",
         phoneNumber: "555-1234",
-        relatedprojects:"1"
+        relatedprojects: "1"
     }
 ];
 
-function page() {
+const MainContent = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <div className='p-6 flex-1 bg-gray-200 shadow-md'>
             <div className="flex flex-col md:flex-row justify-between items-center mb-4">
@@ -55,6 +59,7 @@ function page() {
 
                 </div>
                 <button
+                    onClick={() => setIsModalOpen(true)}
                     className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
                     + Add a contact
                 </button>
@@ -69,7 +74,7 @@ function page() {
                 </ul>
             </div>
 
-            <div  className='bg-gray-300 text-sm rounded-lg inline-block p-1 text-gray-600'>
+            <div className='bg-gray-300 text-sm rounded-lg inline-block p-1 text-gray-600'>
                 <p>7 Clients</p>
             </div>
 
@@ -81,7 +86,7 @@ function page() {
                             <th className="py-2 px-4 border-b text-gray-500">Email</th>
                             <th className="py-2 px-4 border-b text-gray-500">Phone </th>
                             <th className="py-2 px-4 border-b text-gray-500">Related Projects</th>
-        
+
                         </tr>
                     </thead>
                     <tbody>
@@ -96,17 +101,97 @@ function page() {
                                 <td className="py-2 px-4">{item.email}</td>
                                 <td className="py-2 px-4">{item.phoneNumber}</td>
                                 <td className="py-2 px-4">{item.relatedprojects}</td>
-                                
+
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
 
+            <Transition appear show={isModalOpen} as={Fragment}>
+                <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                    </Transition.Child>
 
+                    <div className="fixed inset-0 overflow-y-auto">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                    <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                                        Add a contact
+                                    </Dialog.Title>
+                                    <div className="mt-4 p-2 ">
+                                        <div
+                                            className=" p-4 text-center  cursor-pointer text-black rounded-lg border border-indigo-600  duration-200 w-full mb-4"
+                                            onClick={() => console.log('Add customer yourself clicked')}
+                                        >
+                                            <h4 className="text-xl font-semibold mb-2">Employee / Subcontractor</h4>
+                                            <p className="text-xs">Access to employee portal (Tasks, timesheet, daily logs)</p>
+                                        </div>
+                                        <div
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            onClick={() => console.log('Share magic link clicked')}
+                                        >
+                                            <h4 className="text-xl font-semibold mb-2">Administrator</h4>
+                                            <p className="text-xs">Full access</p>
+                                        </div>
+                                        <div
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            onClick={() => console.log('Share magic link clicked')}
+                                        >
+                                            <h4 className="text-xl font-semibold mb-2">Professional</h4>
+                                            <p className="text-xs">No access to the software (For architects, subcontractors)</p>
+                                        </div>
+                                        <div
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            onClick={() => console.log('Share magic link clicked')}
+                                        >
+                                            <h4 className="text-xl font-semibold mb-2">Client</h4>
+                                            <p className="text-xs">Access to client dashboard only (Quotes, invoices)</p>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 flex justify-between gap-2">
+                                        <button
+                                            type="button"
+                                            className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline"
+                                            onClick={() => setIsModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-mediumfocus:outline"
+                                            onClick={console.log("Confirm")}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition>
 
         </div>
     )
 }
 
-export default page
+export default MainContent;

@@ -1,8 +1,14 @@
-import React from 'react'
+"use client";
+import React, { useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import DoneIcon from '@mui/icons-material/Done';
-function page() {
+
+
+const MainContent = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const people = [
         {
@@ -70,6 +76,7 @@ function page() {
                 <div className='flex gap-4'>
                     <button className='text-indigo-600 flex font-semibold justify-center items-center'><span><PeopleAltIcon /> </span>Manage team</button>
                     <button
+                    onClick={() => setIsModalOpen(true)}
                         className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
                         + Add a team member
                     </button>
@@ -191,7 +198,73 @@ function page() {
 
 
 
+            <Transition appear show={isModalOpen} as={Fragment}>
+                <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                    >
+                        <div className="fixed inset-0 bg-black bg-opacity-25" />
+                    </Transition.Child>
 
+                    <div className="fixed inset-0 overflow-y-auto">
+                        <div className="flex min-h-full items-center justify-center p-4 text-center">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 scale-95"
+                                enterTo="opacity-100 scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 scale-100"
+                                leaveTo="opacity-0 scale-95"
+                            >
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                    <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                                        Add New Project
+                                    </Dialog.Title>
+                                    <div className="mt-4 p-2 ">
+                                        <div
+                                            className=" p-4 text-center  cursor-pointer text-black rounded-lg border border-indigo-600  duration-200 w-full mb-4"
+                                            onClick={() => console.log('Add customer yourself clicked')}
+                                        >
+                                            <h4 className="text-xl font-semibold mb-2">Administrator <span className='text-sm bg-gray-400 p-2 text-gray-700 rounded-xl'>1/6</span></h4>
+                                            <p className="text-sm">Full access</p>
+                                        </div>
+                                        <div
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            onClick={() => console.log('Share magic link clicked')}
+                                        >
+                                             <h4 className="text-xl font-semibold mb-2">Employee/Subcontractor</h4>
+                                             <p className="text-xs">Access to employee portal (Tasks, timesheet, daily logs)</p>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 flex justify-between gap-2">
+                                        <button
+                                            type="button"
+                                            className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline"
+                                            onClick={() => setIsModalOpen(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-mediumfocus:outline"
+                                            onClick={console.log("Confirm")}
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition>
 
 
 
@@ -200,4 +273,4 @@ function page() {
     )
 }
 
-export default page
+export default MainContent;
