@@ -1,5 +1,6 @@
 import React from 'react'
 import ReportIcon from '@mui/icons-material/Report';
+import Link from 'next/link';
 
 
 
@@ -20,7 +21,9 @@ function page() {
           <p className="flex items-center justify-center text-xs p-2 bg-gray-300 text-center rounded-lg">1 invoice</p>
         </div>
         <button className="text-white px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 duration-200">
-          + New invoice
+          <Link href={'/my-projects/new/client-flow-selection'}>
+            + New invoice
+          </Link>
         </button>
       </div>
 
