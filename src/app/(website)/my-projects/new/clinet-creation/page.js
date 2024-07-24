@@ -1,5 +1,6 @@
 import React from 'react'
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import Link from 'next/link';
 
 function page() {
     return (
@@ -44,10 +45,12 @@ function page() {
                         <input placeholder="English" className="w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600" />
                     </div>
                     <div className="mb-4 flex justify-between">
-
-                        <button className="bg-gray-300 h-10 w-full text-sm font-semibold text-gray-600 px-4 py-2 rounded-xl  hover:bg-gray-400 transition-colors" >
+                       <Link href={"/my-projects/8aa910fb-c6c2-42ed-9dfb-b98d6be4e004?tab=description"}>
+                       <button className="bg-gray-300 h-10 w-full text-sm font-semibold text-gray-600 px-4 py-2 rounded-xl  hover:bg-gray-400 transition-colors" >
                             Confirm and create project
                         </button>
+                       </Link>
+                        
 
 
                     </div>
