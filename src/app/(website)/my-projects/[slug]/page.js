@@ -9,6 +9,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const SlugDescription = dynamic(() => import('../../_components/my-projects/SlugDiscription'), { ssr: false })
 const SlugFiles = dynamic(() => import('../../_components/my-projects/SlugFiles'), { ssr: false })
+const SlugQuote = dynamic(() => import('../../_components/my-projects/SlugQuote'), { ssr: false })
 // Import other components similarly...
 
 function Page() {
@@ -21,7 +22,7 @@ function Page() {
       case 'Files':
         return <SlugFiles />;
       case 'Quotes':
-        return <SlugFiles />;
+        return <SlugQuote />;
       default:
         return <SlugDescription />;
     }
