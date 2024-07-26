@@ -1,6 +1,7 @@
 import React from 'react'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import Link from 'next/link';
 
 
 const createData = (ref, address, tag, date, size, status) => {
@@ -29,7 +30,7 @@ function ProjectsTable() {
           <tbody>
             {rows.map((row) => (
               <tr key={row.ref}>
-                <td className="py-2 px-4 border">{row.ref}</td>
+                <td className="py-2 px-4 border"><Link href={'/my-projects/dfsdfsdf'}>{row.ref}</Link></td>
                 <td className="py-2 px-4 border">{row.address}</td>
                 <td className="py-2 px-4 border">{row.tag}</td>
                 <td className="py-2 px-4 border">{row.date}</td>
