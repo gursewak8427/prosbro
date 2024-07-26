@@ -10,6 +10,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 const SlugDescription = dynamic(() => import('../../_components/my-projects/SlugDiscription'), { ssr: false })
 const SlugFiles = dynamic(() => import('../../_components/my-projects/SlugFiles'), { ssr: false })
 const SlugQuote = dynamic(() => import('../../_components/my-projects/SlugQuote'), { ssr: false })
+const SlugContract = dynamic(() => import('../../_components/my-projects/SlugContract'), { ssr: false })
+const SlugInvoices = dynamic(() => import('../../_components/my-projects/SlugInvoices'), { ssr: false })
 // Import other components similarly...
 
 function Page() {
@@ -23,6 +25,10 @@ function Page() {
         return <SlugFiles />;
       case 'Quotes':
         return <SlugQuote />;
+      case 'Contract':
+        return <SlugContract />;
+      case 'Invoices':
+        return <SlugInvoices />;
       default:
         return <SlugDescription />;
     }
@@ -56,7 +62,7 @@ function Page() {
             <li className={`text-gray-600 text-sm ${activeTab === 'Files' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Files')}>Files</li>
             <li className={`text-gray-600 text-sm ${activeTab === 'Quotes' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Quotes')}>Quotes</li>
             <li className={`text-gray-600 text-sm ${activeTab === 'Materials' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Materials')}>Materials</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Contact' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Contact')}>Contact</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'Contact' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Contract')}>Contract</li>
             <li className={`text-gray-600 text-sm ${activeTab === 'Invoices' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Invoices')}>Invoices</li>
             <li className={`text-gray-600 text-sm ${activeTab === 'ProfitAndLoss' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('ProfitAndLoss')}>Profit and loss</li>
             <li className={`text-gray-600 text-sm ${activeTab === 'Schedule' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Schedule')}>Schedule</li>
