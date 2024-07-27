@@ -11,7 +11,7 @@ const SlugDescription = dynamic(() => import('../../_components/my-projects/Slug
 const SlugFiles = dynamic(() => import('../../_components/my-projects/SlugFiles'), { ssr: false })
 const SlugQuote = dynamic(() => import('../../_components/my-projects/SlugQuote'), { ssr: false })
 const SlugContract = dynamic(() => import('../../_components/my-projects/SlugContract'), { ssr: false })
-const SlugInvoices = dynamic(() => import('../../_components/my-projects/SlugInvoices'), { ssr: false })
+const SlugProfitAndLoss = dynamic(() => import('../../_components/my-projects/SlugProfitAndLoss'), { ssr: false })
 // Import other components similarly...
 
 function Page() {
@@ -29,6 +29,8 @@ function Page() {
         return <SlugContract />;
       case 'Invoices':
         return <SlugInvoices />;
+      case 'ProfitAndLoss':
+        return <SlugProfitAndLoss />;
       default:
         return <SlugDescription />;
     }
