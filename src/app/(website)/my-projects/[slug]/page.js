@@ -15,6 +15,7 @@ const SlugInvoices = dynamic(() => import('../../_components/my-projects/SlugInv
 const SlugProfitAndLoss = dynamic(() => import('../../_components/my-projects/SlugProfitAndLoss'), { ssr: false })
 const SlugSchedule = dynamic(() => import('../../_components/my-projects/SlugSchedule'), { ssr: false })
 const SlugTasks = dynamic(() => import('../../_components/my-projects/SlugTasks'), { ssr: false })
+const SlugTimeSheet = dynamic(() => import('../../_components/my-projects/SlugTimeSheet'), { ssr: false })
 // Import other components similarly...
 
 function Page() {
@@ -38,6 +39,8 @@ function Page() {
         return <SlugSchedule />;
       case 'Task':
         return <SlugTasks />;
+      case 'Timesheet':
+        return <SlugTimeSheet />;
       default:
         return <SlugDescription />;
     }
@@ -76,6 +79,7 @@ function Page() {
             <li className={`text-gray-600 text-sm ${activeTab === 'ProfitAndLoss' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('ProfitAndLoss')}>Profit and loss</li>
             <li className={`text-gray-600 text-sm ${activeTab === 'Schedule' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Schedule')}>Schedule</li>
             <li className={`text-gray-600 text-sm ${activeTab === 'Task' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Task')}>Tasks</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'Timesheet' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Timesheet')}>Timesheet</li>
           </ul>
         </div>
 
