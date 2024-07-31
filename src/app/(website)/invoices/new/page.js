@@ -28,7 +28,7 @@ function page() {
                     </div>
                    
                     <div className="mb-4 flex justify-between ">
-                        <Link className='w-full flex items-center justify-center text-white  text-sm font-semibold bg-indigo-600 px-4 py-2 rounded-xl h-14 hover:bg-gray-400 transition-colors' href={''}>
+                        <Link className='w-full flex items-center justify-center text-white  text-sm font-semibold bg-indigo-600 px-4 py-2 rounded-xl h-14 hover:bg-gray-400 transition-colors' href='/invoices/84359ty84cb3/edit'>
                             <button className="" >
                                 Continue and enter client details
                             </button>
