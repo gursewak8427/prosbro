@@ -3,12 +3,14 @@ import { formoneAction } from '@/app/redux/Project/NewProjectSlice';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import MapComponent from './MapComponent';
 
 const Page = () => {
-  const [form, setForm] = useState({ name: '', address: '' });
+  const [form, setForm] = useState({ name: '', address: '', url: '' });
   const [errors, setErrors] = useState({ name: '', address: '' });
+  const [places, setPlaces] = useState([]);
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -45,6 +47,14 @@ const Page = () => {
     }
   };
 
+  useEffect(() => {
+    if (places && places.length > 0) {
+      // console.log(places[0]);
+      // // console.log(places[0]?.geometry.viewport.Gh.hi);
+      // // console.log(places[0]?.geometry.viewport.Yh.hi);
+      setForm({ ...form, ['address']: places[0]?.formatted_address, ['url']: places[0]?.url,['lat']:places[0]?.geometry.viewport.Yh.hi,['lng']:places[0]?.geometry.viewport.Gh.hi });
+    }
+  }, [places])
   return (
     <div className="w-full bg-gray-200 min-h-screen">
       <div className="max-w-screen mx-auto p-6 bg-white shadow-md rounded-lg w-full h-screen flex justify-between">
@@ -83,13 +93,7 @@ const Page = () => {
               <label className="block text-gray-700 mb-2 font-semibold">
                 Project address
               </label>
-              <input
-                name="address"
-                placeholder="Enter your address"
-                className={`w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.address ? 'border-red-500' : 'focus:ring-indigo-600'}`}
-                value={form.address}
-                onChange={handleChange}
-              />
+              <MapComponent errors={errors} setPlaces={setPlaces} />
               {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
             </div>
             <div className="mb-4 flex justify-between">

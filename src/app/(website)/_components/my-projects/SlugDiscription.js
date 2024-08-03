@@ -7,8 +7,9 @@ import PersonIcon from '@mui/icons-material/Person';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CircleIcon from '@mui/icons-material/Circle';
+import MapIframe from './MapIframe';
 
-function SlugDiscription({ client }) {
+function SlugDiscription({ client,project }) {
     return (
         <>
             <div className='mt-5 mb-5 bg-white p-4 rounded-lg'>
@@ -60,13 +61,7 @@ function SlugDiscription({ client }) {
 
                     <div className="rounded-lg max-w-full list-none transition-none overflow-hidden w-[500px] h-[400px]">
                         <div id="my-map-display" className="h-full w-full max-w-full">
-                            <iframe
-                                className="h-full w-full border-0"
-                                frameBorder="0"
-                                src="https://www.google.com/maps/embed/v1/place?q=Toronto&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"
-                                allowFullScreen
-                                title="Google Map"
-                            ></iframe>
+                            <MapIframe lat={project?.lat} lng={project?.lng}/>
                         </div>
                     </div>
                 </div>

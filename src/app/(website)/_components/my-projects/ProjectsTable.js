@@ -7,8 +7,8 @@ import Link from 'next/link';
 
 
 function ProjectsTable({ projectlist }) {
-  const createData = (ref, address, tag, date, size, status,slug) => {
-    return { ref, address, tag, date, size, status,slug };
+  const createData = (ref, address, tag, date, size, status, slug,name) => {
+    return { ref, address, tag, date, size, status, slug,name };
   };
   const rows = [];
   if (projectlist.length > 0) {
@@ -20,7 +20,8 @@ function ProjectsTable({ projectlist }) {
         item.createdAt,
         '$0',
         item.status.toLowerCase(),
-        item.slug
+        item.slug,
+        item.name
       )
       rows.push(tempdata);
     });
@@ -40,10 +41,10 @@ function ProjectsTable({ projectlist }) {
             </tr>
           </thead>
           <tbody>
-            {rows.map((row,index) => (
+            {rows.map((row, index) => (
               <tr key={index}>
                 <td className="py-2 px-4 border"><Link href={`/my-projects/${row.slug}?tab=description`}>{row.ref}</Link></td>
-                <td className="py-2 px-4 border">{row.address}</td>
+                <td className="py-2 px-4 border">{row.name} {row.address}</td>
                 <td className="py-2 px-4 border">{row.tag}</td>
                 <td className="py-2 px-4 border">{row.date}</td>
                 <td className="py-2 px-4 border">{row.size}</td>

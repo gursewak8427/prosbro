@@ -37,7 +37,7 @@ function Page() {
   const renderComponent = () => {
     switch (activeTab) {
       case 'description':
-        return <SlugDescription client={project.client} />;
+        return <SlugDescription client={project.client} project={project} />;
       case 'files':
         return <SlugFiles />;
       case 'materials':
@@ -90,7 +90,7 @@ function Page() {
             <button className='text-indigo-600'><span><AddIcon /></span> Add a tag</button>
           </div>
           <div className='flex gap-4 items-center text-indigo-600'>
-            <p><span><LocationOnIcon /> </span> {project.address}</p>
+            <p><span><LocationOnIcon /> </span><Link href={project.url ?? '/'}>{project.address}</Link></p>
             <p><span><PersonIcon /></span> {project.client?.name}</p>
           </div>
         </div>
