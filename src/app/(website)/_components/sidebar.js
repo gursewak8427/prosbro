@@ -18,7 +18,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const Sidebar = () => {
   const items = [
-    { text: 'My projects', icon: <GridViewIcon className="h-5 w-5" />, href: '/my-projects' },
+    { text: 'My projects', icon: <GridViewIcon className="h-5 w-5" />, href: '/my-projects?search=&tab=all&view=list' },
     { text: 'Overview', icon: <SignalCellularAltIcon className="h-5 w-5" />, href: '/overview' },
     { text: 'Invoices', icon: <RequestQuoteIcon className="h-5 w-5" />, href: '/invoices' },
     { text: 'Templates & costs', icon: <BentoIcon className="h-5 w-5" />, href: '/templates-costs' },

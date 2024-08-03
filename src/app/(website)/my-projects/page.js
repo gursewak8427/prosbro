@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic'
-
 import MenuIcon from '@mui/icons-material/Menu';
 import GridViewIcon from '@mui/icons-material/GridView';
 import MapIcon from '@mui/icons-material/Map';
+import { useDispatch, useSelector } from 'react-redux';
+import { Fetchprojects, TotalProjects } from '@/app/redux/Project/ProjectSlice';
+import { useSearchParams } from 'next/navigation';
 
 const NewProject = dynamic(() => import('../_components/my-projects/NewProject'), { ssr: false })
 const ProjectsTable = dynamic(() => import('../_components/my-projects/ProjectsTable'), { ssr: false })
@@ -13,13 +15,66 @@ const ProjectsTable = dynamic(() => import('../_components/my-projects/ProjectsT
 
 const MainContent = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selected, setSelected] = useState('')
+  const dispatch = useDispatch();
+  const projectlist = useSelector(data => data.projectData.projectlist)
+  const totalprojects = useSelector(data => data.projectData.totalprojects)
+  const searchParams = useSearchParams()
+  const search = searchParams.get('tab')
+  const updateUrl = (tab) => {
+    const newUrl = `${window.location.pathname}?search=&tab=${tab}&view=list`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  };
+  const renderComponent = () => {
+    switch (selected) {
+      case 'all':
+        updateUrl(selected)
+        dispatch(Fetchprojects(selected))
+        return;
+      case 'tobid':
+        updateUrl(selected)
+        dispatch(Fetchprojects(selected))
+        return;
+      case 'quotesent':
+        updateUrl(selected)
+        dispatch(Fetchprojects(selected))
+        return;
+      case 'inconstruction':
+        updateUrl(selected)
+        dispatch(Fetchprojects(selected))
+        return;
+      case 'complete':
+        updateUrl(selected)
+        dispatch(Fetchprojects(selected))
+        return;
+      case 'archived':
+        updateUrl(selected)
+        dispatch(Fetchprojects(selected))
+        return;
+      default:
+        updateUrl(selected)
+        dispatch(Fetchprojects('all'))
+        return;
+    }
+  };
+
+  useEffect(() => {
+    setSelected(search)
+    dispatch(TotalProjects())
+  }, [])
+
+  useEffect(() => {
+    if (selected) {
+      renderComponent();
+    }
+  }, [selected]);
 
   return (
     <div className="p-6 flex-1 bg-gray-200 shadow-md">
       <div className="flex flex-col md:flex-row justify-between items-center mb-4">
         <div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0">
           <h1 className="text-2xl font-bold">My Projects</h1>
-          <p className="flex items-center justify-center text-xs p-2 bg-gray-300 text-center rounded-lg">Project-1</p>
+          <p className="flex items-center justify-center text-xs p-2 bg-gray-300 text-center rounded-lg">{totalprojects} Projects</p>
         </div>
         <button
           className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200"
@@ -32,12 +87,12 @@ const MainContent = () => {
       <div className="flex flex-col md:flex-row justify-between items-center mt-4 mb-4">
         <div className="p-2 border-b border-gray-400 w-full md:w-auto">
           <ul className="flex flex-wrap gap-4 text-gray-800 text-sm font-medium">
-            <li className="hover:text-indigo-500 cursor-pointer transition-colors duration-200 underline-indigo">All projects (0)</li>
-            <li className="hover:text-indigo-500 cursor-pointer transition-colors duration-200 underline-grey">To bid</li>
-            <li className="hover:text-indigo-500 cursor-pointer transition-colors duration-200 underline-grey">Quote sent</li>
-            <li className="hover:text-indigo-500 cursor-pointer transition-colors duration-200 underline-grey">In Construction</li>
-            <li className="hover:text-indigo-500 cursor-pointer transition-colors duration-200 underline-grey">Completed</li>
-            <li className="hover:text-indigo-500 cursor-pointer transition-colors duration-200 underline-grey">Archived</li>
+            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'all' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('all') }}>All projects {selected == 'all' ? '('+projectlist.length+')' : ''}</li>
+            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'tobid' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('tobid') }}>To bid {selected == 'tobid' ? '('+projectlist.length+')' : ''}</li>
+            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'quotesent' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('quotesent') }}>Quote sent {selected == 'quotesent' ? '('+projectlist.length+')' : ''}</li>
+            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'inconstruction' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('inconstruction') }}>In Construction {selected == 'inconstruction' ? '('+projectlist.length+')' : ''}</li>
+            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'complete' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('complete') }}>Completed {selected == 'complete' ? '('+projectlist.length+')' : ''}</li>
+            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'archived' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('archived') }}>Archived {selected == 'archived' ? '('+projectlist.length+')' : ''}</li>
           </ul>
         </div>
 
@@ -69,13 +124,13 @@ const MainContent = () => {
           <option value="address">Address</option>
         </select>
       </div>
-
-      <ProjectsTable />
-      {/* modal new project component */}
+      {
+        projectlist.length > 0 ? <ProjectsTable projectlist={projectlist} /> :
+          <div className='p-4'>
+            <img src='https://app.billdr.co/_next/image?url=%2Fassets%2Fimages%2Fempty-project-img.png&w=1920&q=75'></img>
+          </div>
+      }
       <NewProject isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      {/* <div className='p-4'>
-        <img src='https://app.billdr.co/_next/image?url=%2Fassets%2Fimages%2Fempty-project-img.png&w=1920&q=75'></img>
-      </div> */}
     </div>
   );
 };

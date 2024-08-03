@@ -1,9 +1,5 @@
-import MainContent from "./my-projects/page";
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
-
-
-  return (
-    <><MainContent/></>
-  );
+  redirect('/my-projects?search=&tab=all&view=list');
 }

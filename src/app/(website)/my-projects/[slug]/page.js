@@ -1,11 +1,14 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import EditIcon from '@mui/icons-material/Edit';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import Link from 'next/link';
+import axiosInstance from '@/app/redux/AxiosInstance';
 
 const SlugDescription = dynamic(() => import('../../_components/my-projects/SlugDiscription'), { ssr: false })
 const SlugFiles = dynamic(() => import('../../_components/my-projects/SlugFiles'), { ssr: false })
@@ -21,29 +24,37 @@ const SlugMaterials = dynamic(() => import('../../_components/my-projects/SlugMa
 // Import other components similarly...
 
 function Page() {
-  const [activeTab, setActiveTab] = useState('Description');
-
+  const [activeTab, setActiveTab] = useState('');
+  const [project, setProject] = useState({})
+  const router = useRouter();
+  const searchParams = useSearchParams()
+  const search = searchParams.get('tab')
+  const pathname = usePathname();
+  const updateUrl = (tab) => {
+    const newUrl = `${window.location.pathname}?tab=${tab}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  };
   const renderComponent = () => {
     switch (activeTab) {
-      case 'Description':
-        return <SlugDescription />;
-      case 'Files':
+      case 'description':
+        return <SlugDescription client={project.client} />;
+      case 'files':
         return <SlugFiles />;
-      case 'Materials':
+      case 'materials':
         return <SlugMaterials />;
-      case 'Quotes':
+      case 'quotes':
         return <SlugQuote />;
-      case 'Contract':
+      case 'contract':
         return <SlugContract />;
-      case 'Invoices':
+      case 'invoices':
         return <SlugInvoices />;
-      case 'ProfitAndLoss':
+      case 'profitandloss':
         return <SlugProfitAndLoss />;
-      case 'Schedule':
+      case 'schedule':
         return <SlugSchedule />;
-      case 'Task':
+      case 'task':
         return <SlugTasks />;
-      case 'Timesheet':
+      case 'timesheet':
         return <SlugTimeSheet />;
       case 'logs':
         return <SlugLogs />;
@@ -51,20 +62,36 @@ function Page() {
         return <SlugDescription />;
     }
   };
+  useEffect(() => {
+    setActiveTab(search)
+  }, [search])
 
+  useEffect(() => {
+    const segments = pathname.split('/');
+    const lastSegment = segments[segments.length - 1];
+    const getclients = async (lastSegment) => {
+      try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchproject/${lastSegment}`)
+        setProject(response.data)
+      } catch (error) {
+
+      }
+    }
+    getclients(lastSegment);
+  }, [pathname])
   return (
     <div className="w-full bg-gray-200 min-h-screen">
       <div className='flex justify-between p-4 bg-white'>
         <div className='p-4'>
-          <h1 className='text-gray-500'>P24_0017</h1>
+          <h1 className='text-gray-500'>{project.reference}</h1>
           <div className='flex gap-4 items-center mt-5 mb-5'>
-            <h1 className='text-3xl font-bold'>Project-Home <span className='text-indigo-600'><EditIcon /></span></h1>
-            <p className='px-3 py-1 bg-orange-200 font-semibold text-orange-700 rounded-lg'>To bid</p>
+            <h1 className='text-3xl font-bold'>{project.name} <span className='text-indigo-600'><EditIcon /></span></h1>
+            <p className='px-3 py-1 bg-orange-200 font-semibold text-orange-700 rounded-lg'>{project.status?.toLowerCase()}</p>
             <button className='text-indigo-600'><span><AddIcon /></span> Add a tag</button>
           </div>
           <div className='flex gap-4 items-center text-indigo-600'>
-            <p><span><LocationOnIcon /> </span> Toronto, ON, Canada</p>
-            <p><span><PersonIcon /></span> Gurjeet Singh</p>
+            <p><span><LocationOnIcon /> </span> {project.address}</p>
+            <p><span><PersonIcon /></span> {project.client?.name}</p>
           </div>
         </div>
         <div className='flex items-center gap-2'>
@@ -72,28 +99,24 @@ function Page() {
           <h1><span><MoreVertIcon /></span></h1>
         </div>
       </div>
-
       <div className='p-4 mt-3 mb-5'>
         <div >
           <ul className='flex gap-6 border border-b-gray-400 '>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Description' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Description')}>Description</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Files' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Files')}>Files</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Quotes' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Quotes')}>Quotes</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Materials' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Materials')}>Materials</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Contact' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Contract')}>Contract</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Invoices' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Invoices')}>Invoices</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'ProfitAndLoss' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('ProfitAndLoss')}>Profit and loss</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Schedule' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Schedule')}>Schedule</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Task' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Task')}>Tasks</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'Timesheet' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('Timesheet')}>Timesheet</li>
-            <li className={`text-gray-600 text-sm ${activeTab === 'logs' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => setActiveTab('logs')}>Logs</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'description' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('description') }} >Description</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'files' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('files') }}>Files</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'quotes' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('quotes') }}>Quotes</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'materials' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('materials') }}>Materials</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'contract' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('contract') }}>Contract</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'invoices' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('invoices') }}>Invoices</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'profitandloss' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('profitandloss') }}>Profit and loss</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'schedule' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('schedule') }}>Schedule</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'task' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('task') }}>Tasks</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'timesheet' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('timesheet') }}>Timesheet</li>
+            <li className={`text-gray-600 text-sm ${activeTab === 'logs' ? 'border-2 border-b-indigo-600' : ''}`} onClick={() => { updateUrl('logs') }}>Logs</li>
           </ul>
         </div>
-
         {renderComponent()}
-
       </div>
-
     </div>
   )
 }

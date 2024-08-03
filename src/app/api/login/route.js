@@ -3,15 +3,20 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   try {
-    // const data = await req.json();
-    // const response = await axios.post('http://127.0.0.1:8000/authentication/login/', data);
-    // const res = NextResponse.json({ status: 'success', data: response.data });
-    const res = NextResponse.json({ status: 'success' });
-    // res.cookies.set('authToken', response.data['token'], {
-    res.cookies.set('authToken', 'token', {
+    const data = await req.json();
+    const response = await axios.post(`${process.env.BACKENDURL}/authentication/login/`, data);
+    const token = response.data['token'];
+    const expires = new Date(response.data['expires']);
+    const res = NextResponse.json({ status: 'success', data: response.data });
+    res.cookies.set('authToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 5,
+    });
+    res.cookies.set('expires', expires.toUTCString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 5,
     });
     return res;
   } catch (error) {

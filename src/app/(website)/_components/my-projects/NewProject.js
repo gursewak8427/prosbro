@@ -8,13 +8,13 @@ export default function NewProject({ isModalOpen, setIsModalOpen }) {
   const [confirm, setConfirm] = useState(false);
 
   useEffect(() => {
-    setOption({ option1: true, option2: false });
+    setOption({ option1: false, option2: false });
     setConfirm(false);
   }, [])
   return (
     <>
       <Transition appear show={isModalOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
+        <Dialog as="div" className="relative z-10" onClose={() => { setIsModalOpen(false); setOption({ option1: false, option2: false }); setConfirm(false); }}>
           <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
@@ -68,7 +68,7 @@ export default function NewProject({ isModalOpen, setIsModalOpen }) {
                     <button
                       type="button"
                       className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-medium bg-white text-black hover:bg-indigo-700 hover:text-white focus:outline-none"
-                      onClick={() => setIsModalOpen(false)}
+                      onClick={() => { setIsModalOpen(false); setOption({ option1: false, option2: false }); setConfirm(false); }}
                     >
                       Cancel
                     </button>

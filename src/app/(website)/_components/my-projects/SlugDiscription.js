@@ -8,17 +8,17 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CircleIcon from '@mui/icons-material/Circle';
 
-function SlugDiscription() {
+function SlugDiscription({ client }) {
     return (
         <>
             <div className='mt-5 mb-5 bg-white p-4 rounded-lg'>
                 <h1 className='flex items-center text-xl font-bold'>Client contact<span className='ml-5 text-indigo-600'> <EditIcon /></span></h1>
                 <div className='flex gap-5 mt-3 mb-3 text-indigo-600'>
-                    <p><span className='text-gray-500'><PersonIcon /></span> Grujeet Singh</p>
+                    <p><span className='text-gray-500'><PersonIcon /></span> {client?.name}</p>
                     <p className='text-gray-500'>|</p>
-                    <p><span className='text-gray-500'><LocalPhoneIcon /> </span>5555-555-555</p>
+                    <p><span className='text-gray-500'><LocalPhoneIcon /> </span>{client?.mobile}</p>
                     <p className='text-gray-500'>|</p>
-                    <p><span className='text-gray-500'><EmailIcon /> </span> Gurjeet@gmail.com</p>
+                    <p><span className='text-gray-500'><EmailIcon /> </span> {client?.email}</p>
                 </div>
             </div>
 
@@ -68,12 +68,9 @@ function SlugDiscription() {
                                 title="Google Map"
                             ></iframe>
                         </div>
-                      
                     </div>
                 </div>
-
             </div>
-
         </>
     )
 }
