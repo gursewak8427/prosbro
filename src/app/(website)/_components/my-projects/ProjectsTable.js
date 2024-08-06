@@ -4,15 +4,28 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Link from 'next/link';
 
 
-const createData = (ref, address, tag, date, size, status) => {
-    return { ref, address, tag, date, size, status };
-  };
-  
-  const rows = [
-    createData('P24_0001', 'Basement remodel Test', '', '07/10/24', '$267,246.02', 'In construction')
-  ];
 
-function ProjectsTable() {
+
+function ProjectsTable({ projectlist }) {
+  const createData = (ref, address, tag, date, size, status, slug,name) => {
+    return { ref, address, tag, date, size, status, slug,name };
+  };
+  const rows = [];
+  if (projectlist.length > 0) {
+    projectlist.forEach(item => {
+      const tempdata = createData(
+        item.reference,
+        item.address,
+        item.tag,
+        item.createdAt,
+        '$0',
+        item.status.toLowerCase(),
+        item.slug,
+        item.name
+      )
+      rows.push(tempdata);
+    });
+  }
   return (
     <>
       <div className="overflow-x-auto">
@@ -28,10 +41,10 @@ function ProjectsTable() {
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
-              <tr key={row.ref}>
-                <td className="py-2 px-4 border"><Link href={'/my-projects/dfsdfsdf'}>{row.ref}</Link></td>
-                <td className="py-2 px-4 border">{row.address}</td>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td className="py-2 px-4 border"><Link href={`/my-projects/${row.slug}?tab=description`}>{row.ref}</Link></td>
+                <td className="py-2 px-4 border">{row.name} {row.address}</td>
                 <td className="py-2 px-4 border">{row.tag}</td>
                 <td className="py-2 px-4 border">{row.date}</td>
                 <td className="py-2 px-4 border">{row.size}</td>
