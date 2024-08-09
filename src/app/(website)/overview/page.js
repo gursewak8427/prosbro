@@ -1,8 +1,18 @@
+"use server"
 import React from 'react'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import ReportIcon from '@mui/icons-material/Report';
+import axios from 'axios';
+import { cookies } from 'next/headers'
 
-function Page() {
+async function Page() {
+  const cookieStore = cookies()
+  const authToken = cookieStore.get('authToken')
+  const headers = {
+    'Authorization': 'Bearer ' + authToken.value
+  };
+  const response = await axios.get(`${process.env.BACKENDURL}/fetchprojectsinvoiceamt/`, { headers })
+  console.log(response.status);
   return (
     <div className="p-6 flex-1 bg-gray-200 shadow-md">
       <div>
@@ -12,7 +22,6 @@ function Page() {
           <button className='text-indigo-600 text-xl font-semibold'>See my projects <KeyboardArrowRightIcon /></button>
         </div>
       </div>
-
       <div className='bg-white rounded-lg p-4 '>
         <div className='flex justify-between p-4 gap-4'>
           <div className='w-1/4 p-2'>
@@ -58,21 +67,18 @@ function Page() {
           <div className='w-1/4 p-2'>
             <h2 className='w-2/3 text-center bg-red-200 p-1 rounded-md mt-2 mb-2 font-semibold text-red-600'>Bill not paid</h2>
             <p className='text-xs' ><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
-
           </div>
           <div className='w-1/4 p-2'>
             <h2 className='w-2/3  text-center bg-orange-200 p-1 rounded-md mt-2 mb-2 font-semibold text-orange-600'>Processing</h2>
             <p className='text-xs' ><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
-
           </div>
           <div className='w-1/4 p-2'>
             <h2 className='w-2/3 text-center bg-indigo-200 p-1 rounded-md mt-2 mb-2 font-semibold text-indigo-600'>Total paid</h2>
             <p className='text-xs' ><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
-
           </div>
           <div className='w-1/4 p-2'>
             <h2 className='w-2/3 text-center bg-green-200 p-1 rounded-md mt-2 mb-2 font-semibold text-green-600'>Not billed yet</h2>
-            <p className='text-xs'><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
+            <p className='text-xs'><span className='font-semibold text-2xl'>$0</span> Tax excl</p>                                                                                                                                     
           </div>
         </div>
       </div>
