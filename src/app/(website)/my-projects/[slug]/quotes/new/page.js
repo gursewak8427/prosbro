@@ -1,9 +1,12 @@
-"use-client"
+"use client"
 import React from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
+import { useRouter } from 'next/navigation';
 
 function page() {
+  const router = useRouter();
+
   return (
     <>
       <div className='p-6 flex-1 bg-gray-200 shadow-md'>
@@ -62,7 +65,9 @@ function page() {
                   price: "$193k"
                 },
               ].map((template, index) => (
-                <div key={index} className="flex flex-col md:flex-row bg-white basis-full md:basis-[calc(50%-1rem)] p-4 rounded-lg shadow-lg ">
+                <div onClick={()=>{
+                  router.push("edit")
+                }} key={index} className="flex flex-col md:flex-row bg-white basis-full md:basis-[calc(50%-1rem)] p-4 rounded-lg shadow-lg ">
                   <img
                     src={template.imgSrc}
                     alt={template.title}
