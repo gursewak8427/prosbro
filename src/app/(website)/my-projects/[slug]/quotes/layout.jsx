@@ -67,34 +67,6 @@ export default function QuoteLayout({ children }) {
                         })}
                     </Stepper>
                 </div>
-
-                {/* ======== OLD STEPPER ========== */}
-                {/* <div className='flex gap-16'>
-                    <div className='flex flex-col items-center'>
-                        <button className='w-6 h-6 bg-transparent rounded-full border-2 border-indigo-600 flex items-center justify-center'>
-                            <div className='w-4 h-4 bg-indigo-600 rounded-full'></div>
-                        </button>
-                        <span className='mt-2 text-sm text-gray-600'>Edit</span>
-                    </div>
-                    <div className='flex flex-col items-center'>
-                        <button className='w-6 h-6 bg-transparent rounded-full border-2 border-indigo-600 flex items-center justify-center'>
-                            <div className='w-4 h-4 bg-indigo-600 rounded-full'></div>
-                        </button>
-                        <span className='mt-2 text-sm text-gray-600'>Add details</span>
-                    </div>
-                    <div className='flex flex-col items-center'>
-                        <button className='w-6 h-6 bg-transparent rounded-full border-2 border-indigo-600 flex items-center justify-center'>
-                            <div className='w-4 h-4 bg-indigo-600 rounded-full'></div>
-                        </button>
-                        <span className='mt-2 text-sm text-gray-600'>Customize</span>
-                    </div>
-                    <div className='flex flex-col items-center'>
-                        <button className='w-6 h-6 bg-transparent rounded-full border-2 border-indigo-600 flex items-center justify-center'>
-                            <div className='w-4 h-4 bg-indigo-600 rounded-full'></div>
-                        </button>
-                        <span className='mt-2 text-sm text-gray-600'>Send</span>
-                    </div>
-                </div> */}
                 <div className='text-indigo-600'>
                     <button className='text-lg font-semibold'>Save and exit</button>
                 </div>

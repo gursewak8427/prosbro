@@ -8,11 +8,14 @@ import { cookies } from 'next/headers'
 async function Page() {
   const cookieStore = cookies()
   const authToken = cookieStore.get('authToken')
-  const headers = {
-    'Authorization': 'Bearer ' + authToken.value
-  };
-  const response = await axios.get(`${process.env.BACKENDURL}/fetchprojectsinvoiceamt/`, { headers })
-  console.log(response.status);
+  try {
+    const headers = {
+      'Authorization': 'Bearer ' + authToken.value
+    };
+    const response = await axios.get(`${process.env.BACKENDURL}/fetchprojectsinvoiceamt/`, { headers })
+  } catch (error) {
+    console.log(error);
+  }
   return (
     <div className="p-6 flex-1 bg-gray-200 shadow-md">
       <div>
@@ -78,7 +81,7 @@ async function Page() {
           </div>
           <div className='w-1/4 p-2'>
             <h2 className='w-2/3 text-center bg-green-200 p-1 rounded-md mt-2 mb-2 font-semibold text-green-600'>Not billed yet</h2>
-            <p className='text-xs'><span className='font-semibold text-2xl'>$0</span> Tax excl</p>                                                                                                                                     
+            <p className='text-xs'><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
           </div>
         </div>
       </div>

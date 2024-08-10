@@ -52,7 +52,7 @@ const Page = () => {
       // console.log(places[0]);
       // // console.log(places[0]?.geometry.viewport.Gh.hi);
       // // console.log(places[0]?.geometry.viewport.Yh.hi);
-      setForm({ ...form, ['address']: places[0]?.formatted_address, ['url']: places[0]?.url,['lat']:places[0]?.geometry.viewport.Yh.hi,['lng']:places[0]?.geometry.viewport.Gh.hi });
+      setForm({ ...form, ['address']: places[0]?.formatted_address, ['url']: places[0]?.url,['lat']:places[0]?.geometry?.viewport?.Yh?.hi,['lng']:places[0]?.geometry?.viewport?.Gh?.hi });
     }
   }, [places])
   return (
