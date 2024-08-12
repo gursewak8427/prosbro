@@ -1,15 +1,14 @@
-import React from 'react'
+import React from 'react';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Link from 'next/link';
-
-
-
+import AddIcon from '@mui/icons-material/Add';
 
 function ProjectsTable({ projectlist }) {
-  const createData = (ref, address, tag, date, size, status, slug,name) => {
-    return { ref, address, tag, date, size, status, slug,name };
+  const createData = (ref, address, tag, date, size, status, slug, name) => {
+    return { ref, address, tag, date, size, status, slug, name };
   };
+
   const rows = [];
   if (projectlist.length > 0) {
     projectlist.forEach(item => {
@@ -22,33 +21,43 @@ function ProjectsTable({ projectlist }) {
         item.status.toLowerCase(),
         item.slug,
         item.name
-      )
+      );
       rows.push(tempdata);
     });
   }
+
   return (
     <>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-2xl">
+        <table className="min-w-full bg-white rounded-2xl table-fixed">
           <thead>
-            <tr>
-              <th className="py-2 px-4 border">Ref #</th>
-              <th className="py-2 px-4 border">Address & Client</th>
-              <th className="py-2 px-4 border">Tag</th>
-              <th className="py-2 px-4 border">Created on</th>
-              <th className="py-2 px-4 border">Project size</th>
-              <th className="py-2 px-4 border">Status</th>
+            <tr className="border-b">
+              <th className="py-2 px-4 text-gray-500 text-sm w-24 text-left">Ref #</th>
+              <th className="py-2 px-4 text-gray-500 text-sm w-1/4 text-left">Address & Client</th>
+              <th className="py-2 px-4 text-gray-500 text-sm w-36 text-left">Tag</th>
+              <th className="py-2 px-4 text-gray-500 text-sm w-32 text-left">Created on</th>
+              <th className="py-2 px-4 text-gray-500 text-sm w-28 text-left">Project size</th>
+              <th className="py-2 px-4 text-gray-500 text-sm w-24 text-left">Status</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row, index) => (
-              <tr key={index}>
-                <td className="py-2 px-4 border"><Link href={`/my-projects/${row.slug}?tab=description`}>{row.ref}</Link></td>
-                <td className="py-2 px-4 border">{row.name} {row.address}</td>
-                <td className="py-2 px-4 border">{row.tag}</td>
-                <td className="py-2 px-4 border">{row.date}</td>
-                <td className="py-2 px-4 border">{row.size}</td>
-                <td className="py-2 px-4 border">{row.status}</td>
+              <tr key={index} className="border-b ">
+                <td className="py-2 px-4 whitespace-nowrap text-sm">
+                  <Link href={`/my-projects/${row.slug}?tab=description`}>{row.ref}</Link>
+                </td>
+                <td className="py-2 px-4">
+                  <div className="flex flex-col">
+                    <span className="font-medium text-sm mb-1">{row.name}</span>
+                    <span className="text-xs text-gray-600">{row.address}</span>
+                  </div>
+                </td>
+                <td className="py-2 px-4 whitespace-nowrap">
+                  <button className="text-sm text-indigo-600 flex items-center text-center"><AddIcon className='text-sm' /> Add tag</button>
+                </td>
+                <td className="py-2 px-4 whitespace-nowrap text-sm">{row.date}</td>
+                <td className="py-2 px-4 whitespace-nowrap text-sm">{row.size}</td>
+                <td className="py-2 px-4 whitespace-nowrap text-sm">{<button className='bg-orange-300 px-4 rounded-md font-semibold text-orange-700'>To bid</button>}</td>
               </tr>
             ))}
           </tbody>
@@ -67,9 +76,9 @@ function ProjectsTable({ projectlist }) {
           </div>
         </div>
       </div>
-
     </>
-  )
+  );
 }
 
-export default ProjectsTable
+export default ProjectsTable;
+
