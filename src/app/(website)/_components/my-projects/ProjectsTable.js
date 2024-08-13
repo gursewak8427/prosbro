@@ -3,6 +3,8 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 function ProjectsTable({ projectlist }) {
   const createData = (ref, address, tag, date, size, status, slug, name) => {
@@ -42,7 +44,7 @@ function ProjectsTable({ projectlist }) {
           </thead>
           <tbody>
             {rows.map((row, index) => (
-              <tr key={index} className="border-b ">
+              <tr key={index} className="border-b hover:bg-indigo-50 cursor-pointer">
                 <td className="py-2 px-4 whitespace-nowrap text-sm">
                   <Link href={`/my-projects/${row.slug}?tab=description`}>{row.ref}</Link>
                 </td>
@@ -57,7 +59,7 @@ function ProjectsTable({ projectlist }) {
                 </td>
                 <td className="py-2 px-4 whitespace-nowrap text-sm">{row.date}</td>
                 <td className="py-2 px-4 whitespace-nowrap text-sm">{row.size}</td>
-                <td className="py-2 px-4 whitespace-nowrap text-sm">{<button className='bg-orange-300 px-4 rounded-md font-semibold text-orange-700'>To bid</button>}</td>
+                <td className="py-2 px-4 whitespace-nowrap text-sm">{<button className='bg-orange-100  px-4 rounded-md font-semibold text-orange-700'>To bid</button>}</td>
               </tr>
             ))}
           </tbody>
@@ -65,15 +67,23 @@ function ProjectsTable({ projectlist }) {
 
         <div className="flex items-center justify-between p-4 bg-white rounded-2xl mt-5 mb-5">
           <p className="text-gray-400 text-sm font-medium">Showing Results</p>
-          <div className="flex items-center gap-2">
-            <button className="flex items-center justify-center p-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors duration-200">
-              <KeyboardArrowLeftIcon className="h-5 w-5 text-gray-600" />
+          <div className="flex items-center">
+            <button className="flex items-center justify-center border border-gray-400 rounded-l-md hover:bg-gray-200 transition-colors duration-200">
+              <KeyboardDoubleArrowLeftIcon className="h-6 w-6 text-gray-500" />
             </button>
-            <p className="text-gray-800 text-sm font-medium">1</p>
-            <button className="flex items-center justify-center p-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors duration-200">
-              <KeyboardArrowRightIcon className="h-5 w-5 text-gray-600" />
+            <button className="flex items-center justify-center border border-gray-400  hover:bg-gray-200 transition-colors duration-200">
+              <KeyboardArrowLeftIcon className="h-6 w-6 text-gray-500" />
+            </button>
+            <p className="text-white bg-indigo-500 text-sm font-medium px-3 py-1 ">1</p>
+            <button className="flex items-center justify-center border border-gray-400  hover:bg-gray-200 transition-colors duration-200">
+              <KeyboardArrowRightIcon className="h-6 w-6 text-gray-500" />
+            </button>
+            <button className="flex items-center justify-center border border-gray-400  rounded-r-md hover:bg-gray-200 transition-colors duration-200">
+              <KeyboardDoubleArrowRightIcon className="h-6 w-6 text-gray-500" />
             </button>
           </div>
+
+
         </div>
       </div>
     </>
