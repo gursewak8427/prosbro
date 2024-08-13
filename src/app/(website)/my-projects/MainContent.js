@@ -87,14 +87,46 @@ const MainContent = () => {
       <div className="flex flex-col md:flex-row justify-between items-center mt-4 mb-4">
         <div className="p-2 border-b border-gray-400 w-full md:w-auto">
           <ul className="flex flex-wrap gap-4 text-gray-800 text-sm font-medium">
-            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'all' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('all') }}>All projects {selected == 'all' ? '('+projectlist.length+')' : ''}</li>
-            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'tobid' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('tobid') }}>To bid {selected == 'tobid' ? '('+projectlist.length+')' : ''}</li>
-            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'quotesent' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('quotesent') }}>Quote sent {selected == 'quotesent' ? '('+projectlist.length+')' : ''}</li>
-            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'inconstruction' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('inconstruction') }}>In Construction {selected == 'inconstruction' ? '('+projectlist.length+')' : ''}</li>
-            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'complete' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('complete') }}>Completed {selected == 'complete' ? '('+projectlist.length+')' : ''}</li>
-            <li className={`hover:text-indigo-500 cursor-pointer transition-colors duration-200 ${selected === 'archived' ? 'underline-indigo' : 'underline-grey'}`} onClick={() => { setSelected('archived') }}>Archived {selected == 'archived' ? '('+projectlist.length+')' : ''}</li>
+            <li
+              className={`cursor-pointer transition-colors duration-200 ${selected === 'all' ? 'text-indigo-500 underline-indigo' : 'hover:underline-indigo '}`}
+              onClick={() => { setSelected('all') }}
+            >
+              All projects {selected == 'all' ? '(' + projectlist.length + ')' : ''}
+            </li>
+            <li
+              className={`cursor-pointer transition-colors duration-200 ${selected === 'tobid' ? 'text-indigo-500 underline-indigo' : 'hover:text-indigo-500 hover:underline-indigo'}`}
+              onClick={() => { setSelected('tobid') }}
+            >
+              To bid {selected === 'tobid' ? '(' + projectlist.length + ')' : ''}
+            </li>
+
+            <li
+              className={`cursor-pointer transition-colors duration-200 ${selected === 'quotesent' ? 'text-indigo-500 underline-indigo' : 'hover:text-indigo-500 '}`}
+              onClick={() => { setSelected('quotesent') }}
+            >
+              Quote sent {selected == 'quotesent' ? '(' + projectlist.length + ')' : ''}
+            </li>
+            <li
+              className={`cursor-pointer transition-colors duration-200 ${selected === 'inconstruction' ? 'text-indigo-500 underline-indigo' : 'hover:text-indigo-500 '}`}
+              onClick={() => { setSelected('inconstruction') }}
+            >
+              In Construction {selected == 'inconstruction' ? '(' + projectlist.length + ')' : ''}
+            </li>
+            <li
+              className={`cursor-pointer transition-colors duration-200 ${selected === 'complete' ? 'text-indigo-500 underline-indigo' : 'hover:text-indigo-500 '}`}
+              onClick={() => { setSelected('complete') }}
+            >
+              Completed {selected == 'complete' ? '(' + projectlist.length + ')' : ''}
+            </li>
+            <li
+              className={`cursor-pointer transition-colors duration-200 ${selected === 'archived' ? 'text-indigo-500 underline-indigo' : 'hover:text-indigo-500 hover:underline-indigo'}`}
+              onClick={() => { setSelected('archived') }}
+            >
+              Archived {selected == 'archived' ? '(' + projectlist.length + ')' : ''}
+            </li>
           </ul>
         </div>
+
 
         <div className="bg-white p-1 rounded-md w-full md:w-auto mt-4 md:mt-0">
           <ul className="flex gap-4">
