@@ -22,7 +22,11 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useDispatch } from 'react-redux';
 import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
 import { useRouter } from 'next/navigation';
-import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, Edit, EditOutlined } from '@mui/icons-material';
+import { Switch } from '@mui/material';
+import { CostSummary } from '../_components/CostSummary';
+
+
 
 
 function Page() {
@@ -55,7 +59,7 @@ function Page() {
 
   return (
     <div className='p-8'>
-      <div className='flex gap-5 mt-5 mb-5'>
+      <div className='flex gap-5 mt-5 mb-5 '>
         <div className='w-9/12'>
           <div className="bg-gray-100 rounded-lg">
             {/* Cover image and title section */}
@@ -71,10 +75,12 @@ function Page() {
                 </h1>
                 <p className="text-gray-200">Renovation of a standard low to mid-end kitchen</p>
                 <button className="mt-4 bg-white text-gray-800 py-2 px-4 rounded-lg shadow hover:bg-gray-100">
+                  <EditOutlined />
                   Edit title
                 </button>
               </div>
               <button className="absolute top-4 right-4 bg-white text-gray-800 py-1 px-3 rounded-lg shadow hover:bg-gray-100">
+                <EditOutlined />
                 Edit cover image
               </button>
             </div>
@@ -88,6 +94,7 @@ function Page() {
                 <p>aghreno@gmail.com</p>
                 <p>587-899-3252</p>
                 <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                  <EditOutlined />
                   Personal information
                 </button>
               </div>
@@ -95,6 +102,7 @@ function Page() {
                 <p>GST: 733658314RT0001</p>
                 <p>https://www.aghrenovation.ca</p>
                 <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                  <EditOutlined />
                   Business
                 </button>
               </div>
@@ -105,6 +113,7 @@ function Page() {
                   className="h-48 w-48 object-contain mb-2"
                 />
                 <button className="ml-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                  <EditOutlined />
                   Change logo
                 </button>
               </div>
@@ -126,110 +135,15 @@ function Page() {
                 <h3 className="font-semibold">Billing address</h3>
                 <p>Calgary, AB, Canada, Calgary</p>
                 <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                  <EditOutlined />
                   Edit billing address
                 </button>
               </div>
             </div>
-          </div>
-          {
-            [1, 2, 3].map(_ =>
-              <div className="my-3">
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<KeyboardArrowDownIcon className='text-indigo-600' />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                  >
-                    <div className="w-full flex flex-row justify-between items-center">
-                      <div className="w-1/2 flex flex-row">
-                        <h1 className='mr-2'><PersonIcon className='text-indigo-600' /></h1>
-                        <h1 className='mr-2'>General conditions </h1>
-                        <h1><EditOutlined className='text-indigo-600' /></h1>
-                      </div>
-                      <div className="w-1/2 flex flex-row justify-end items-center">
-                        <div className="flex flex-col justify-end items-end mr-2">
-                          <p className='text-sm'>Estimate Labour time: 70h</p>
-                          <p className='text-sm'>Labour Rate: $70/h <EditOutlined className='text-indigo-600' /></p>
-                        </div>
-                        <input placeholder='$43 ' className='w-[150px] border border-gray-400 rounded-lg px-1 py-1 text-sm'></input>
-                        <DeleteOutline className='text-red-600' />
-                      </div>
-                    </div>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <div className='w-full'>
-                      <table className='w-full'>
-                        <thead className='border-b border-gray-400'>
-                          <td className='p-1 text-sm'>Task</td>
-                          <td className='p-1 text-sm text-center'>Quantity</td>
-                          <td className='p-1 text-sm text-center'>Material</td>
-                          <td className='p-1 text-sm text-center'>Labour</td>
-                          <td className='p-1 text-sm text-center'>Markup</td>
-                          <td className='p-1 text-sm text-right'>Total</td>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td className='p-1'>General Admin Fees</td>
-                            <td className='p-1'>
-                              <div className="flex flex-row justify-center">
-                                <input type="text" className="border text-center rounded py-1 w-12 mr-2" placeholder='1' />
-                                <select name="" id="" className='px-2 py-1 border rounded'>
-                                  <option value="">each</option>
-                                  <option value="">all</option>
-                                  <option value="">a</option>
-                                  <option value="">b</option>
-                                </select>
-                              </div>
-                            </td>
-                            <td className='p-1 w-[200px] py-4'>
-                              <div className="flex flex-col items-center">
-                                <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>Builder Cost</label>
-                                <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' />
-                                <p className='text-sm mt-2'>/each</p>
-                              </div>
-                            </td>
-                            <td className='p-1 w-[200px] py-4'>
-                              <div className="flex flex-col items-center">
-                                <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' />
-                                <p className='text-sm mt-2'>/each</p>
-                              </div>
-                            </td>
-                            <td className='p-1 py-4'>
-                              <div className="flex flex-col items-center">
-                                <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>$0.00</label>
-                                <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='0%' />
-                              </div>
-                            </td>
-                            <td className='p-1 py-4'>
-                              <div className="flex flex-col items-end">
-                                <p className='font-semibold mt-2'>$5,240</p>
-                                <p className='text-sm mt-2'>$5,240/each</p>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <input type="text" className="border rounded py-1 m-2" placeholder='Enter description' />
-                            </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td className='flex justify-end items-center'>
-                              <BookmarkBorderOutlined className='text-indigo-600 text-[20px] mx-1' />
-                              <RemoveRedEyeIcon className='text-indigo-600 text-[20px] mx-1' />
-                              <ContentCopy className='text-indigo-600 text-[20px] mx-1' />
-                              <DeleteOutline className='text-red-600 text-[23px] mx-1' />
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
 
-                    </div>
-                  </AccordionDetails>
-                </Accordion>
-              </div>)
-          }
+            {/* cost summary */}
+            <CostSummary />
+          </div>
         </div>
 
         <div className='w-3/12'>
@@ -251,32 +165,28 @@ function Page() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Quantities</span>
-                <input
-                  type="checkbox"
-                  className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                  checked
-                />
+                <Switch />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Material + labor cost</span>
-                <input
-                  type="checkbox"
-                  className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
+                <Switch />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Markup amount</span>
-                <input
-                  type="checkbox"
-                  className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
+                <Switch />
               </div>
             </div>
           </div>
-
-          <div className='bg-white py-4 px-4 rounded-lg shadow-md h-96'>
-            <h2 className='font-semibold text-sm'>Markup on quote</h2>
-            <h2 className='text-sm text-indigo-600'>Edit on quote %</h2>
+          <div className="bg-white p-4 rounded-lg shadow-lg w-full mb-4">
+            <div className="flex flex-row justify-between">
+              <div>
+                <h2 className='font-semibold text-sm'>Markup on quote</h2>
+                <h2 className='text-sm text-indigo-600'>Edit on quote %</h2>
+              </div>
+              <div>
+                $848
+              </div>
+            </div>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>Subtotal</h2>
               <p className='text-gray-600 text-sm'>$7865.00</p>
@@ -286,17 +196,14 @@ function Page() {
               <p className='text-gray-600 text-sm'>$65.00</p>
             </div>
             <div className='mb-4 mt-4 flex justify-between'>
-              <button className='text-sm text-indigo-600'>Edit taxes</button>
-            </div>
-            <div className='mb-4 mt-4 flex justify-between'>
               <h2 className=' text-lg font-semibold'>Total</h2>
               <p className='text-lg font-semibold'>$75445.00</p>
             </div>
 
             <button onClick={() => {
               // dispatch(nextQuoteStepperFormIndex())
-              router.push("customize")
-            }} className='w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Send Quote</button>
+              router.push("preview")
+            }} className='w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next - Preview</button>
             <div className='mb-2 mt-2 flex justify-center items-center'>
               <button className='text-sm font-semibold text-indigo-600'><RemoveRedEyeIcon /> Clint preview - PDF</button>
             </div>
@@ -307,7 +214,7 @@ function Page() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
