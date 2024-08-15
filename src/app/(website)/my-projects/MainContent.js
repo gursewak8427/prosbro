@@ -222,7 +222,7 @@ const MainContent = () => {
         <input
           type="text"
           placeholder="Search a project, a client, an address"
-          class="p-2 h-10 text-sm border border-indigo-600 rounded-lg w-64 focus:border-indigo-600 focus:ring-0 transition-colors duration-200"
+          className="p-2 h-10 text-sm border border-indigo-600 rounded-lg w-64 focus:border-indigo-600 focus:ring-0 transition-colors duration-200"
         />
 
         <div className="relative w-full md:w-44 h-10 border border-indigo-600 rounded-md">
