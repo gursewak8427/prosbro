@@ -1,19 +1,116 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Cards from './Cards';
+import axiosInstance from '@/app/redux/AxiosInstance';
+import { useDispatch, useSelector } from 'react-redux';
+import { showToastPromise, updateToast } from '@/app/redux/toastSlice';
 
 function page() {
+  const dispatch = useDispatch();
+  const toastId = useSelector((state) => state.toast.toastId);
+  const [activeTab, setActiveTab] = useState('base_template')
+  const [selectedtempletes, setSelectedtempletes] = useState([])
+  const [btnstatus, setBtnstatus] = useState(false)
+  const [data, setData] = useState([])
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const template_tab = searchParams.get('template_tab')
+  const updateUrl = (tab) => {
+    const newUrl = `${window.location.pathname}?template_tab=${tab}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+  };
+  const fetchdata = async (activeTab) => {
+    const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchtemplatesandquotes/?tab=${activeTab}`)
+    setData(response.data)
+  }
+  const renderComponent = () => {
 
+    switch (activeTab) {
+      case 'base_template':
+        return <Cards data={data} setSelectedtempletes={setSelectedtempletes} selectedtempletes={selectedtempletes} />;
+      case 'contractor_template':
+        return <Cards data={data} setSelectedtempletes={setSelectedtempletes} selectedtempletes={selectedtempletes} />;
+      case 'contractor_quote':
+        return <Cards data={data} setSelectedtempletes={setSelectedtempletes} selectedtempletes={selectedtempletes} />;
+      default:
+        return <Cards data={data} setSelectedtempletes={setSelectedtempletes} selectedtempletes={selectedtempletes} />;
+    }
+  };
+
+  const handleselected = (template) => {
+    console.log(template);
+    const isSelected = selectedtempletes.some(item => item.id === template.id);
+
+    if (isSelected) {
+      // If the card is already selected, deselect it
+      setSelectedtempletes(selectedtempletes.filter(item => item.id !== template.id));
+    } else {
+      // If the card is not selected, select it
+      setSelectedtempletes([...selectedtempletes, { id: template.id, name: template.name }]);
+    }
+  }
+
+  // to send request to create quote for new template for client project
+  const handleQuotecreation = async () => {
+    const requestPromise = axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/createquoteforproject/`);
+
+    dispatch(showToastPromise({
+      promise: requestPromise,
+      messages: {
+        pending: 'Creating quote...',
+        success: 'Quote successfully created!',
+        error: 'Failed to create Quote please contact service team!!!',
+      }
+    }));
+
+    try {
+      const response = await requestPromise;
+      console.log('Data:', response.data);
+      // Optionally update the toast
+      dispatch(updateToast({
+        toastId,
+        options: { render: 'Data loaded!', type: 'success', isLoading: false }
+      }));
+    } catch (error) {
+      console.error('Error:', error);
+      dispatch(updateToast({
+        toastId,
+        options: { render: 'Failed to load data!', type: 'error', isLoading: false }
+      }));
+    }
+  };
+
+  useEffect(() => {
+    if (selectedtempletes.length > 0) {
+      setBtnstatus(true)
+    } else {
+      setBtnstatus(false)
+    }
+  }, [selectedtempletes])
+  useEffect(() => {
+    fetchdata(template_tab);
+    setActiveTab(template_tab)
+  }, [template_tab])
   return (
     <>
       <div className='p-6 flex-1 bg-gray-200 shadow-md'>
         <div className='flex justify-between' >
           <div className='p-2 '>
             <h1 className='text-2xl font-semibold mt-2 mb-5'>Choose a template to start your quote</h1>
-            <p className='text-gray-700'>No template selected</p>
+            <p className='text-gray-700'>{selectedtempletes.length ? `${selectedtempletes.length} template selected` : 'No template selected'}</p>
+            <div class="flex flex-grow-0 flex-wrap gap-4">
+              <div class="flex w-full flex-wrap gap-2">
+                {selectedtempletes.map((item, index) => (
+                  <div class="flex items-center justify-center gap-3 rounded-lg bg-neutral-300 p-2 text-sm" key={index}>
+                    <span class="overflow-ellipsis whitespace-nowrap text-center">{item.name}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer" onClick={() => { handleselected(item) }}><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path></svg>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <div>
             <button><CloseIcon /></button>
@@ -22,69 +119,23 @@ function page() {
 
         <div className='flex gap-5'>
           <div className='flex flex-col gap-5 rounded-r-md mt-5 mb-5'>
-            <div className='bg-white px-5 py-4 border-l-4 border-indigo-600 rounded-r-md shadow-sm'>
-              <h1 className="text-lg font-medium">Billdr templates</h1>
+            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'base_template' ? 'border-indigo-600' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('base_template') }}>
+              <h1 className="text-lg font-medium">Prosbro templates</h1>
             </div>
-            <div className='bg-white px-5 py-4 border-l-4 border-indigo-600 rounded-r-md shadow-sm'>
+            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'contractor_template' ? 'border-indigo-600' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('contractor_template') }}>
               <h1 className="text-lg font-medium">My templates</h1>
             </div>
-            <div className='bg-white px-5 py-4 border-l-4 border-indigo-600 rounded-r-md shadow-sm'>
+            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'contractor_quote' ? 'border-indigo-600' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('contractor_quote') }}>
               <h1 className="text-lg font-medium">Previous quotes</h1>
             </div>
-          
+
             <div className='bg-white hover:bg-gray-100 cursor-pointer px-5 py-4 border-2 border-indigo-600 rounded-md text-indigo-600 font-semibold '>
-              <button><AddIcon/> Blank quote</button>
+              <button><AddIcon /> Blank quote</button>
             </div>
-          
+
           </div>
           <div className='flex-1 mt-5 mb-5'>
-            <div className='flex flex-wrap gap-4'>
-              {[
-                {
-                  imgSrc: "https://th.bing.com/th/id/OIP.PUuevUFoxDO5lRMcQBdQnAHaE8?w=280&h=187&c=7&r=0&o=5&pid=1.7",
-                  title: "New Build",
-                  description: "Contemporary wood frame house on a concrete foundation",
-                  price: "$193k"
-                },
-                {
-                  imgSrc: "https://de927adv5b23k.cloudfront.net/wp-content/uploads/2018/06/29154124/kitchen-nakul-baghel.jpeg",
-                  title: "Kitchen remodel standard",
-                  description: "Renovation of standard low to mid-end kitchen",
-                  price: "$36k"
-                },
-                {
-                  imgSrc: "https://th.bing.com/th/id/OIP._LLumzR0wnTykqBEHaq7pAHaFC?w=182&h=124&c=7&r=0&o=5&pid=1.7",
-                  title: "Bathroom Remodel- High End 10X10",
-                  description: "Contemporary wood frame house on a concrete foundation",
-                  price: "$26k"
-                },
-                {
-                  imgSrc: "https://th.bing.com/th/id/OIP.BNJ4V6jItBKycrHY2ZJb1gAAAA?rs=1&pid=ImgDetMain",
-                  title: "New Build",
-                  description: "Contemporary wood frame house on a concrete foundation",
-                  price: "$193k"
-                },
-              ].map((template, index) => (
-                <div onClick={()=>{
-                  router.push("edit")
-                }} key={index} className="flex flex-col md:flex-row bg-white basis-full md:basis-[calc(50%-1rem)] p-4 rounded-lg shadow-lg ">
-                  <img
-                    src={template.imgSrc}
-                    alt={template.title}
-                    className="w-full md:w-1/3 h-auto rounded-lg object-cover"
-                  />
-                  <div className="flex flex-col justify-between ml-4 w-full">
-                    <div>
-                      <h1 className="text-lg font-semibold">{template.title}</h1>
-                      <p className="text-gray-600 text-sm mt-2">{template.description}</p>
-                    </div>
-                    <div className="flex justify-end mt-4 md:mt-0">
-                      <h1 className="text-xl font-bold text-indigo-600">{template.price}</h1>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {renderComponent()}
           </div>
         </div>
 
@@ -92,7 +143,11 @@ function page() {
 
       </div>
       <div className='flex justify-center items-center py-5 bg-gray-100 '>
-        <button className='px-4 py-2 bg-gray-300 font-semibold rounded-xl hover:bg-gray-400 cursor-pointer'>
+        <button
+          className={`px-4 py-2 bg-gray-300 font-semibold rounded-xl ${btnstatus ? 'cursor-pointer hover:bg-gray-400' : 'cursor-not-allowed'}`}
+          disabled={!btnstatus}
+          onClick={handleQuotecreation}
+        >
           Confirm & create a quote
         </button>
       </div>

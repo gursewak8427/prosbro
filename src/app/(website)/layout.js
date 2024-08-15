@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './_components/sidebar';
 import { usePathname } from 'next/navigation';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -25,6 +27,7 @@ export default function WebsiteLayout({ children }) {
 
   return (
     <div className="flex">
+      <ToastContainer />
       {
         show && <Sidebar />
       }

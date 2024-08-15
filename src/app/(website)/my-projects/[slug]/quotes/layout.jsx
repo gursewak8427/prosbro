@@ -44,6 +44,7 @@ export default function QuoteLayout({ children }) {
                                     break;
 
                                 default:
+                                    router.back()
                                     break;
                             }
                         }} className='text-lg font-semibold'><ArrowBackIosIcon /> Back</button>
