@@ -30,56 +30,61 @@ function ProjectsTable({ projectlist }) {
 
   return (
     <>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded-2xl table-fixed">
+      <div className="overflow-x-auto min-h-[50vh] bg-white rounded-2xl flex flex-col justify-between">
+        <table className="min-w-full table-fixed">
           <thead>
             <tr className="border-b">
-              <th className="py-2 px-4 text-gray-500 text-sm w-24 text-left">Ref #</th>
-              <th className="py-2 px-4 text-gray-500 text-sm w-1/4 text-left">Address & Client</th>
-              <th className="py-2 px-4 text-gray-500 text-sm w-36 text-left">Tag</th>
-              <th className="py-2 px-4 text-gray-500 text-sm w-32 text-left">Created on</th>
-              <th className="py-2 px-4 text-gray-500 text-sm w-28 text-left">Project size</th>
-              <th className="py-2 px-4 text-gray-500 text-sm w-24 text-left">Status</th>
+              <th className="p-4 text-gray-500 text-sm font-semibold w-24 text-left">Ref #</th>
+              <th className="p-4 text-gray-500 text-sm font-semibold w-1/4 text-left">Address & Client</th>
+              <th className="p-4 text-gray-500 text-sm font-semibold w-36 text-left">Tag</th>
+              <th className="p-4 text-gray-500 text-sm font-semibold w-32 text-left">Created on</th>
+              <th className="p-4 text-gray-500 text-sm font-semibold w-28 text-right">Project size</th>
+              <th className="p-4 text-gray-500 text-sm font-semibold w-24 text-center">Status</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row, index) => (
               <tr key={index} className="border-b hover:bg-indigo-50 cursor-pointer">
-                <td className="py-2 px-4 whitespace-nowrap text-sm">
+                <td className="p-4 whitespace-nowrap text-sm">
                   <Link href={`/my-projects/${row.slug}?tab=description`}>{row.ref}</Link>
                 </td>
-                <td className="py-2 px-4">
+                <td className="p-4">
                   <div className="flex flex-col">
                     <span className="font-medium text-sm mb-1">{row.name}</span>
                     <span className="text-xs text-gray-600">{row.address}</span>
                   </div>
                 </td>
-                <td className="py-2 px-4 whitespace-nowrap">
-                  <button className="text-sm text-indigo-600 flex items-center text-center"><AddIcon className='text-sm' /> Add tag</button>
+                <td className="p-4 whitespace-nowrap">
+                  <button className="text-sm text-primary flex items-center text-center"><AddIcon className='text-sm' /> Add tag</button>
                 </td>
-                <td className="py-2 px-4 whitespace-nowrap text-sm">{row.date}</td>
-                <td className="py-2 px-4 whitespace-nowrap text-sm">{row.size}</td>
-                <td className="py-2 px-4 whitespace-nowrap text-sm">{<button className='bg-orange-100  px-4 rounded-md font-semibold text-orange-700'>To bid</button>}</td>
+                <td className="p-4 whitespace-nowrap font-light text-sm">{new Date(row.date)?.toLocaleDateString()}</td>
+                <td className="p-4 whitespace-nowrap text-sm text-right">{row.size}</td>
+                <td className="p-4 whitespace-nowrap text-sm">{<button className='bg-orange-100  w-full px-4 py-1 rounded-md font-semibold text-orange-700'>To bid</button>}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        <div className="flex items-center justify-between p-4 bg-white rounded-2xl mt-5 mb-5">
-          <p className="text-gray-400 text-sm font-medium">Showing Results</p>
+        <div className="flex items-center justify-between p-4 bg-white rounded-2xl">
+          <p className="text-gray-500 text-xs font-medium">Showing 1 to 17 of 17 results.</p>
           <div className="flex items-center">
-            <button className="flex items-center justify-center border border-gray-400 rounded-l-md hover:bg-gray-200 transition-colors duration-200">
-              <KeyboardDoubleArrowLeftIcon className="h-6 w-6 text-gray-500" />
+
+            <button className="flex items-center justify-center border border-gray-300 rounded-l-md hover:bg-gray-200 transition-colors duration-200 w-[35px] h-[35px]">
+              <KeyboardDoubleArrowLeftIcon className="h-6 w-6 text-gray-400" />
             </button>
-            <button className="flex items-center justify-center border border-gray-400  hover:bg-gray-200 transition-colors duration-200">
-              <KeyboardArrowLeftIcon className="h-6 w-6 text-gray-500" />
+
+            <button className="flex items-center justify-center border border-gray-300  hover:bg-gray-200 transition-colors duration-200 w-[35px] h-[35px]">
+              <KeyboardArrowLeftIcon className="h-6 w-6 text-gray-400" />
             </button>
-            <p className="text-white bg-indigo-500 text-sm font-medium px-3 py-1 ">1</p>
-            <button className="flex items-center justify-center border border-gray-400  hover:bg-gray-200 transition-colors duration-200">
-              <KeyboardArrowRightIcon className="h-6 w-6 text-gray-500" />
+
+            <p className="text-white bg-primary text-sm font-medium w-[35px] h-[35px] flex items-center justify-center">1</p>
+
+            <button className="flex items-center justify-center border border-gray-300  hover:bg-gray-200 transition-colors duration-200 w-[35px] h-[35px]">
+              <KeyboardArrowRightIcon className="h-6 w-6 text-gray-400" />
             </button>
-            <button className="flex items-center justify-center border border-gray-400  rounded-r-md hover:bg-gray-200 transition-colors duration-200">
-              <KeyboardDoubleArrowRightIcon className="h-6 w-6 text-gray-500" />
+
+            <button className="flex items-center justify-center border border-gray-300  rounded-r-md hover:bg-gray-200 transition-colors duration-200 w-[35px] h-[35px]">
+              <KeyboardDoubleArrowRightIcon className="h-6 w-6 text-gray-400" />
             </button>
           </div>
 
