@@ -38,43 +38,44 @@ export default function NewProject({ isModalOpen, setIsModalOpen }) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <DialogTitle as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                    Add New Project
+                <DialogPanel className="flex gap-8 max-w-xl flex-col p-6 bg-white rounded-xl overflow-hidden relative">
+                  <svg
+                    onClick={() => { setIsModalOpen(false); setOption({ option1: false, option2: false }); setConfirm(false); }}
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="absolute top-4 right-4 z-10 h-6 w-6 cursor-pointer"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path></svg>
+                  <DialogTitle as="h3" className="text-xl font-bold text-left leading-6 text-gray-900">
+                    Add a New Project
                   </DialogTitle>
-                  <div className="mt-4 p-2 ">
+                  <div className="">
                     <div
-                      className={`p-4 text-center  cursor-pointer text-black rounded-lg border border-indigo-600  ${option.option1 ? 'bg-blue-100' : ''}  duration-200 w-full mb-4`}
+                      className={`flex w-full cursor-pointer flex-col space-y-2 rounded-lg border p-5 text-center bg-white  ${option.option1 ? 'bg-primary-soft border border-indigo-600' : ''}  duration-200 w-full mb-4`}
                       onClick={() => {
                         setOption({ option1: true, option2: false });
                         setConfirm(true);
                       }}
                     >
-                      <h4 className="text-xl font-semibold mb-2">Add customer yourself</h4>
-                      <p className="text-sm">Fill out the form for your customers</p>
+                      <h4 className="text-lg font-[500]">Add customer yourself</h4>
+                      <p className="text-base">Fill out the form for your customers</p>
                     </div>
                     <div
-                      className={`p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4 ${option.option2 ? 'bg-blue-100' : ''}`}
+                      className={`flex w-full cursor-pointer flex-col space-y-2 rounded-lg border p-5 text-center bg-white  ${option.option2 ? 'bg-primary-soft border border-indigo-600' : ''}  duration-200 w-full mb-4`}
                       onClick={() => {
                         setOption({ option1: false, option2: true });
                         setConfirm(true);
                       }}
                     >
-                      <h4 className="text-xl font-semibold mb-2">Share magic link</h4>
-                      <p className="text-sm">Share a link to allow customers to fill out the form themself with their contact information.</p>
+                      <h4 className="text-lg font-[500]">Share magic link <span className='bg-green-200 text-sm p-1 rounded-xl px-2 text-green-600'>New</span></h4>
+                      <p className="text-base">Share a link to allow customers to fill out the form themself with their contact information.</p>
                     </div>
                   </div>
-                  <div className="mt-4 flex justify-between gap-2">
+                  <div class="flex justify-center gap-4">
                     <button
-                      type="button"
-                      className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-medium bg-white text-black hover:bg-indigo-700 hover:text-white focus:outline-none"
+                      className="flex items-center cursor-pointer rounded-xl font-semibold box-border outline-none transition-colors ease-in-out duration-300 flex-wrap flex-row pl-4 pr-4 py-3 text-base gap-2 justify-center border-2 border-primary text-primary hover:bg-primary-soft w-full" type="button" data-headlessui-state=""
                       onClick={() => { setIsModalOpen(false); setOption({ option1: false, option2: false }); setConfirm(false); }}
                     >
                       Cancel
                     </button>
                     <button
-                      type="button"
-                      className={`w-1/2 inline-flex justify-center rounded-md border px-4 py-2 text-sm font-medium  focus:outline-none ${confirm ? 'bg-indigo-700 border-indigo-700 hover:bg-indigo-800 text-white cursor-pointer' : 'bg-gray-300 text-gray-400 cursor-not-allowed'} `}
+                      className={`flex items-center rounded-xl font-semibold box-border outline-none transition-colors ease-in-out duration-300 flex-wrap flex-row pl-4 pr-4 py-3 text-base gap-2 justify-center w-full ${!confirm ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-primary text-white hover:bg-primary-dark cursor-pointer"}`} type="button" data-headlessui-state=""
                       disabled={!confirm}
                       onClick={() => {
                         router.push('/my-projects/new/project-creation')

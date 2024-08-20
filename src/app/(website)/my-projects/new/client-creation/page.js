@@ -102,88 +102,103 @@ function Page() {
     };
 
     useEffect(() => {
-        if (Object.keys(formone).length === 0) {
-            router.push('/my-projects/new/project-creation')
-        }
+        // if (Object.keys(formone).length === 0) {
+        //     router.push('/my-projects/new/project-creation')
+        // }
     }, [formone, router])
     return (
         <>
             <ToastContainer />
             <div className="w-full bg-gray-200 min-h-screen">
-                <div className="max-w-screen mx-auto p-6 bg-white shadow-md rounded-lg w-full h-screen flex justify-between">
-                    <div className="w-2/3 h-full">
+                <div className="max-w-screen mx-auto bg-white shadow-md rounded-lg w-full h-screen flex justify-between">
+                    <div className="relative z-10 hidden h-full sm:flex md:w-full lg:w-[65%]">
                         <img
                             src="https://app.billdr.co/_next/image?url=%2Fassets%2Fimages%2Fliving_room.png&w=3840&q=75"
                             alt="Sign Up Step"
                             className="w-full h-full object-cover"
                         />
                     </div>
-                    <div className="w-1/2 p-8 flex flex-col justify-center">
-                        <div className="mb-2">
-                            <button className="text-indigo-600 text-sm" onClick={()=>{router.back()}}>
-                                <ArrowBackIosIcon className="text-sm text-center" />Back
+                    <div className="relative h-full px-12 md:w-full lg:w-[35%] tablet:px-6">
+                        <div class="flex h-20 w-full items-center justify-between">
+                            <button
+                                className="rounded-xl font-semibold box-border outline-none transition-colors ease-in-out duration-300 flex-wrap flex-row text-base justify-center bg-transparent text-primary hover:text-secondary p-0 flex cursor-pointer items-center gap-1"
+                                type="button"
+                                data-headlessui-state=""
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="shrink-0 h-5 w-5"><path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd"></path></svg>
+                                <Link href={'/my-projects'}>Back</Link>
                             </button>
-                            <h2 className="text-3xl font-bold mt-5">Client information</h2>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-8 w-8 cursor-pointer"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path></svg>
                         </div>
-                        <form onSubmit={handleSubmit}>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2 text-sm font-semibold">Email</label>
-                                <input
-                                    name="email"
-                                    type="email"
-                                    placeholder="client@email.com"
-                                    className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'focus:ring-indigo-600'}`}
-                                    value={form.email}
-                                    onChange={handleChange}
-                                />
-                                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                        <div className="flex h-5/6 flex-col">
+                            <h2 className="text-3xl font-bold mt-5 mb-10">Client information</h2>
+                            <div className="flex h-full flex-col justify-center">
+                                <form onSubmit={handleSubmit}>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2 text-sm font-semibold">Email</label>
+                                        <input
+                                            name="email"
+                                            type="email"
+                                            placeholder="client@email.com"
+                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            value={form.email}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2 text-sm font-semibold">Full name</label>
+                                        <input
+                                            name="name"
+                                            placeholder="John Doe"
+                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            value={form.name}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2 text-sm font-semibold">Phone number</label>
+                                        <input
+                                            name="mobile"
+                                            type="text"
+                                            placeholder="555-555-5555"
+                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.mobile ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            value={form.mobile}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-gray-700 mb-2 text-sm font-semibold">Language</label>
+                                        <select
+                                            name="language"
+                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.language ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            value={form.language}
+                                            onChange={handleChange}
+                                        >
+                                            <option value="English">English</option>
+                                            <option value="Hindi">Hindi</option>
+                                            <option value="Spanish">Spanish</option>
+                                            <option value="French">French</option>
+                                        </select>
+                                        {errors.language && <p className="text-red-500 text-sm mt-1">{errors.language}</p>}
+                                    </div>
+                                    <div className="mb-4 flex justify-between">
+                                        <button
+                                            type="submit"
+                                            className="bg-primary h-10 w-full text-sm font-semibold text-white px-4 py-2 rounded-xl transition-colors"
+                                            disabled={btnloading}
+                                        >
+                                            {
+                                                btnloading ? 'please wait' : 'Confirm and create project'
+                                            }
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2 text-sm font-semibold">Full name</label>
-                                <input
-                                    name="name"
-                                    placeholder="John Doe"
-                                    className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-indigo-600'}`}
-                                    value={form.name}
-                                    onChange={handleChange}
-                                />
-                                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2 text-sm font-semibold">Phone number</label>
-                                <input
-                                    name="mobile"
-                                    type="text"
-                                    placeholder="555-555-5555"
-                                    className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.mobile ? 'border-red-500' : 'focus:ring-indigo-600'}`}
-                                    value={form.mobile}
-                                    onChange={handleChange}
-                                />
-                                {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2 text-sm font-semibold">Language</label>
-                                <input
-                                    name="language"
-                                    placeholder="English"
-                                    className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.language ? 'border-red-500' : 'focus:ring-indigo-600'}`}
-                                    value={form.language}
-                                    onChange={handleChange}
-                                />
-                                {errors.language && <p className="text-red-500 text-sm mt-1">{errors.language}</p>}
-                            </div>
-                            <div className="mb-4 flex justify-between">
-                                <button
-                                    type="submit"
-                                    className="bg-gray-300 h-10 w-full text-sm font-semibold text-gray-600 px-4 py-2 rounded-xl hover:bg-gray-400 transition-colors"
-                                    disabled={btnloading}
-                                >
-                                    {
-                                        btnloading ? 'please wait' : 'Confirm and create project'
-                                    }
-                                </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         primary: '#6366f1', // or you can directly use the specific shade like '#6366F1' (which is indigo-500)
         "primary-dark": "#5255cb",
+        "primary-soft": "#e5eefc",
         main: '#E5E7EB', // this corresponds to bg-gray-200
       },
     },
