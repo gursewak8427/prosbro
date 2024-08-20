@@ -24,8 +24,8 @@ import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
 import { useRouter } from 'next/navigation';
 import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { Button, Switch, Tab, Tabs } from '@mui/material';
-import { TaskItems } from '../_components/TaskItems';
-import { CostSummary } from '../_components/CostSummary';
+import { TaskItems } from '../../_components/TaskItems';
+import { CostSummary } from '../../_components/CostSummary';
 
 
 const VIEW_TYPES = {

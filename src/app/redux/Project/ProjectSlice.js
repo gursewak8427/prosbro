@@ -6,7 +6,8 @@ const initialState = {
     project: {},
     projectlist: [],
     error: '',
-    totalprojects: 0
+    totalprojects: 0,
+    clientquote: {}
 }
 
 // Utility function to process error and convert to string
@@ -57,6 +58,16 @@ export const TotalProjects = createAsyncThunk("TotalProjects", async (data, { re
     }
 });
 
+export const FetchClientQuote = createAsyncThunk("FetchClientQuote", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/createquoteforproject/?slug=${data}`);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
 const Slice = createSlice({
     name: "projectslice",
     initialState,
@@ -66,6 +77,9 @@ const Slice = createSlice({
         },
         projectAction: (state, action) => {
             state.project = action.payload
+        },
+        clientQuoteAction: (state, action) => {
+            state.clientquote = action.payload
         }
     },
     // extra reducer for api calss
@@ -82,9 +96,15 @@ const Slice = createSlice({
         builder.addCase(TotalProjects.rejected, (state, action) => {
             state.error = action.payload
         })
+        builder.addCase(FetchClientQuote.fulfilled, (state, action) => {
+            state.clientquote = action.payload
+        })
+        builder.addCase(FetchClientQuote.rejected, (state, action) => {
+            state.error = action.payload
+        })
     }
 })
 
 
-export const { isloadingAction, projectAction } = Slice.actions;
+export const { isloadingAction, projectAction, clientQuoteAction } = Slice.actions;
 export default Slice.reducer;

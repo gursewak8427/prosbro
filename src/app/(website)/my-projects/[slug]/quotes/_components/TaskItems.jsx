@@ -4,281 +4,14 @@ import React from 'react'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { BookmarkBorderOutlined, ContentCopy, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import EmailIcon from '@mui/icons-material/Email';
-import CallIcon from '@mui/icons-material/Call';
 import AddIcon from '@mui/icons-material/Add';
-import BookIcon from '@mui/icons-material/Book';
-import PaidIcon from '@mui/icons-material/Paid';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ErrorIcon from '@mui/icons-material/Error';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-export const TaskItems = ({ isEditable = true }) => {
-
-    const data = [
-        {
-            title: "General conditions",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Plans and permitting",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Mobilization",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Demolition",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Structural wood",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Flooring",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Painting",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Electrical",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Doors and windows",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Plumbing",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "HVAC",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Walls - interior",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Walls - insulation",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Ceiling",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Ceiling - insulation",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Kitchen fixtures",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Kitchen countertops",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-        {
-            title: "Appliances",
-            estimateLabourTimeHours: 70,
-            labourRateHours: 40,
-            taskList: [{
-                title: "General Admin Fees",
-                quantity: 1,
-                quantityType: "each",
-                material: 1,
-                labour: 1,
-                markup: 0,
-                total: 5220,
-            }]
-        },
-    ]
-
-
+export const TaskItems = ({ data, isEditable }) => {
     return <>
         {
             data?.map((item, index) => <div key={index} className="my-3">
@@ -290,8 +23,8 @@ export const TaskItems = ({ isEditable = true }) => {
                     >
                         <div className="w-full flex flex-row justify-between items-center">
                             <div className="w-1/2 flex flex-row">
-                                <h1 className='mr-2'><PersonIcon className='text-indigo-600' /></h1>
-                                <h1 className='mr-2'>{item?.title}</h1>
+                                <h1 className='mr-2'><img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/media/${item?.task.icon}`} alt="" className='w-5 h-5'/></h1>
+                                <h1 className='mr-2'>{item?.task.name}</h1>
                                 {isEditable && <h1><EditOutlined className='text-indigo-600' /></h1>}
                             </div>
                             <div className="w-1/2 flex flex-row justify-end items-center">
@@ -299,13 +32,13 @@ export const TaskItems = ({ isEditable = true }) => {
                                     isEditable &&
                                     <div className="flex flex-col justify-end items-end mr-2">
                                         <p className='text-sm'>Estimate Labour time: {item?.estimateLabourTimeHours}h</p>
-                                        <p className='text-sm'>Labour Rate: ${item?.labourRateHours}/h <EditOutlined className='text-indigo-600' /></p>
+                                        <p className='text-sm'>Labour Rate: ${item?.labourrate}/h <EditOutlined className='text-indigo-600' /></p>
                                     </div>
                                 }
                                 {
                                     isEditable ?
-                                        <input placeholder='$43' className='w-[150px] border border-gray-400 rounded-lg px-1 py-1 text-sm'></input> :
-                                        <span className='mx-4 font-semibold'>$43</span>
+                                        <input placeholder={`$${item?.totalcost}`} className='w-[150px] border border-gray-400 rounded-lg px-1 py-1 text-sm'></input> :
+                                        <span className='mx-4 font-semibold'>${item?.totalcost}</span>
                                 }
                                 {
                                     isEditable &&
@@ -326,10 +59,10 @@ export const TaskItems = ({ isEditable = true }) => {
                                 </thead>
                                 <tbody>
                                     {
-                                        item?.taskList?.map((taskDetails, taskIndex) => <tr key={`${index}-${taskIndex}`}>
+                                        item?.subtasks?.map((taskDetails, taskIndex) => <tr key={`${index}-${taskIndex}`}>
                                             <td className='p-1 h-[100px] relative'>
-                                                <div className=''>{taskDetails?.title}</div>
-                                                {isEditable && <input type="text" className="border rounded py-1 transform translate-y-4" placeholder='Enter description' />}
+                                                <div className=''>{taskDetails?.name}</div>
+                                                {isEditable && <input type="text" className="border rounded py-1 transform translate-y-4" placeholder='Enter description' value={taskDetails?.description}/>}
                                             </td>
                                             <td className='p-1'>
                                                 {
@@ -346,7 +79,7 @@ export const TaskItems = ({ isEditable = true }) => {
 
                                                         <div className="flex flex-row justify-center">
                                                             <span className='mx-1'>{taskDetails?.quantity}</span>
-                                                            <span className='mx-1'>{taskDetails?.quantityType}</span>
+                                                            <span className='mx-1'>{taskDetails?.quantitytype}</span>
                                                         </div>
                                                 }
                                             </td>
@@ -408,11 +141,10 @@ export const TaskItems = ({ isEditable = true }) => {
                                     <Button variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
                                 </tbody>
                             </table>
-
                         </div>
                     </AccordionDetails>
                 </Accordion>
-            </div>)
+            </div >)
         }
     </>
 }

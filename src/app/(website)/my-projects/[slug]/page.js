@@ -95,7 +95,7 @@ function Page() {
           </div>
         </div>
         <div className='flex items-center gap-2'>
-          <button className='px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg' onClick={()=>{router.push(`${window.location.pathname}/quotes/new?template_tab=base_template`)}}><span><AddIcon /></span> New quote</button>
+          <button className='px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg' onClick={()=>{router.push(`${window.location.pathname}/quotes/new?template_tab=base_template&client=${project.client?.id}&project=${project.id}`)}}><span><AddIcon /></span> New quote</button>
           <h1><span><MoreVertIcon /></span></h1>
         </div>
       </div>

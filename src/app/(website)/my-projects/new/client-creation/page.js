@@ -120,7 +120,7 @@ function Page() {
                     </div>
                     <div className="w-1/2 p-8 flex flex-col justify-center">
                         <div className="mb-2">
-                            <button className="text-indigo-600 text-sm">
+                            <button className="text-indigo-600 text-sm" onClick={()=>{router.back()}}>
                                 <ArrowBackIosIcon className="text-sm text-center" />Back
                             </button>
                             <h2 className="text-3xl font-bold mt-5">Client information</h2>

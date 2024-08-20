@@ -66,7 +66,7 @@ function ProjectsTable({ projectlist }) {
         </table>
 
         <div className="flex items-center justify-between p-4 bg-white rounded-2xl">
-          <p className="text-gray-500 text-xs font-medium">Showing 1 to 17 of 17 results.</p>
+          <p className="text-gray-500 text-xs font-medium">Showing 1 to {projectlist.length} of {projectlist.length} results.</p>
           <div className="flex items-center">
 
             <button className="flex items-center justify-center border border-gray-300 rounded-l-md hover:bg-gray-200 transition-colors duration-200 w-[35px] h-[35px]">

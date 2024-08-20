@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
@@ -11,30 +11,40 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ErrorIcon from '@mui/icons-material/Error';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
-
-import { useDispatch } from 'react-redux';
-import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
-import { useRouter } from 'next/navigation';
-import { TaskItems } from '../_components/TaskItems';
+import { useDispatch, useSelector } from 'react-redux';
+import { usePathname, useRouter } from 'next/navigation';
+import { TaskItems } from '../../_components/TaskItems'
+import { FetchClientQuote } from '@/app/redux/Project/ProjectSlice';
+import Link from 'next/link';
 
 
 function Page() {
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
+  const pathname = usePathname();
+  const quote = useSelector(store => store.projectData.clientquote)
 
-
+  useEffect(() => {
+    if (Object.keys(quote).length > 0) {
+      return
+    } else {
+      const pathSegments = pathname.split("/");
+      const slug = pathSegments[pathSegments.length - 2];
+      dispatch(FetchClientQuote(slug))
+    }
+  }, [pathname, quote])
   return (
     <div className='p-8'>
       <div className='p-2 mt-5 mb-5 w-1/2'>
-        <h1 className='text-3xl font-bold mb-2 '>New Build</h1>
-        <p className='text-gray-600 '>Contemporary wood frame house on a concrete foundation</p>
+        <h1 className='text-3xl font-bold mb-2 '>{quote.name}</h1>
+        <p className='text-gray-600 '>{quote.description}</p>
       </div>
 
       <div className='flex mr-2 '>
-        <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><PersonIcon className='text-gray-500 mr-1' /> Test</div>
-        <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><LocationOnIcon className='text-gray-500 mr-1' />Location</div>
-        <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><EmailIcon className='text-gray-500 mr-1' /> garry@email.com</div>
-        <div className='text-indigo-600 px-2 flex flex-row items-center justify-center'><CallIcon className='text-gray-500 mr-1' /> 234-324-576 </div>
+        <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><PersonIcon className='text-gray-500 mr-1' /> {quote?.client?.name}</div>
+        {/* <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><LocationOnIcon className='text-gray-500 mr-1' /><Link href={'/'}>Location</Link></div> */}
+        <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><EmailIcon className='text-gray-500 mr-1' /> {quote?.client?.email}</div>
+        <div className='text-indigo-600 px-2 flex flex-row items-center justify-center'><CallIcon className='text-gray-500 mr-1' /> {quote?.client?.mobile} </div>
       </div>
 
       <div className='flex gap-5 mt-5 mb-5 '>
@@ -50,9 +60,7 @@ function Page() {
             </div>
 
           </div>
-
-          <TaskItems />
-
+          <TaskItems data={quote?.tasks} isEditable={true}/>
         </div>
 
         <div className="w-3/12 flex flex-col p-4">
@@ -61,7 +69,7 @@ function Page() {
             <h2 className='text-sm text-indigo-600'>Edit on quote %</h2>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>Subtotal</h2>
-              <p className='text-gray-600 text-sm'>$7865.00</p>
+              <p className='text-gray-600 text-sm'>${quote.subtotalbill}</p>
             </div>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>GST</h2>
@@ -72,7 +80,7 @@ function Page() {
             </div>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className=' text-lg font-semibold'>Total</h2>
-              <p className='text-lg font-semibold'>$75445.00</p>
+              <p className='text-lg font-semibold'>${quote.totalbill}</p>
             </div>
 
             <button onClick={() => {

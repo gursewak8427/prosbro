@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Cards from './Cards';
 import axiosInstance from '@/app/redux/AxiosInstance';
 import { useDispatch, useSelector } from 'react-redux';
 import { showToastPromise, updateToast } from '@/app/redux/toastSlice';
+import { clientQuoteAction } from '@/app/redux/Project/ProjectSlice';
 
 function page() {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ function page() {
   const [btnstatus, setBtnstatus] = useState(false)
   const [data, setData] = useState([])
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams()
   const template_tab = searchParams.get('template_tab')
   const updateUrl = (tab) => {
@@ -55,7 +57,16 @@ function page() {
 
   // to send request to create quote for new template for client project
   const handleQuotecreation = async () => {
-    const requestPromise = axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/createquoteforproject/`);
+    const client = searchParams.get('client')
+    const project = searchParams.get('project')
+    const templateIds = selectedtempletes.map(template => template.id);
+    const data = {
+      template_ids: templateIds,
+      client: client,
+      quote: 'quote 1',
+      project: project
+    }
+    const requestPromise = axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/createquoteforproject/`, data);
 
     dispatch(showToastPromise({
       promise: requestPromise,
@@ -68,12 +79,14 @@ function page() {
 
     try {
       const response = await requestPromise;
-      console.log('Data:', response.data);
+      dispatch(clientQuoteAction(response.data))
       // Optionally update the toast
       dispatch(updateToast({
         toastId,
         options: { render: 'Data loaded!', type: 'success', isLoading: false }
       }));
+      const newPathname = pathname.replace('/new', `/${response.data.slug}/edit`);
+      router.push(newPathname)
     } catch (error) {
       console.error('Error:', error);
       dispatch(updateToast({
