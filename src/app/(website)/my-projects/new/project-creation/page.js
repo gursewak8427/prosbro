@@ -105,7 +105,7 @@ const Page = () => {
                 <div className="mb-4 flex justify-between">
                   <button
                     type="submit"
-                    className="bg-primary w-full text-sm font-semibold px-4 py-2 rounded-xl h-14 transition-colors"
+                    className="bg-primary text-white w-full text-sm font-semibold px-4 py-2 rounded-xl h-14 transition-colors"
                   >
                     Continue and enter client details
                   </button>

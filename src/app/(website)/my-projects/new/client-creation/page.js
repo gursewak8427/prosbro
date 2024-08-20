@@ -102,9 +102,9 @@ function Page() {
     };
 
     useEffect(() => {
-        // if (Object.keys(formone).length === 0) {
-        //     router.push('/my-projects/new/project-creation')
-        // }
+        if (Object.keys(formone).length === 0) {
+            router.push('/my-projects/new/project-creation')
+        }
     }, [formone, router])
     return (
         <>
@@ -141,7 +141,7 @@ function Page() {
                                             name="email"
                                             type="email"
                                             placeholder="client@email.com"
-                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'focus:ring-indigo-600'}`}
                                             value={form.email}
                                             onChange={handleChange}
                                         />
@@ -152,29 +152,33 @@ function Page() {
                                         <input
                                             name="name"
                                             placeholder="John Doe"
-                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-indigo-600'}`}
                                             value={form.name}
                                             onChange={handleChange}
                                         />
                                         {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
                                     </div>
                                     <div className="mb-4">
-                                        <label className="block text-gray-700 mb-2 text-sm font-semibold">Phone number</label>
+                                        <div className="flex justify-between">
+                                            <label className="block text-gray-700 mb-2 text-sm font-semibold">Phone number</label>
+                                            <label className="block text-gray-500 mb-2 text-sm">Optional</label>
+                                        </div>
                                         <input
                                             name="mobile"
                                             type="text"
                                             placeholder="555-555-5555"
-                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.mobile ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.mobile ? 'border-red-500' : 'focus:ring-indigo-600'}`}
                                             value={form.mobile}
                                             onChange={handleChange}
                                         />
                                         {errors.mobile && <p className="text-red-500 text-sm mt-1">{errors.mobile}</p>}
                                     </div>
                                     <div className="mb-4">
-                                        <label className="block text-gray-700 mb-2 text-sm font-semibold">Language</label>
+                                        <label className="block text-gray-700 mb-1 text-sm font-semibold">Preferred language</label>
+                                        <p className='text-sm text-gray-500 mb-1'>Your clients will receive automatic notifications in this language</p>
                                         <select
                                             name="language"
-                                            className={`w-full h-10 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.language ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.language ? 'border-red-500' : 'focus:ring-indigo-600'}`}
                                             value={form.language}
                                             onChange={handleChange}
                                         >
@@ -185,10 +189,10 @@ function Page() {
                                         </select>
                                         {errors.language && <p className="text-red-500 text-sm mt-1">{errors.language}</p>}
                                     </div>
-                                    <div className="mb-4 flex justify-between">
+                                    <div className="mb-4 mt-8 flex justify-between">
                                         <button
                                             type="submit"
-                                            className="bg-primary h-10 w-full text-sm font-semibold text-white px-4 py-2 rounded-xl transition-colors"
+                                            className="bg-primary h-11 w-full text-sm font-semibold text-white px-4 py-2 rounded-xl transition-colors"
                                             disabled={btnloading}
                                         >
                                             {
