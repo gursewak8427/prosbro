@@ -23,9 +23,9 @@ export const TaskItems = ({ data, isEditable }) => {
                     >
                         <div className="w-full flex flex-row justify-between items-center">
                             <div className="w-1/2 flex flex-row">
-                                <h1 className='mr-2'><img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/media/${item?.task.icon}`} alt="" className='w-5 h-5'/></h1>
+                                <h1 className='mr-2'><img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/media/${item?.task.icon}`} alt="" className='w-5 h-5' /></h1>
                                 <h1 className='mr-2'>{item?.task.name}</h1>
-                                {isEditable && <h1><EditOutlined className='text-primary' /></h1>}
+                                {isEditable && <h1 onClick={(e) => { e.stopPropagation; alert('hello') }}><EditOutlined className='text-primary' /></h1>}
                             </div>
                             <div className="w-1/2 flex flex-row justify-end items-center">
                                 {
@@ -62,7 +62,7 @@ export const TaskItems = ({ data, isEditable }) => {
                                         item?.subtasks?.map((taskDetails, taskIndex) => <tr key={`${index}-${taskIndex}`}>
                                             <td className='p-1 h-[100px] relative'>
                                                 <div className=''>{taskDetails?.name}</div>
-                                                {isEditable && <input type="text" className="border rounded py-1 transform translate-y-4" placeholder='Enter description' value={taskDetails?.description}/>}
+                                                {isEditable && <input type="text" className="border rounded py-1 transform translate-y-4" placeholder='Enter description' value={taskDetails?.description} />}
                                             </td>
                                             <td className='p-1'>
                                                 {
