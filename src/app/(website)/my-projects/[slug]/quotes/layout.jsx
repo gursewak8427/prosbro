@@ -27,7 +27,7 @@ export default function QuoteLayout({ children }) {
     return (
         <div className='p-2 bg-gray-100'>
             <div className='flex justify-between items-center p-4'>
-                <div className='text-indigo-600'>
+                <div className='text-primary'>
                     {
                         step != 0 && <button onClick={() => {
                             switch (step) {
@@ -68,7 +68,7 @@ export default function QuoteLayout({ children }) {
                         })}
                     </Stepper>
                 </div>
-                <div className='text-indigo-600'>
+                <div className='text-primary'>
                     <button className='text-lg font-semibold'>Save and exit</button>
                 </div>
             </div>

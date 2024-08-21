@@ -22,7 +22,7 @@ async function Page() {
         <h1 className='text-4xl font-bold'>Dashboard</h1>
         <div className='flex justify-between mt-5 mb-5'>
           <h2 className='text-xl font-semibold'>Sales pipeline <ReportIcon className='text-gray-400' /> </h2>
-          <button className='text-indigo-600 text-xl font-semibold'>See my projects <KeyboardArrowRightIcon /></button>
+          <button className='text-primary text-xl font-semibold'>See my projects <KeyboardArrowRightIcon /></button>
         </div>
       </div>
       <div className='bg-white rounded-lg p-4 '>
@@ -38,7 +38,7 @@ async function Page() {
             <p className='text-xs' >No projects</p>
           </div>
           <div className='w-1/4 p-2'>
-            <h2 className='w-2/3 text-center bg-indigo-200 p-1 rounded-md mt-2 mb-2 font-semibold text-indigo-600'>In construction</h2>
+            <h2 className='w-2/3 text-center bg-indigo-200 p-1 rounded-md mt-2 mb-2 font-semibold text-primary'>In construction</h2>
             <p className='text-xs' ><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
             <p className='text-xs' >No projects</p>
           </div>
@@ -76,7 +76,7 @@ async function Page() {
             <p className='text-xs' ><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
           </div>
           <div className='w-1/4 p-2'>
-            <h2 className='w-2/3 text-center bg-indigo-200 p-1 rounded-md mt-2 mb-2 font-semibold text-indigo-600'>Total paid</h2>
+            <h2 className='w-2/3 text-center bg-indigo-200 p-1 rounded-md mt-2 mb-2 font-semibold text-primary'>Total paid</h2>
             <p className='text-xs' ><span className='font-semibold text-2xl'>$0</span> Tax excl</p>
           </div>
           <div className='w-1/4 p-2'>

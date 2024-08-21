@@ -65,7 +65,7 @@ const MainContent = () => {
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
+                    className="text-white px-4 py-2 rounded bg-primary hover:bg-indigo-700 duration-200">
                     + Add a team member
                 </button>
             </div>

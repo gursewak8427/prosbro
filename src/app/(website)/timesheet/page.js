@@ -75,10 +75,10 @@ const MainContent = () => {
 
                 </div>
                 <div className='flex gap-4'>
-                    <button className='text-indigo-600 flex font-semibold justify-center items-center'><span><PeopleAltIcon /> </span>Manage team</button>
+                    <button className='text-primary flex font-semibold justify-center items-center'><span><PeopleAltIcon /> </span>Manage team</button>
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
+                        className="text-white px-4 py-2 rounded bg-primary hover:bg-indigo-700 duration-200">
                         + Add a team member
                     </button>
                 </div>
@@ -104,8 +104,8 @@ const MainContent = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <button className="flex items-center gap-1 p-1h-full text-sm font-semibold text-indigo-600">
-                        <span ><IosShareIcon className='text-lg text-indigo-600' /></span> Export
+                    <button className="flex items-center gap-1 p-1h-full text-sm font-semibold text-primary">
+                        <span ><IosShareIcon className='text-lg text-primary' /></span> Export
                     </button>
                     <button className="flex items-center gap-1 text-gray-700 font-semibold p-1 border-2 border-gray-400 rounded-xl h-full text-sm">
                         <span><DoneIcon /></span> Approve pending (2)
@@ -140,11 +140,11 @@ const MainContent = () => {
                                     </span>
                                     <span className='font-semibold'>{item.name}</span>
                                 </td>
-                                <td className="py-2 px-4 text-indigo-600">{item.work1}</td>
-                                <td className="py-2 px-4 text-indigo-600">{item.work2}</td>
-                                <td className="py-2 px-4 text-indigo-600">{item.work3}</td>
-                                <td className="py-2 px-4 text-indigo-600">{item.work4}</td>
-                                <td className="py-2 px-4 text-indigo-600">{item.work5}</td>
+                                <td className="py-2 px-4 text-primary">{item.work1}</td>
+                                <td className="py-2 px-4 text-primary">{item.work2}</td>
+                                <td className="py-2 px-4 text-primary">{item.work3}</td>
+                                <td className="py-2 px-4 text-primary">{item.work4}</td>
+                                <td className="py-2 px-4 text-primary">{item.work5}</td>
                                 <td className="py-2 px-4 ">{item.totalhrs}</td>
                                 <td className="py-2 px-4 ">{item.totaldoller}</td>
 
@@ -230,14 +230,14 @@ const MainContent = () => {
                                     </Dialog.Title>
                                     <div className="mt-4 p-2 ">
                                         <div
-                                            className=" p-4 text-center  cursor-pointer text-black rounded-lg border border-indigo-600  duration-200 w-full mb-4"
+                                            className=" p-4 text-center  cursor-pointer text-black rounded-lg border border-primary  duration-200 w-full mb-4"
                                             onClick={() => console.log('Add customer yourself clicked')}
                                         >
                                             <h4 className="text-xl font-semibold mb-2">Administrator <span className='text-sm bg-gray-400 p-2 text-gray-700 rounded-xl'>1/6</span></h4>
                                             <p className="text-sm">Full access</p>
                                         </div>
                                         <div
-                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-primary duration-200 w-full mb-4"
                                             onClick={() => console.log('Share magic link clicked')}
                                         >
                                             <h4 className="text-xl font-semibold mb-2">Employee/Subcontractor</h4>
@@ -247,7 +247,7 @@ const MainContent = () => {
                                     <div className="mt-4 flex justify-between gap-2">
                                         <button
                                             type="button"
-                                            className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline"
+                                            className="w-1/2 inline-flex justify-center rounded-md border border-primary  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-primary hover:text-white focus:outline"
                                             onClick={() => setIsModalOpen(false)}
                                         >
                                             Cancel
@@ -256,7 +256,7 @@ const MainContent = () => {
                                         <Link >
                                             <button
                                                 type="button"
-                                                className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-mediumfocus:outline"
+                                                className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-primary hover:text-white text-sm font-mediumfocus:outline"
                                                 onClick={console.log("Confirm")}
                                             >
                                                 Confirm

@@ -44,14 +44,14 @@ function Page() {
   return (
     <div className='p-4 bg-gray-200'>
       <div className='flex justify-between p-4'>
-        <div className='text-indigo-600 text-lg font-semibold'>
+        <div className='text-primary text-lg font-semibold'>
           <button><ArrowBackIosIcon className='text-lg' /> Back</button>
         </div>
         <div className='flex items-center space-x-4 relative text-gray-500'>
           <div className='relative flex flex-col items-center'>
             <button
               onClick={handleEditClick}
-              className={`w-5 h-5 rounded-full ${activeButton === 'edit' ? 'bg-indigo-600' : 'bg-gray-400'}`}
+              className={`w-5 h-5 rounded-full ${activeButton === 'edit' ? 'bg-primary' : 'bg-gray-400'}`}
               style={{
                 outline: activeButton === 'edit' ? '3px solid rgba(75, 85, 99, 0.5)' : '3px solid rgba(107, 114, 128, 0.5)',
                 outlineOffset: '4px'
@@ -65,7 +65,7 @@ function Page() {
           <div className='relative flex flex-col items-center'>
             <button
               onClick={handlePreviewClick}
-              className={`w-5 h-5 rounded-full ${activeButton === 'preview' ? 'bg-indigo-600' : 'bg-gray-400'}`}
+              className={`w-5 h-5 rounded-full ${activeButton === 'preview' ? 'bg-primary' : 'bg-gray-400'}`}
               style={{
                 outline: activeButton === 'preview' ? '3px solid rgba(75, 85, 99, 0.5)' : '3px solid rgba(107, 114, 128, 0.5)',
                 outlineOffset: '4px'
@@ -74,7 +74,7 @@ function Page() {
             <span className='mt-2 text-sm'>Preview & Send</span>
           </div>
         </div>
-        <div className='text-indigo-600 text-lg font-semibold'>
+        <div className='text-primary text-lg font-semibold'>
           <button>Save & Exit</button>
         </div>
       </div>
@@ -148,14 +148,14 @@ function Page() {
                     </td>
                     <td className='py-2 px-4'>
                       <button>
-                        <DeleteOutlineIcon className='text-indigo-600' />
+                        <DeleteOutlineIcon className='text-primary' />
                       </button>
                     </td>
                   </tr>
                 ))}
                 <tr>
                   <td colSpan="5" className="py-2 px-4 text-center">
-                    <button className='text-indigo-600 py-2 px-4 rounded font-semibold'>
+                    <button className='text-primary py-2 px-4 rounded font-semibold'>
                       <AddIcon /> Add Line Item
                     </button>
                   </td>
@@ -168,7 +168,7 @@ function Page() {
             <div className='flex flex-col items-center justify-center'>
               <NoteAddIcon onClick={handleFileInputClick} className='text-gray-600 text-4xl mb-4 cursor-pointer' />
               <button
-                className='flex items-center space-x-2 text-indigo-600 py-2 px-4 rounded'
+                className='flex items-center space-x-2 text-primary py-2 px-4 rounded'
                 onClick={handleFileInputClick}
               >
                 <AddIcon />
@@ -196,14 +196,14 @@ function Page() {
             <span className='text-gray-600'>GST</span>
             <span className='text-gray-800'>$50.00</span>
           </div>
-          <div className='mt-2 mb-2 text-indigo-600 font-semibold'>
+          <div className='mt-2 mb-2 text-primary font-semibold'>
           <button>Edit taxes</button>
           </div>
           <div className='flex justify-between mb-4'>
             <span className=' font-bold'>Total</span>
             <span className='font-bold'>$1050.00</span>
           </div>
-          <button className='w-full py-2 px-4 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700'>
+          <button className='w-full py-2 px-4 bg-primary text-white rounded-lg font-semibold hover:bg-indigo-700'>
             Preview and Send
           </button>
         </div>

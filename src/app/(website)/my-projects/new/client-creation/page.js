@@ -141,7 +141,7 @@ function Page() {
                                             name="email"
                                             type="email"
                                             placeholder="client@email.com"
-                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'focus:ring-primary'}`}
                                             value={form.email}
                                             onChange={handleChange}
                                         />
@@ -152,7 +152,7 @@ function Page() {
                                         <input
                                             name="name"
                                             placeholder="John Doe"
-                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-primary'}`}
                                             value={form.name}
                                             onChange={handleChange}
                                         />
@@ -167,7 +167,7 @@ function Page() {
                                             name="mobile"
                                             type="text"
                                             placeholder="555-555-5555"
-                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.mobile ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.mobile ? 'border-red-500' : 'focus:ring-primary'}`}
                                             value={form.mobile}
                                             onChange={handleChange}
                                         />
@@ -178,7 +178,7 @@ function Page() {
                                         <p className='text-sm text-gray-500 mb-1'>Your clients will receive automatic notifications in this language</p>
                                         <select
                                             name="language"
-                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.language ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                                            className={`w-full h-11 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.language ? 'border-red-500' : 'focus:ring-primary'}`}
                                             value={form.language}
                                             onChange={handleChange}
                                         >

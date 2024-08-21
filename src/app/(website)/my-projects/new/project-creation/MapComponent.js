@@ -36,7 +36,7 @@ const MapComponent = ({ errors,setPlaces }) => {
                     type="text"
                     name="address"
                     placeholder="Enter your address"
-                    className={`w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.address ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                    className={`w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.address ? 'border-red-500' : 'focus:ring-primary'}`}
                 />
             </StandaloneSearchBox>
         </>

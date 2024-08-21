@@ -43,7 +43,7 @@ function SelectionModal({ isModalOpen, setIsModalOpen, setIsAdminModalOpen }) {
                                 </DialogTitle>
                                 <div className="mt-4 p-2 ">
                                     <div
-                                        className={`p-4 text-center   ${selected.option1 ? 'bg-indigo-100' : ''} cursor-pointer text-black rounded-lg border border-indigo-600  duration-200 w-full mb-4`}
+                                        className={`p-4 text-center   ${selected.option1 ? 'bg-indigo-100' : ''} cursor-pointer text-black rounded-lg border border-primary  duration-200 w-full mb-4`}
                                         onClick={() => {
                                             setSelected({ option1: true, option2: false });
                                             setBtn(true)
@@ -53,7 +53,7 @@ function SelectionModal({ isModalOpen, setIsModalOpen, setIsAdminModalOpen }) {
                                         <p className="text-sm">Full access</p>
                                     </div>
                                     <div
-                                        className={`p-4 text-center ${selected.option2 ? 'bg-indigo-100' : ''} cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4`}
+                                        className={`p-4 text-center ${selected.option2 ? 'bg-indigo-100' : ''} cursor-pointer text-black rounded-lg border border-primary duration-200 w-full mb-4`}
                                         onClick={() => {
                                             setSelected({ option1: false, option2: true });
                                             setBtn(true)
@@ -66,14 +66,14 @@ function SelectionModal({ isModalOpen, setIsModalOpen, setIsAdminModalOpen }) {
                                 <div className="mt-4 flex justify-between gap-2">
                                     <button
                                         type="button"
-                                        className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline"
+                                        className="w-1/2 inline-flex justify-center rounded-md border border-primary  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-primary hover:text-white focus:outline"
                                         onClick={() => { setIsModalOpen(false); setSelected({ option1: false, option2: false }); setBtn(false) }}
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="button"
-                                        className={`w-1/2 inline-flex justify-center rounded-md ${btn ? 'bg-indigo-600 hover:bg-blue-700 cursor-pointer text-white' : 'text-black cursor-not-allowed'}  px-4 py-2 bg-gray-200   text-sm font-mediumfocus:outline`}
+                                        className={`w-1/2 inline-flex justify-center rounded-md ${btn ? 'bg-primary hover:bg-blue-700 cursor-pointer text-white' : 'text-black cursor-not-allowed'}  px-4 py-2 bg-gray-200   text-sm font-mediumfocus:outline`}
                                         onClick={submitHandle}
                                         disabled={!btn}
                                     >

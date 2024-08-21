@@ -11,7 +11,7 @@ export default function Templates() {
                 <h1 className="text-3xl font-bold">Templates</h1>
                 <div className='mt-5 mb-5'>
                     <ul className=' w-8/12 flex gap-4 border border-b-gray-400'>
-                        <li className='text-gray-700 border-2 border-b-indigo-600'>Billdr templates</li>
+                        <li className='text-gray-700 border-2 border-b-primary'>Billdr templates</li>
                         <li className='text-gray-700'>My templates</li>
                         <li className='text-gray-700'>My cost catalog</li>
                         <li className='text-gray-700'>Categories</li>
@@ -21,7 +21,7 @@ export default function Templates() {
 
             <div className='flex'>
                 <button
-                    className="text-white px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 duration-200 ml-auto"
+                    className="text-white px-4 py-2 rounded-lg bg-primary hover:bg-indigo-700 duration-200 ml-auto"
                     onClick={() => setIsModalOpen(true)}
                 >
                     + Create a new template
@@ -76,7 +76,7 @@ export default function Templates() {
                                 </div>
                             </div>
                             <div className="flex justify-end">
-                                <h1 className="text-2xl font-bold text-indigo-600">{template.price}</h1>
+                                <h1 className="text-2xl font-bold text-primary">{template.price}</h1>
                             </div>
                         </div>
                     ))}
@@ -119,14 +119,14 @@ export default function Templates() {
                                                 <input
                                                     type="text"
                                                     placeholder="Kitchen remodel"
-                                                    className="w-full p-2 border border-gray-300 rounded-lg focus:border-2 focus:border-indigo-600 focus:outline-none"
+                                                    className="w-full p-2 border border-gray-300 rounded-lg focus:border-2 focus:border-primary focus:outline-none"
                                                 />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="block text-sm font-medium text-gray-900">Description</label>
                                                 <textarea
                                                     placeholder="Includes cabinetry, trim, plumbing, electrical..."
-                                                    className="w-full p-2 border border-gray-300 rounded-lg focus:border-2 focus:border-indigo-600 focus:outline-none h-32"
+                                                    className="w-full p-2 border border-gray-300 rounded-lg focus:border-2 focus:border-primary focus:outline-none h-32"
                                                 />
                                             </div>
                                         </form>
@@ -135,14 +135,14 @@ export default function Templates() {
                                     <div className="mt-4 flex justify-between gap-2">
                                         <button
                                             type="button"
-                                            className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline"
+                                            className="w-1/2 inline-flex justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-primary hover:text-white focus:outline"
                                             onClick={() => setIsModalOpen(false)}
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type="button"
-                                            className="w-1/2 inline-flex justify-center rounded-md px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-medium focus:outline"
+                                            className="w-1/2 inline-flex justify-center rounded-md px-4 py-2 bg-gray-200 text-black hover:bg-primary hover:text-white text-sm font-medium focus:outline"
                                             onClick={() => console.log('Confirm')}
                                         >
                                             Confirm

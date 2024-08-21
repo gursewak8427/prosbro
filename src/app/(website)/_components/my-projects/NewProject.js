@@ -47,7 +47,7 @@ export default function NewProject({ isModalOpen, setIsModalOpen }) {
                   </DialogTitle>
                   <div className="">
                     <div
-                      className={`flex w-full cursor-pointer flex-col space-y-2 rounded-lg border p-5 text-center bg-white  ${option.option1 ? 'bg-primary-soft border border-indigo-600' : ''}  duration-200 w-full mb-4`}
+                      className={`flex w-full cursor-pointer flex-col space-y-2 rounded-lg border p-5 text-center bg-white  ${option.option1 ? 'bg-primary-soft border border-primary' : ''}  duration-200 w-full mb-4`}
                       onClick={() => {
                         setOption({ option1: true, option2: false });
                         setConfirm(true);
@@ -57,7 +57,7 @@ export default function NewProject({ isModalOpen, setIsModalOpen }) {
                       <p className="text-base">Fill out the form for your customers</p>
                     </div>
                     <div
-                      className={`flex w-full cursor-pointer flex-col space-y-2 rounded-lg border p-5 text-center bg-white  ${option.option2 ? 'bg-primary-soft border border-indigo-600' : ''}  duration-200 w-full mb-4`}
+                      className={`flex w-full cursor-pointer flex-col space-y-2 rounded-lg border p-5 text-center bg-white  ${option.option2 ? 'bg-primary-soft border border-primary' : ''}  duration-200 w-full mb-4`}
                       onClick={() => {
                         setOption({ option1: false, option2: true });
                         setConfirm(true);

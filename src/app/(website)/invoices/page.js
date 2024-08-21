@@ -20,7 +20,7 @@ function page() {
           <h1 className="text-3xl font-bold">Invoices</h1>
           <p className="flex items-center justify-center text-xs p-2 bg-gray-300 text-center rounded-lg">1 invoice</p>
         </div>
-        <button className="text-white px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 duration-200">
+        <button className="text-white px-4 py-2 rounded-lg bg-primary hover:bg-indigo-700 duration-200">
           <Link href={'/invoices/new'}>
             + New invoice
           </Link>

@@ -163,7 +163,7 @@ The Contractor shall perform the construction work described in this quote in ac
 
         <div className='w-3/12 bg-white py-4 px-4 rounded-lg shadow-md h-96'>
           <h2 className='font-semibold text-sm'>Markup on quote</h2>
-          <h2 className='text-sm text-indigo-600'>Edit on quote %</h2>
+          <h2 className='text-sm text-primary'>Edit on quote %</h2>
           <div className='mb-4 mt-4 flex justify-between'>
             <h2 className='text-gray-500 text-sm'>Subtotal</h2>
             <p className='text-gray-600 text-sm'>$7865.00</p>
@@ -173,7 +173,7 @@ The Contractor shall perform the construction work described in this quote in ac
             <p className='text-gray-600 text-sm'>$65.00</p>
           </div>
           <div className='mb-4 mt-4 flex justify-between'>
-            <button className='text-sm text-indigo-600'>Edit taxes</button>
+            <button className='text-sm text-primary'>Edit taxes</button>
           </div>
           <div className='mb-4 mt-4 flex justify-between'>
             <h2 className=' text-lg font-semibold'>Total</h2>
@@ -183,12 +183,12 @@ The Contractor shall perform the construction work described in this quote in ac
           <button onClick={() => {
             // dispatch(nextQuoteStepperFormIndex())
             router.push("customize")
-          }} className='w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next - Customize</button>
+          }} className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next - Customize</button>
           <div className='mb-2 mt-2 flex justify-center items-center'>
-            <button className='text-sm font-semibold text-indigo-600'><RemoveRedEyeIcon /> Clint preview - PDF</button>
+            <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Clint preview - PDF</button>
           </div>
           <div className='mb-2 mt-2 flex justify-center items-center'>
-            <button className='text-sm font-semibold text-indigo-600'>Scope of work (no prices)</button>
+            <button className='text-sm font-semibold text-primary'>Scope of work (no prices)</button>
             <button className='text-gray-400'><ErrorIcon /></button>
           </div>
         </div>

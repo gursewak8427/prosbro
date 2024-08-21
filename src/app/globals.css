@@ -4,14 +4,28 @@
 
 .underline-indigo {
     text-decoration: underline;
-    text-decoration-color: #6366f1; /* Tailwind's indigo-500 color */
-    text-underline-offset: 10px; /* Adjust this value to set the distance from the text */
+    text-decoration-color: #6366f1;
+    /* Tailwind's indigo-500 color */
+    text-underline-offset: 10px;
+    /* Adjust this value to set the distance from the text */
     text-decoration-thickness: 3px;
 }
 
+
 .underline-grey:hover {
     text-decoration: underline;
-    text-decoration-color: #00000000; /* Tailwind's indigo-500 color */
-    text-underline-offset: 10px; /* Adjust this value to set the distance from the text */
+    text-decoration-color: #00000000;
+    /* Tailwind's indigo-500 color */
+    text-underline-offset: 10px;
+    /* Adjust this value to set the distance from the text */
     text-decoration-thickness: 3px;
+}
+
+.activity-item:not(:last-child)::before {
+    content: "";
+    border-left: 2px dotted #6366f1;
+    height: 115%;
+    position: absolute;
+    top: 14px;
+    left: 6px;
 }

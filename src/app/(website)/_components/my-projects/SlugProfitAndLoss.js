@@ -98,31 +98,34 @@ function SlugProfitAndLoss() {
     return (
         <div className='p-4'>
 
-            <div className='flex bg-white w-1/2 justify-between p-2 rounded-lg items-center mt-4 mb-4'>
-                <div className='p-2 bg-gray-300 rounded-lg'>
-                    <button><MultipleStopIcon /> Summary</button>
-                </div>
-                <div className='p-2 rounded-lg hover:bg-gray-300'>
-                    <button><ArrowUpwardIcon /> Income</button>
-                </div>
-                <div className='p-2 rounded-lg hover:bg-gray-300'>
-                    <button><ArrowDownwardIcon /> Expenses</button>
-                </div>
 
-            </div>
+            <div className="flex justify-between items-center">
+                <div className='flex justify-start gap-4'>
+                    <div className='min-w-[250px] bg-white  px-5 py-3 rounded-lg border-2 border-l-primary'>
+                        <p className='text-gray-500'>CONTRACT VALUE</p>
+                        <h1 className='text-lg font-semibold '>$280,608.33</h1>
+                    </div>
+                    <div className='min-w-[250px] bg-white  px-5 py-3 rounded-lg border-2 border-l-orange-600'>
+                        <p className='text-gray-500'>PAID TO DATE</p>
+                        <h1 className='text-lg font-semibold '>$0</h1>
+                    </div>
+                    <div className='min-w-[250px] bg-white  px-5 py-3 rounded-lg border-2 border-l-green-600'>
+                        <p className='text-gray-500'>BALANCE</p>
+                        <h1 className='text-lg font-semibold '>$280,608.33</h1>
+                    </div>
+                </div>
+                
+                <div className='flex bg-white p-2 rounded-lg items-center gap-2'>
+                    <div className='p-2 bg-gray-300 rounded-lg'>
+                        <button><MultipleStopIcon /> Summary</button>
+                    </div>
+                    <div className='p-2 rounded-lg hover:bg-gray-300'>
+                        <button><ArrowUpwardIcon /> Income</button>
+                    </div>
+                    <div className='p-2 rounded-lg hover:bg-gray-300'>
+                        <button><ArrowDownwardIcon /> Expenses</button>
+                    </div>
 
-            <div className='flex justify-start gap-10'>
-                <div className='bg-white  px-10 py-4 rounded-lg border-2 border-l-indigo-600'>
-                    <p className='text-gray-500'>CONTRACT VALUE</p>
-                    <h1 className='text-lg font-semibold '>$0</h1>
-                </div>
-                <div className='bg-white  px-10 py-4 rounded-lg border-2 border-l-orange-600'>
-                    <p className='text-gray-500'>PAID TO DATE</p>
-                    <h1 className='text-lg font-semibold '>$0</h1>
-                </div>
-                <div className='bg-white  px-10 py-4 rounded-lg border-2 border-l-green-600'>
-                    <p className='text-gray-500'>BALANCE</p>
-                    <h1 className='text-lg font-semibold '>$0</h1>
                 </div>
             </div>
 

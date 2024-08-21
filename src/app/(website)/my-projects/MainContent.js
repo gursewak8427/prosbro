@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import MenuIcon from "@mui/icons-material/Menu";
 import GridViewIcon from "@mui/icons-material/GridView";
@@ -9,6 +9,7 @@ import { Fetchprojects, TotalProjects } from "@/app/redux/Project/ProjectSlice";
 import { useSearchParams } from "next/navigation";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ClearIcon from '@mui/icons-material/Clear';
+import { KeyboardArrowUp } from "@mui/icons-material";
 
 
 
@@ -79,6 +80,27 @@ const MainContent = () => {
   }, [selected]);
 
 
+  const dropdownRef = useRef(null);
+  const btnRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside() {
+
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        if (btnRef.current && !btnRef.current.contains(event.target))
+          setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -104,6 +126,8 @@ const MainContent = () => {
   };
 
 
+
+
   return (
     <div className="p-8 h-full min-h-screen flex-1 bg-gray-200 shadow-md">
       <div className="flex flex-col md:flex-row justify-between items-center mb-9">
@@ -124,12 +148,12 @@ const MainContent = () => {
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="py-2 border-b border-gray-300 w-full md:w-auto">
+          <div className="border-b border-gray-300 w-full md:w-auto">
             <ul className="flex flex-wrap gap-4 text-gray-800 text-sm font-medium">
               <li
-                className={`cursor-pointer transition-colors duration-200 ${selected === "all"
-                  ? "text-indigo-500 underline-indigo"
-                  : "hover:underline-indigo text-gray-600 font-normal"
+                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "all"
+                  ? "text-indigo-500 border-primary"
+                  : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
                   }`}
                 onClick={() => {
                   setSelected("all");
@@ -139,9 +163,9 @@ const MainContent = () => {
                 {selected == "all" ? "(" + projectlist.length + ")" : ""}
               </li>
               <li
-                className={`cursor-pointer transition-colors duration-200 ${selected === "tobid"
-                  ? "text-indigo-500 underline-indigo"
-                  : "hover:text-indigo-500 text-gray-600 font-normal hover:underline-indigo"
+                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "tobid"
+                  ? "text-indigo-500 border-primary"
+                  : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
                   }`}
                 onClick={() => {
                   setSelected("tobid");
@@ -152,9 +176,9 @@ const MainContent = () => {
               </li>
 
               <li
-                className={`cursor-pointer transition-colors duration-200 ${selected === "quotesent"
-                  ? "text-indigo-500 underline-indigo"
-                  : "hover:text-indigo-500 text-gray-600 font-normal "
+                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "quotesent"
+                  ? "text-indigo-500 border-primary"
+                  : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
                   }`}
                 onClick={() => {
                   setSelected("quotesent");
@@ -164,9 +188,9 @@ const MainContent = () => {
                 {selected == "quotesent" ? "(" + projectlist.length + ")" : ""}
               </li>
               <li
-                className={`cursor-pointer transition-colors duration-200 ${selected === "inconstruction"
-                  ? "text-indigo-500 underline-indigo"
-                  : "hover:text-indigo-500 text-gray-600 font-normal "
+                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "inconstruction"
+                  ? "text-indigo-500 border-primary"
+                  : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
                   }`}
                 onClick={() => {
                   setSelected("inconstruction");
@@ -178,9 +202,9 @@ const MainContent = () => {
                   : ""}
               </li>
               <li
-                className={`cursor-pointer transition-colors duration-200 ${selected === "complete"
-                  ? "text-indigo-500 underline-indigo"
-                  : "hover:text-indigo-500 text-gray-600 font-normal "
+                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "complete"
+                  ? "text-indigo-500 border-primary"
+                  : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
                   }`}
                 onClick={() => {
                   setSelected("complete");
@@ -190,9 +214,9 @@ const MainContent = () => {
                 {selected == "complete" ? "(" + projectlist.length + ")" : ""}
               </li>
               <li
-                className={`cursor-pointer transition-colors duration-200 ${selected === "archived"
-                  ? "text-indigo-500 underline-indigo"
-                  : "hover:text-indigo-500 text-gray-600 font-normal hover:underline-indigo"
+                className={`cursor-pointer  border-b-2  pb-2 transition-colors duration-200   ${selected === "archived"
+                  ? "text-indigo-500 border-primary"
+                  : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
                   }`}
                 onClick={() => {
                   setSelected("archived");
@@ -232,8 +256,12 @@ const MainContent = () => {
 
           <div className="relative w-80">
             <button
+              ref={btnRef}
               className="py-3 px-2 h-11 border-2 border-gray-300 rounded-xl w-full bg-white flex items-center justify-between hover:border-primary hover:border-2"
-              onClick={toggleDropdown}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDropdown();
+              }}
             >
               {selectedOptions.length > 0 ? (
                 <div className="flex gap-1 overflow-hidden whitespace-nowrap">
@@ -256,12 +284,12 @@ const MainContent = () => {
                 </div>
               ) : (
                 <>
-                  <span className="mr-2 text-gray-500 text-sm">Filter by tag</span> <KeyboardArrowDownIcon className="text-gray-500" />
+                  <span className="mr-2 text-gray-500 text-sm">Filter by tag</span> {isOpen ? <KeyboardArrowUp className="text-gray-500" /> : <KeyboardArrowDownIcon className="text-gray-500" />}
                 </>
               )}
             </button>
             {isOpen && (
-              <div className="absolute bg-white border border-gray-300 rounded-md mt-1 w-full z-50 shadow-xl">
+              <div ref={dropdownRef} className="absolute bg-white border border-gray-300 rounded-md mt-1 w-full z-50 shadow-xl">
                 <ul className="py-2 max-h-60 overflow-auto">
                   {options.map((option) => (
                     <li key={option.value} className="flex items-center text-gray-500 text-sm p-2 hover:bg-slate-200">
@@ -278,8 +306,6 @@ const MainContent = () => {
               </div>
             )}
           </div>
-
-
         </div>
 
 
