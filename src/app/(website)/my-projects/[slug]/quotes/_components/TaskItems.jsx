@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import { BookmarkBorderOutlined, ContentCopy, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { BookmarkBorderOutlined, Close, ContentCopy, DeleteOutline, Done, EditOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
@@ -102,7 +102,52 @@ const SingleSubTask = ({ taskDetails, taskIndex, isEditable, index }) => {
 }
 
 
-const SingleTaskItem = ({ item, index, isEditable }) => {
+const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
+    const [item, setItem] = useState(myItem)
+
+    const [fd, setFd] = useState({
+        title: -1
+    })
+
+    const setEdited = (e, itemm, value) => { // pass value as -1 to close
+        e.stopPropagation();
+
+        setFd({
+            ...fd,
+            [itemm]: value
+        })
+    }
+
+    const handleChange = (e) => {
+        e.stopPropagation();
+
+        setFd({
+            ...fd,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const saveTitle = (e) => {
+        e.stopPropagation();
+
+        let title = fd?.title;
+
+        // Send this title to API
+
+
+        // Update Local data after response
+        setItem({
+            ...item,
+            task: {
+                ...item?.task,
+                name: fd?.title
+            }
+        })
+
+        // Close Input
+        setEdited(e, "title", -1)
+    }
+
     return <div key={index} className="my-3">
         <Accordion>
             <AccordionSummary
@@ -111,10 +156,22 @@ const SingleTaskItem = ({ item, index, isEditable }) => {
                 id="panel1-header"
             >
                 <div className="w-full flex flex-row justify-between items-center">
-                    <div className="w-1/2 flex flex-row">
+                    <div className="w-1/2 flex flex-row items-center">
                         <h1 className='mr-2'><img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/media/${item?.task.icon}`} alt="" className='w-5 h-5' /></h1>
-                        <h1 className='mr-2'>{item?.task.name}</h1>
-                        {isEditable && <h1 onClick={(e) => { e.stopPropagation(); alert('hello') }}><EditOutlined className='text-primary' /></h1>}
+                        <div className='mr-2'>
+                            {
+                                fd?.title == -1 ?
+                                    <>{item?.task?.name}</> :
+                                    <><input onClick={(e) => { e.stopPropagation() }} className='px-2 py-1 border border-gray-600 rounded-md' value={fd?.title} name="title" onChange={handleChange} /></>
+                            }
+                        </div>
+                        {
+                            fd?.title != -1 ? <div className='flex flex-row items-center gap-2'>
+                                <button className='cursor-pointer hover:bg-gray-300 w-8 h-8 rounded-full pb-[2px]' onClick={(e) => saveTitle(e)}><Done color='success' /></button>
+                                <button className='cursor-pointer hover:bg-gray-300 w-8 h-8 rounded-full pb-[2px]' onClick={(e) => setEdited(e, "title", -1)}><Close color='warning' /></button>
+                            </div> :
+                                isEditable && <h1 onClick={(e) => setEdited(e, "title", item?.task?.name)}><EditOutlined className='text-primary' /></h1>
+                        }
                     </div>
                     <div className="w-1/2 flex flex-row justify-end items-center">
                         {
