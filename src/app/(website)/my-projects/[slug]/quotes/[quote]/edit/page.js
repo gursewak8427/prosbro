@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
@@ -23,9 +23,20 @@ function Page() {
   const router = useRouter();
   const pathname = usePathname();
   const quote = useSelector(store => store.projectData.clientquote)
+  const [quoteset, setQuoteset] = useState({ name: quote.name, description: quote.description, id: quote.id })
 
+  const handleQuoteUpdate = (e) => {
+    const { name, value } = e.target
+    setQuoteset(
+      (prevdata) => ({
+        ...prevdata,
+        [name]: value
+      })
+    )
+  }
   useEffect(() => {
     if (Object.keys(quote).length > 0) {
+      setQuoteset({ name: quote.name, description: quote.description, id: quote.id })
       return
     } else {
       const pathSegments = pathname.split("/");
@@ -36,8 +47,24 @@ function Page() {
   return (
     <div className='p-8'>
       <div className='p-2 mt-5 mb-5 w-1/2'>
-        <h1 className='text-3xl font-bold mb-2 '>{quote.name}</h1>
-        <p className='text-gray-600 '>{quote.description}</p>
+        <h1 className='text-3xl font-bold mb-2 '>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={quoteset.name}
+            onChange={(e) => { handleQuoteUpdate(e) }}
+          />
+        </h1>
+        <p className='text-gray-600 '>
+          <input
+            type="text"
+            name="description"
+            id="description"
+            value={quoteset.description}
+            onChange={(e) => { handleQuoteUpdate(e) }}
+          />
+        </p>
       </div>
 
       <div className='flex mr-2 '>
@@ -60,13 +87,13 @@ function Page() {
             </div>
 
           </div>
-          <TaskItems data={quote?.tasks} isEditable={true}/>
+          <TaskItems data={quote?.tasks} isEditable={true} />
         </div>
 
         <div className="w-3/12 flex flex-col p-4">
           <div className='w-full bg-white py-4 px-4 rounded-lg shadow-md h-96'>
             <h2 className='font-semibold text-sm'>Markup on quote</h2>
-            <h2 className='text-sm text-indigo-600'>Edit on quote %</h2>
+            <h2 className='text-sm text-indigo-600 cursor-pointer'>Edit on quote %</h2>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>Subtotal</h2>
               <p className='text-gray-600 text-sm'>${quote.subtotalbill}</p>
