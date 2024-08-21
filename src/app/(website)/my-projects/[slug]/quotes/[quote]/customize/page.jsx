@@ -181,7 +181,7 @@ function Page() {
             <div className="flex flex-row justify-between">
               <div>
                 <h2 className='font-semibold text-sm'>Markup on quote</h2>
-                <h2 className='text-sm text-indigo-600'>Edit on quote %</h2>
+                <h2 className='text-sm text-primary'>Edit on quote %</h2>
               </div>
               <div>
                 $848
@@ -203,12 +203,12 @@ function Page() {
             <button onClick={() => {
               // dispatch(nextQuoteStepperFormIndex())
               router.push("preview")
-            }} className='w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next - Preview</button>
+            }} className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next - Preview</button>
             <div className='mb-2 mt-2 flex justify-center items-center'>
-              <button className='text-sm font-semibold text-indigo-600'><RemoveRedEyeIcon /> Clint preview - PDF</button>
+              <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Clint preview - PDF</button>
             </div>
             <div className='mb-2 mt-2 flex justify-center items-center'>
-              <button className='text-sm font-semibold text-indigo-600'>Scope of work (no prices)</button>
+              <button className='text-sm font-semibold text-primary'>Scope of work (no prices)</button>
               <button className='text-gray-400'><ErrorIcon /></button>
             </div>
           </div>

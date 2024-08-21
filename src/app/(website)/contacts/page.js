@@ -60,14 +60,14 @@ const MainContent = () => {
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
+                    className="text-white px-4 py-2 rounded bg-primary hover:bg-indigo-700 duration-200">
                     + Add a contact
                 </button>
             </div>
 
             <div className='mt-5 mb-5'>
                 <ul className='w-1/2 flex gap-4 border border-b-gray-400'>
-                    <li className='text-gray-700 border-2 border-b-indigo-600'>Clients</li>
+                    <li className='text-gray-700 border-2 border-b-primary'>Clients</li>
                     <li className='text-gray-700'>Professional</li>
                     <li className='text-gray-700'>Employees</li>
                     <li className='text-gray-700'>Administrators</li>
@@ -139,28 +139,28 @@ const MainContent = () => {
                                     </Dialog.Title>
                                     <div className="mt-4 p-2 ">
                                         <div
-                                            className=" p-4 text-center  cursor-pointer text-black rounded-lg border border-indigo-600  duration-200 w-full mb-4"
+                                            className=" p-4 text-center  cursor-pointer text-black rounded-lg border border-primary  duration-200 w-full mb-4"
                                             onClick={() => console.log('Add customer yourself clicked')}
                                         >
                                             <h4 className="text-xl font-semibold mb-2">Employee / Subcontractor</h4>
                                             <p className="text-xs">Access to employee portal (Tasks, timesheet, daily logs)</p>
                                         </div>
                                         <div
-                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-primary duration-200 w-full mb-4"
                                             onClick={() => console.log('Share magic link clicked')}
                                         >
                                             <h4 className="text-xl font-semibold mb-2">Administrator</h4>
                                             <p className="text-xs">Full access</p>
                                         </div>
                                         <div
-                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-primary duration-200 w-full mb-4"
                                             onClick={() => console.log('Share magic link clicked')}
                                         >
                                             <h4 className="text-xl font-semibold mb-2">Professional</h4>
                                             <p className="text-xs">No access to the software (For architects, subcontractors)</p>
                                         </div>
                                         <div
-                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-indigo-600 duration-200 w-full mb-4"
+                                            className=" p-4 text-center cursor-pointer text-black rounded-lg border border-primary duration-200 w-full mb-4"
                                             onClick={() => console.log('Share magic link clicked')}
                                         >
                                             <h4 className="text-xl font-semibold mb-2">Client</h4>
@@ -170,14 +170,14 @@ const MainContent = () => {
                                     <div className="mt-4 flex justify-between gap-2">
                                         <button
                                             type="button"
-                                            className="w-1/2 inline-flex justify-center rounded-md border border-indigo-600  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-indigo-600 hover:text-white focus:outline"
+                                            className="w-1/2 inline-flex justify-center rounded-md border border-primary  px-4 py-2 text-sm font-medium bg-slate-200 text-black hover:bg-primary hover:text-white focus:outline"
                                             onClick={() => setIsModalOpen(false)}
                                         >
                                             Cancel
                                         </button>
                                         <button
                                             type="button"
-                                            className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-indigo-600 hover:text-white text-sm font-mediumfocus:outline"
+                                            className="w-1/2 inline-flex justify-center rounded-md  px-4 py-2 bg-gray-200 text-black hover:bg-primary hover:text-white text-sm font-mediumfocus:outline"
                                             onClick={console.log("Confirm")}
                                         >
                                             Confirm

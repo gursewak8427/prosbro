@@ -89,7 +89,7 @@ const Page = () => {
                   <input
                     name="name"
                     placeholder="Bathroom makeover"
-                    className={`w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-indigo-600'}`}
+                    className={`w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500' : 'focus:ring-primary'}`}
                     value={form.name}
                     onChange={handleChange}
                   />

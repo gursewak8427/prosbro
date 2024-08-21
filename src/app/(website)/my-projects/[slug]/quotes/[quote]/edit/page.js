@@ -68,10 +68,10 @@ function Page() {
       </div>
 
       <div className='flex mr-2 '>
-        <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><PersonIcon className='text-gray-500 mr-1' /> {quote?.client?.name}</div>
-        {/* <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><LocationOnIcon className='text-gray-500 mr-1' /><Link href={'/'}>Location</Link></div> */}
-        <div className='text-indigo-600 border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><EmailIcon className='text-gray-500 mr-1' /> {quote?.client?.email}</div>
-        <div className='text-indigo-600 px-2 flex flex-row items-center justify-center'><CallIcon className='text-gray-500 mr-1' /> {quote?.client?.mobile} </div>
+        <div className='text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><PersonIcon className='text-gray-500 mr-1' /> {quote?.client?.name}</div>
+        {/* <div className='text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><LocationOnIcon className='text-gray-500 mr-1' /><Link href={'/'}>Location</Link></div> */}
+        <div className='text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><EmailIcon className='text-gray-500 mr-1' /> {quote?.client?.email}</div>
+        <div className='text-primary px-2 flex flex-row items-center justify-center'><CallIcon className='text-gray-500 mr-1' /> {quote?.client?.mobile} </div>
       </div>
 
       <div className='flex gap-5 mt-5 mb-5 '>
@@ -83,7 +83,7 @@ function Page() {
               <button className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><PaidIcon /> Sub. price request</button>
             </div>
             <div>
-              <button className='text-sm text-indigo-600'><KeyboardArrowDownIcon />Expand all </button>
+              <button className='text-sm text-primary'><KeyboardArrowDownIcon />Expand all </button>
             </div>
 
           </div>
@@ -93,7 +93,7 @@ function Page() {
         <div className="w-3/12 flex flex-col p-4">
           <div className='w-full bg-white py-4 px-4 rounded-lg shadow-md h-96'>
             <h2 className='font-semibold text-sm'>Markup on quote</h2>
-            <h2 className='text-sm text-indigo-600 cursor-pointer'>Edit on quote %</h2>
+            <h2 className='text-sm text-primary'>Edit on quote %</h2>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>Subtotal</h2>
               <p className='text-gray-600 text-sm'>${quote.subtotalbill}</p>
@@ -103,7 +103,7 @@ function Page() {
               <p className='text-gray-600 text-sm'>$65.00</p>
             </div>
             <div className='mb-4 mt-4 flex justify-between'>
-              <button className='text-sm text-indigo-600'>Edit taxes</button>
+              <button className='text-sm text-primary'>Edit taxes</button>
             </div>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className=' text-lg font-semibold'>Total</h2>
@@ -113,13 +113,13 @@ function Page() {
             <button onClick={() => {
               // dispatch(nextQuoteStepperFormIndex())
               router.push("add-details")
-            }} className='w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next Add Details</button>
-            {/* <button className='w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700'>Submit Payment</button> */}
+            }} className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next Add Details</button>
+            {/* <button className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700'>Submit Payment</button> */}
             <div className='mb-2 mt-2 flex justify-center items-center'>
-              <button className='text-sm font-semibold text-indigo-600'><RemoveRedEyeIcon /> Clint preview - PDF</button>
+              <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Clint preview - PDF</button>
             </div>
             <div className='mb-2 mt-2 flex justify-center items-center'>
-              <button className='text-sm font-semibold text-indigo-600'>Scope of work (no prices)</button>
+              <button className='text-sm font-semibold text-primary'>Scope of work (no prices)</button>
               <button className='text-gray-400'><ErrorIcon /></button>
             </div>
           </div>

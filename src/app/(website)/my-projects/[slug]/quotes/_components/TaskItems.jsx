@@ -17,7 +17,7 @@ export const TaskItems = ({ data, isEditable }) => {
             data?.map((item, index) => <div key={index} className="my-3">
                 <Accordion>
                     <AccordionSummary
-                        expandIcon={<KeyboardArrowDownIcon className='text-indigo-600' />}
+                        expandIcon={<KeyboardArrowDownIcon className='text-primary' />}
                         aria-controls="panel1-content"
                         id="panel1-header"
                     >
@@ -25,14 +25,14 @@ export const TaskItems = ({ data, isEditable }) => {
                             <div className="w-1/2 flex flex-row">
                                 <h1 className='mr-2'><img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/media/${item?.task.icon}`} alt="" className='w-5 h-5'/></h1>
                                 <h1 className='mr-2'>{item?.task.name}</h1>
-                                {isEditable && <h1><EditOutlined className='text-indigo-600' /></h1>}
+                                {isEditable && <h1><EditOutlined className='text-primary' /></h1>}
                             </div>
                             <div className="w-1/2 flex flex-row justify-end items-center">
                                 {
                                     isEditable &&
                                     <div className="flex flex-col justify-end items-end mr-2">
                                         <p className='text-sm'>Estimate Labour time: {item?.estimateLabourTimeHours}h</p>
-                                        <p className='text-sm'>Labour Rate: ${item?.labourrate}/h <EditOutlined className='text-indigo-600' /></p>
+                                        <p className='text-sm'>Labour Rate: ${item?.labourrate}/h <EditOutlined className='text-primary' /></p>
                                     </div>
                                 }
                                 {
@@ -127,9 +127,9 @@ export const TaskItems = ({ data, isEditable }) => {
                                                             <p className='text-sm mt-2'>${taskDetails?.total}/each</p>
 
                                                             <div className='flex justify-end items-center transform translate-y-4'>
-                                                                <BookmarkBorderOutlined className='text-indigo-600 text-[20px] mx-1' />
-                                                                <RemoveRedEyeIcon className='text-indigo-600 text-[20px] mx-1' />
-                                                                <ContentCopy className='text-indigo-600 text-[20px] mx-1' />
+                                                                <BookmarkBorderOutlined className='text-primary text-[20px] mx-1' />
+                                                                <RemoveRedEyeIcon className='text-primary text-[20px] mx-1' />
+                                                                <ContentCopy className='text-primary text-[20px] mx-1' />
                                                                 <DeleteOutline className='text-red-600 text-[23px] mx-1' />
                                                             </div>
                                                         </>

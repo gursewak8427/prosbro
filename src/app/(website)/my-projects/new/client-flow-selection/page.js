@@ -71,7 +71,7 @@ function page() {
               </div>
               <div className='text-center mt-4 mb-4'>
                 <button
-                  className='bg-indigo-600 w-full py-3 text-white font-bold rounded-lg border-t'
+                  className='bg-primary w-full py-3 text-white font-bold rounded-lg border-t'
                   onClick={() => handlesubmit()}
                 >
                   Confirm

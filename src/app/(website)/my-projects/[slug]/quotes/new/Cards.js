@@ -35,7 +35,7 @@ function Cards({ data, selectedtempletes, setSelectedtempletes }) {
                             <p className="text-gray-600 text-sm mt-2">{template.description}</p>
                         </div>
                         <div className="flex justify-end mt-4 md:mt-0">
-                            <h1 className="text-xl font-bold text-indigo-600">{template.totalbill}</h1>
+                            <h1 className="text-xl font-bold text-primary">{template.totalbill}</h1>
                             <p><span>{template.categories}</span> Categories <span>{template.tasks}</span> Tasks</p>
                         </div>
                     </div>

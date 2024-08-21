@@ -5,8 +5,11 @@ import Link from 'next/link';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import { useRouter } from 'next/navigation';
 
 function ProjectsTable({ projectlist }) {
+  const router = useRouter();
+
   const createData = (ref, address, tag, date, size, status, slug, name) => {
     return { ref, address, tag, date, size, status, slug, name };
   };
@@ -44,10 +47,10 @@ function ProjectsTable({ projectlist }) {
           </thead>
           <tbody>
             {rows.map((row, index) => (
-              <tr key={index} className="border-b hover:bg-indigo-50 cursor-pointer">
-                <td className="p-4 whitespace-nowrap text-sm">
-                  <Link href={`/my-projects/${row.slug}?tab=description`}>{row.ref}</Link>
-                </td>
+              <tr onClick={() => {
+                router.push(`/my-projects/${row.slug}?tab=description`);
+              }} key={index} className="border-b hover:bg-indigo-50 cursor-pointer">
+                <td className="p-4 whitespace-nowrap text-sm">{row?.ref}</td>
                 <td className="p-4">
                   <div className="flex flex-col">
                     <span className="font-medium text-sm mb-1">{row.name}</span>
@@ -55,7 +58,9 @@ function ProjectsTable({ projectlist }) {
                   </div>
                 </td>
                 <td className="p-4 whitespace-nowrap">
-                  <button className="text-sm text-primary flex items-center text-center"><AddIcon className='text-sm' /> Add tag</button>
+                  <button
+                    onClick={(e) => e.stopPropagation()} // Prevent row click when this button is clicked
+                    className="text-sm text-primary flex items-center text-center"><AddIcon className='text-sm' /> Add tag</button>
                 </td>
                 <td className="p-4 whitespace-nowrap font-light text-sm">{new Date(row.date)?.toLocaleDateString()}</td>
                 <td className="p-4 whitespace-nowrap text-sm text-right">{row.size}</td>

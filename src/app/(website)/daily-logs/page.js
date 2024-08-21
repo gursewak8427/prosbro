@@ -11,7 +11,7 @@ function page() {
                     <h1 className="text-2xl font-bold">Daily logs</h1>
                 </div>
                 <button
-                    className="text-white px-4 py-2 rounded bg-indigo-600 hover:bg-indigo-700 duration-200">
+                    className="text-white px-4 py-2 rounded bg-primary hover:bg-indigo-700 duration-200">
                     + New Daily logs
                 </button>
             </div>
@@ -78,7 +78,7 @@ function page() {
 
                 <div className='mt-5 mb-5'>
                     <h1 className='font-semibold text-xl '>Comments</h1>
-                    <button className=' mt-5 mb-5 px-4 py-2 rounded-lg text-indigo-600 border-2 border-indigo-600'><span><QuestionAnswerIcon/> </span>Add comment</button>
+                    <button className=' mt-5 mb-5 px-4 py-2 rounded-lg text-primary border-2 border-primary'><span><QuestionAnswerIcon/> </span>Add comment</button>
                 </div>
             </div>
 

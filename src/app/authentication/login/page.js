@@ -66,7 +66,7 @@ const Page = () => {
                 id="email"
                 name="email"
                 value={form.email}
-                className="w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Enter your email address"
                 onChange={(e) => {
                   const { name, value } = e.target;
@@ -86,7 +86,7 @@ const Page = () => {
                 id="password"
                 name="password"
                 value={form.password}
-                className="w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Enter your password"
                 onChange={(e) => {
                   const { name, value } = e.target;
@@ -104,7 +104,7 @@ const Page = () => {
             </div>
             <hr className="mb-4" />
             <div className="flex justify-center">
-              <button className="text-black border-2 border-indigo-600 w-full h-14 px-4 py-2 rounded-xl hover:bg-indigo-600 hover:text-white transition-colors">
+              <button className="text-black border-2 border-primary w-full h-14 px-4 py-2 rounded-xl hover:bg-primary hover:text-white transition-colors">
                 Sign Up
               </button>
             </div>

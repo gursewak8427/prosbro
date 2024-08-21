@@ -16,7 +16,7 @@ function page() {
                 </div>
                 <div className="w-1/2 p-8 flex flex-col justify-center">
                     <div className="mb-10 " >
-                        <button className="text-indigo-600 text-sm font-semibold"> <ArrowBackIosIcon className="text-sm text-center" />Back </button>
+                        <button className="text-primary text-sm font-semibold"> <ArrowBackIosIcon className="text-sm text-center" />Back </button>
                         <h2 className="text-3xl font-bold  mt-5 mb-10 ">Select a new invoice</h2>
                     </div>
 
@@ -24,11 +24,11 @@ function page() {
                         <label className="block text-gray-700 mb-2 font-semibold">
                             Select a project
                         </label>
-                        <input placeholder="select..." className="w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+                        <input placeholder="select..." className="w-full h-14 px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                     </div>
                    
                     <div className="mb-4 flex justify-between ">
-                        <Link className='w-full flex items-center justify-center text-white  text-sm font-semibold bg-indigo-600 px-4 py-2 rounded-xl h-14 hover:bg-gray-400 transition-colors' href='/invoices/84359ty84cb3/edit'>
+                        <Link className='w-full flex items-center justify-center text-white  text-sm font-semibold bg-primary px-4 py-2 rounded-xl h-14 hover:bg-gray-400 transition-colors' href='/invoices/84359ty84cb3/edit'>
                             <button className="" >
                                 Continue and enter client details
                             </button>

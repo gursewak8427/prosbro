@@ -132,17 +132,17 @@ function page() {
 
         <div className='flex gap-5'>
           <div className='flex flex-col gap-5 rounded-r-md mt-5 mb-5'>
-            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'base_template' ? 'border-indigo-600' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('base_template') }}>
+            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'base_template' ? 'border-primary' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('base_template') }}>
               <h1 className="text-lg font-medium">Prosbro templates</h1>
             </div>
-            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'contractor_template' ? 'border-indigo-600' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('contractor_template') }}>
+            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'contractor_template' ? 'border-primary' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('contractor_template') }}>
               <h1 className="text-lg font-medium">My templates</h1>
             </div>
-            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'contractor_quote' ? 'border-indigo-600' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('contractor_quote') }}>
+            <div className={`bg-white px-5 py-4 border-l-4 ${template_tab === 'contractor_quote' ? 'border-primary' : ''} rounded-r-md shadow-sm cursor-pointer`} onClick={() => { updateUrl('contractor_quote') }}>
               <h1 className="text-lg font-medium">Previous quotes</h1>
             </div>
 
-            <div className='bg-white hover:bg-gray-100 cursor-pointer px-5 py-4 border-2 border-indigo-600 rounded-md text-indigo-600 font-semibold '>
+            <div className='bg-white hover:bg-gray-100 cursor-pointer px-5 py-4 border-2 border-primary rounded-md text-primary font-semibold '>
               <button><AddIcon /> Blank quote</button>
             </div>
 

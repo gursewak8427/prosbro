@@ -20,7 +20,7 @@ const Page = () => {
                 type="text"
                 id=""
                 value=""
-                className="w-full  px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full  px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Enter your name"
               />
             </div>
@@ -32,7 +32,7 @@ const Page = () => {
                 type="email"
                 id="email"
                 value=""
-                className="w-full  px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full  px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Enter your email"
               />
             </div>
@@ -44,20 +44,20 @@ const Page = () => {
                 type="number"
                 id="number"
                 value=""
-                className="w-full  px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                className="w-full  px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="000-000-000"
               />
             </div>
 
             <div className="mb-4 flex justify-between">
-              <button className="bg-indigo-600 w-1./2 h-12 text-white px-4 py-2 rounded-xl hover:bg-indigo-700 transition-colors">
+              <button className="bg-primary w-1./2 h-12 text-white px-4 py-2 rounded-xl hover:bg-indigo-700 transition-colors">
                 Create my account
               </button>
             </div>
             <p className="text-sm text-gray-500 mb-5">By creating an account, I accept Billdr's terms and conditions</p>
             <div className="flex justify-left">
               <h2>Already a member? </h2>
-              <button className="font-semibold text-indigo-600 ml-2 ">Log in </button>
+              <button className="font-semibold text-primary ml-2 ">Log in </button>
             </div>
           </div>
           <div className="w-2/3 h-full">
