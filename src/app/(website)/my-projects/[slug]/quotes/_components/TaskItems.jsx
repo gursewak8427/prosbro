@@ -13,7 +13,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
 
 
-const SingleSubTask = ({ taskDetails, taskIndex, isEditable, index }) => {
+const SingleSubTask = ({ setDeletePopup, taskDetails, taskIndex, isEditable, index }) => {
 
 
     const [qtyType, setQtyType] = useState("")
@@ -101,7 +101,7 @@ const SingleSubTask = ({ taskDetails, taskIndex, isEditable, index }) => {
                             <BookmarkBorderOutlined className='text-primary text-[20px] mx-1' />
                             <RemoveRedEyeIcon className='text-primary text-[20px] mx-1' />
                             <ContentCopy className='text-primary text-[20px] mx-1' />
-                            <DeleteOutline className='text-red-600 text-[23px] mx-1' />
+                            <button onClick={() => setDeletePopup(taskIndex)}><DeleteOutline className='text-red-600 text-[23px] mx-1' /></button>
                         </div>
                     </>
                 }
@@ -111,9 +111,10 @@ const SingleSubTask = ({ taskDetails, taskIndex, isEditable, index }) => {
 }
 
 
-const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
+const SingleTaskItem = ({ setDeletePopupMain, item: myItem, index, isEditable, key }) => {
     const [item, setItem] = useState(myItem)
     const [labourPopup, setLaboutPopup] = useState(false)
+    const [deletePopupIndex2, setDeletePopupIndex2] = useState(-1)
     const [hourlyRate, setHourlyRate] = useState(75);
 
 
@@ -173,6 +174,17 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
     }
 
 
+
+    const handleDeletePopup = (index, e) => {
+        if (e?.stopPropagation) {
+            e?.stopPropagation();
+        }
+
+        setDeletePopupIndex2(index)
+    }
+
+
+
     const addNewSubTask = () => {
         let tempTask = {
             id: 0,
@@ -191,6 +203,21 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
             ...item,
             subtasks: [...item?.subtasks, tempTask]
         })
+    }
+
+    const confirmDeleteMainTask = () => {
+        let oldSubTask = [...item?.subtasks]; // Create a shallow copy of the subtasks array
+        console.log(oldSubTask, "==oldSubTask");
+
+        // Use splice to remove the element at deletePopupIndex2
+        oldSubTask.splice(deletePopupIndex2, 1);
+
+        setItem({
+            ...item,
+            subtasks: oldSubTask, // Update the subtasks with the modified array
+        });
+
+        setDeletePopupIndex2(-1)
     }
 
 
@@ -266,6 +293,66 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
         </Transition>
 
 
+        {/* Delete Popup SubTask*/}
+        <Transition appear show={deletePopupIndex2 != -1} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={(e) => handleDeletePopup(-1, e)}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black bg-opacity-60" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-100 scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 scale-100"
+                            leaveTo="opacity-0 scale-95"
+                        >
+                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-lg font-semibold">Delete category</h2>
+                                    <button
+                                        onClick={(e) => handleDeletePopup(-1, e)}
+                                        className="text-gray-400 hover:text-gray-600">
+                                        <CloseOutlined />
+                                    </button>
+                                </div>
+                                <p className="mt-4">
+                                    Are you sure you want to delete <span className="font-semibold">{item?.subtasks[deletePopupIndex2]?.name}</span>? This action cannot be undone.
+                                </p>
+                                <div className="mt-6 flex items-center gap-2">
+                                    <button
+                                        className="text-blue-600 hover:text-blue-700 border border-blue-600 hover:border-blue-700 rounded-xl px-4 py-2 w-1/2"
+                                        onClick={(e) => handleDeletePopup(-1, e)}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-4 py-2 w-1/2"
+                                        onClick={confirmDeleteMainTask}
+                                    >
+                                        Confirm deletion
+                                    </button>
+                                </div>
+                            </Dialog.Panel>
+                        </Transition.Child>
+                    </div>
+                </div>
+            </Dialog>
+        </Transition>
+
+
         <Accordion>
             <AccordionSummary
                 expandIcon={<KeyboardArrowDownIcon className='text-primary' />}
@@ -305,7 +392,8 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
                         }
                         {
                             isEditable &&
-                            <DeleteOutline className='text-red-600' />}
+                            <button onClick={(e) => setDeletePopupMain(index, e)}><DeleteOutline className='text-red-600' /></button>
+                        }
                     </div>
                 </div>
             </AccordionSummary>
@@ -322,7 +410,7 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
                         </thead>
                         <tbody>
                             {
-                                item?.subtasks?.map((taskDetails, taskIndex) => <SingleSubTask taskDetails={taskDetails} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
+                                item?.subtasks?.map((taskDetails, taskIndex) => <SingleSubTask setDeletePopup={setDeletePopupIndex2} taskDetails={taskDetails} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
                             }
                             <Button onClick={addNewSubTask} variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
                         </tbody>
@@ -334,10 +422,105 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
 }
 
 
-export const TaskItems = ({ data, isEditable }) => {
+export const TaskItems = ({ data: myData, isEditable }) => {
+    const [data, setData] = useState([])
+    const [deletePopupIndex1, setDeletePopupIndex1] = useState(-1)
+
+
+    useEffect(() => {
+        setData(myData)
+    }, [JSON.stringify(myData)])
+
+    const handleDeletePopup = (index, e) => {
+        if (e?.stopPropagation) {
+            e?.stopPropagation();
+        }
+
+        setDeletePopupIndex1(index)
+    }
+
+
+    const confirmDeleteMainTask = () => {
+        let oldSubTask = [...data]; // Create a shallow copy of the subtasks array
+        console.log(deletePopupIndex1, "==deletePopupIndex1");
+
+        // Use splice to remove the element at deletePopupIndex2
+        oldSubTask.splice(deletePopupIndex1, 1);
+
+        setData([...oldSubTask]);
+
+        setDeletePopupIndex1(-1)
+    }
+
+
+
     return <>
+
+        {/* Delete Popup SubTask*/}
+        <Transition appear show={deletePopupIndex1 != -1} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={(e) => handleDeletePopup(-1, e)}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black bg-opacity-60" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-100 scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 scale-100"
+                            leaveTo="opacity-0 scale-95"
+                        >
+                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-lg font-semibold">Delete category</h2>
+                                    <button
+                                        onClick={(e) => handleDeletePopup(-1, e)}
+                                        className="text-gray-400 hover:text-gray-600">
+                                        <CloseOutlined />
+                                    </button>
+                                </div>
+                                <p className="mt-4">
+                                    Are you sure you want to delete <span className="font-semibold">{data?.[deletePopupIndex1]?.task?.name}</span>? This action cannot be undone.
+                                </p>
+                                <p className="mt-2">
+                                    This category has <span className="font-semibold">{data?.[deletePopupIndex1]?.subtasks?.length} task(s)</span>
+                                </p>
+
+                                <div className="mt-6 flex items-center gap-2">
+                                    <button
+                                        className="text-blue-600 hover:text-blue-700 border border-blue-600 hover:border-blue-700 rounded-xl px-4 py-2 w-1/2"
+                                        onClick={(e) => handleDeletePopup(-1, e)}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="bg-red-600 hover:bg-red-700 text-white rounded-xl px-4 py-2 w-1/2"
+                                        onClick={confirmDeleteMainTask}
+                                    >
+                                        Confirm deletion
+                                    </button>
+                                </div>
+                            </Dialog.Panel>
+                        </Transition.Child>
+                    </div>
+                </div>
+            </Dialog>
+        </Transition>
+
         {
-            data?.map((item, index) => <SingleTaskItem item={item} index={index} isEditable={isEditable} />)
+            data?.map((item, index) => <SingleTaskItem key={index} setDeletePopupMain={handleDeletePopup} item={item} index={index} isEditable={isEditable} />)
         }
     </>
 }
