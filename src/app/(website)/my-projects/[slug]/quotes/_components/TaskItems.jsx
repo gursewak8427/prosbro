@@ -1,15 +1,16 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import { BookmarkBorderOutlined, Close, ContentCopy, DeleteOutline, Done, EditOutlined } from '@mui/icons-material';
+import { BookmarkBorderOutlined, Close, CloseFullscreen, CloseOutlined, ContentCopy, DeleteOutline, Done, EditOutlined, Warning, WarningRounded, WarningSharp } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { Dialog, Transition } from '@headlessui/react';
 
 
 const SingleSubTask = ({ taskDetails, taskIndex, isEditable, index }) => {
@@ -24,8 +25,16 @@ const SingleSubTask = ({ taskDetails, taskIndex, isEditable, index }) => {
 
     return <tr key={`${index}-${taskIndex}`}>
         <td className='p-1 h-[100px] relative'>
-            <div className=''>{taskDetails?.name}</div>
-            {isEditable && <input type="text" className="border rounded py-1 transform translate-y-4" placeholder='Enter description' value={taskDetails?.description} />}
+            {
+                taskDetails?.isCustom ?
+                    <input type="text" className="border rounded p-1 mb-2 transform translate-y-4" placeholder='Enter Name' value={taskDetails?.description} /> :
+                    <div className=''>{taskDetails?.name}</div>
+            }
+            {
+                isEditable ?
+                    <input type="text" className="border rounded p-1 transform translate-y-4" placeholder='Enter description' value={taskDetails?.description} /> :
+                    taskDetails?.description
+            }
         </td>
         <td className='p-1'>
             {
@@ -104,6 +113,13 @@ const SingleSubTask = ({ taskDetails, taskIndex, isEditable, index }) => {
 
 const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
     const [item, setItem] = useState(myItem)
+    const [labourPopup, setLaboutPopup] = useState(false)
+    const [hourlyRate, setHourlyRate] = useState(75);
+
+
+    useEffect(() => {
+        setHourlyRate(item?.labourrate)
+    }, [])
 
     const [fd, setFd] = useState({
         title: -1
@@ -148,7 +164,108 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
         setEdited(e, "title", -1)
     }
 
+    const toggleLabourPopup = (e) => {
+        if (e?.stopPropagation) {
+            e?.stopPropagation();
+        }
+
+        setLaboutPopup(!labourPopup)
+    }
+
+
+    const addNewSubTask = () => {
+        let tempTask = {
+            id: 0,
+            name: "",
+            description: "",
+            labour: 0,
+            markup: 0,
+            material: 0,
+            quantity: 0,
+            quantitytype: "each",
+            task: 0,
+            isCustom: true, /// this is used to idenitify that this is custom task and need to update name,
+        }
+
+        setItem({
+            ...item,
+            subtasks: [...item?.subtasks, tempTask]
+        })
+    }
+
+
     return <div key={index} className="my-3">
+        <Transition appear show={labourPopup} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={toggleLabourPopup}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black bg-opacity-60" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-100 scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 scale-100"
+                            leaveTo="opacity-0 scale-95"
+                        >
+                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <div className="bg-white rounded-lg">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h2 className="text-lg font-semibold">Set labor rate by category</h2>
+                                        <button onClick={toggleLabourPopup} className="text-gray-600 hover:text-gray-900">
+                                            <CloseOutlined />
+                                        </button>
+                                    </div>
+                                    <div className="mb-4">
+                                        <h3 className="text-gray-700 font-medium">General conditions</h3>
+                                        <div className="bg-orange-100 text-orange-600 p-2 rounded mt-2 text-sm flex items-center">
+                                            <div className="mr-2"><WarningRounded /></div>
+                                            This will update the hourly rate for all current tasks in this category.
+                                        </div>
+                                    </div>
+                                    <div className="mb-4">
+                                        <div className="flex items-center space-x-2">
+                                            <input
+                                                type="number"
+                                                value={hourlyRate}
+                                                onChange={(e) => setHourlyRate(e.target.value)}
+                                                className="w-20 p-2 border rounded"
+                                            />
+                                            <span className="text-gray-700">/hour</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                        <button
+                                            onClick={toggleLabourPopup}
+                                            className="px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </Dialog.Panel>
+                        </Transition.Child>
+                    </div>
+                </div>
+            </Dialog>
+        </Transition>
+
+
         <Accordion>
             <AccordionSummary
                 expandIcon={<KeyboardArrowDownIcon className='text-primary' />}
@@ -178,7 +295,7 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
                             isEditable &&
                             <div className="flex flex-col justify-end items-end mr-2">
                                 <p className='text-sm'>Estimate Labour time: {item?.estimateLabourTimeHours}h</p>
-                                <p className='text-sm'>Labour Rate: ${item?.labourrate}/h <EditOutlined className='text-primary' /></p>
+                                <p className='text-sm'>Labour Rate: ${item?.labourrate}/h <button onClick={toggleLabourPopup}><EditOutlined className='text-primary' /></button></p>
                             </div>
                         }
                         {
@@ -207,7 +324,7 @@ const SingleTaskItem = ({ item: myItem, index, isEditable }) => {
                             {
                                 item?.subtasks?.map((taskDetails, taskIndex) => <SingleSubTask taskDetails={taskDetails} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
                             }
-                            <Button variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
+                            <Button onClick={addNewSubTask} variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
                         </tbody>
                     </table>
                 </div>
