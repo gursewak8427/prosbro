@@ -1,39 +1,59 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
+import { Business } from './_tabs/business'
+import { PersonalInformation } from './_tabs/personalInfo'
+import { ProjectSettings } from './_tabs/projectsSettings'
+import { SubscriptionPlan } from './_tabs/subscriptionPlans'
+import { AppIntegration } from './_tabs/AppIntegration'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 function page() {
+    const [tab, setTab] = useState(0)
+    const searchParams = useSearchParams()
+    const router = useRouter()
+
+    useEffect(() => {
+        router.push(`/settings?activeTab=${tab}`)
+    }, [tab])
+
+    useEffect(() => {
+        setTab(searchParams.get('activeTab') || 0)
+    }, [])
+
+
     return (
-        <div className='p-6 flex-1 bg-gray-200 shadow-md'>
+        <div className='p-6 flex-1 min-h-screen bg-gray-200 shadow-md'>
             <div className=' mb-5'>
                 <h1 className='text-3xl font-bold'>Settings</h1>
             </div>
             <div className='flex gap-5'>
                 <aside class="flex h-full w-1/5 flex-col gap-4">
                     <div class="flex flex-col">
-                        <div class="mb-1 flex items-center justify-between rounded-r-xl border-l-4 bg-white px-2 py-3 border-primary cursor-pointer gap-3">
-                            <div class="flex flex-1 flex-col justify-end gap-1  ">
-                                <h3 class="text-base leading-5 font-semibold">Business</h3> 
+                        <div onClick={() => setTab(0)} class={`mb-1 flex items-center justify-between rounded-r-xl border-l-4 bg-white px-2 py-3 cursor-pointer gap-3 ${tab == 0 ? "border-primary" : "border-white"}`}>
+                            <div class="flex flex-1 flex-col justify-end gap-1">
+                                <h3 class="text-base leading-5 font-semibold">Business</h3>
                                 <p class="whitespace-pre-line text-xs">Logo, address, documents, bank account</p>
                             </div>
                         </div>
-                        <div class="mb-1 flex items-center justify-between rounded-r-xl border-l-4  bg-white px-2 py-3 border-white cursor-pointer gap-3">
+                        <div onClick={() => setTab(1)} class={`mb-1 flex items-center justify-between rounded-r-xl border-l-4 bg-white px-2 py-3 cursor-pointer gap-3 ${tab == 1 ? "border-primary" : "border-white"}`}>
                             <div class="flex flex-1 flex-col justify-end gap-1">
                                 <h3 class="text-base leading-5 font-semibold">Personal information</h3>
                                 <p class="whitespace-pre-line text-xs ">Contact information, language</p>
                             </div>
                         </div>
-                        <div class="mb-1 flex items-center justify-between rounded-r-xl border-l-4  bg-white px-2 py-3 border-white cursor-pointer gap-3">
+                        <div onClick={() => setTab(2)} class={`mb-1 flex items-center justify-between rounded-r-xl border-l-4 bg-white px-2 py-3 cursor-pointer gap-3 ${tab == 2 ? "border-primary" : "border-white"}`}>
                             <div class="flex flex-1 flex-col justify-end gap-1">
                                 <h3 class="text-base leading-5 font-semibold">Project settings</h3>
                                 <p class="whitespace-pre-line text-xs">Default terms and conditions</p>
                             </div>
                         </div>
-                        <div class="mb-1 flex items-center justify-between rounded-r-xl border-l-4  bg-white px-2 py-3 border-white cursor-pointer gap-3">
+                        <div onClick={() => setTab(3)} class={`mb-1 flex items-center justify-between rounded-r-xl border-l-4 bg-white px-2 py-3 cursor-pointer gap-3 ${tab == 3 ? "border-primary" : "border-white"}`}>
                             <div class="flex flex-1 flex-col justify-end gap-1">
                                 <h3 class="text-base leading-5 font-semibold">Subscription plan</h3>
                                 <p class="whitespace-pre-line text-xs ">Plan management, billing</p>
                             </div>
                         </div>
-                        <div class="mb-1 flex items-center justify-between rounded-r-xl border-l-4  bg-white px-2 py-3 border-white cursor-pointer gap-3">
+                        <div onClick={() => setTab(4)} class={`mb-1 flex items-center justify-between rounded-r-xl border-l-4 bg-white px-2 py-3 cursor-pointer gap-3 ${tab == 4 ? "border-primary" : "border-white"}`}>
                             <div class="flex flex-1 flex-col justify-end gap-1">
                                 <h3 class="text-base leading-5 font-semibold">App integration</h3>
                                 <p class="whitespace-pre-line text-xs ">Quickbooks</p>
@@ -97,8 +117,15 @@ function page() {
                         </a>
                     </div>
                 </aside>
-
-                <main></main>
+                <main className='w-4/5 h-full rounded-xl flex flex-col gap-4'>
+                    {
+                        tab == 0 ? <Business /> :
+                            tab == 1 ? <PersonalInformation /> :
+                                tab == 2 ? <ProjectSettings /> :
+                                    tab == 3 ? <SubscriptionPlan /> :
+                                        tab == 4 && <AppIntegration />
+                    }
+                </main>
             </div>
         </div>
     )
