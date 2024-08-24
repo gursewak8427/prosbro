@@ -18,7 +18,7 @@ import { SingleSubTask } from './SingleSubTask';
 
 
 
-export const SingleTask = ({ subtotalbill, quoteId, setDeletePopupMain, item, index, isEditable, key }) => {
+export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeletePopupMain, item, index, isEditable, key }) => {
     // const [item, setItem] = useState(myItem)
     const [labourPopup, setLaboutPopup] = useState(false)
     const [deletePopupIndex2, setDeletePopupIndex2] = useState(-1)
@@ -248,7 +248,7 @@ export const SingleTask = ({ subtotalbill, quoteId, setDeletePopupMain, item, in
                         <div className='mr-2'>
                             {
                                 !quotetask.editable ?
-                                    <>{quotetask?.name} | {subtotalbill}</> :
+                                    <>{quotetask?.name}</> :
                                     <><input onClick={(e) => { e.stopPropagation() }} className='px-2 py-1 border border-gray-600 rounded-md' value={quotetask?.name} name="name" onChange={(e) => { handleChange(e, item?.task?.id) }} /></>
                             }
                         </div>
@@ -293,7 +293,7 @@ export const SingleTask = ({ subtotalbill, quoteId, setDeletePopupMain, item, in
                         </thead>
                         <tbody>
                             {
-                                item?.subtasks?.map((taskDetails, taskIndex) => <SingleSubTask taskId={item?.id} quoteId={quoteId} subtotalbill={subtotalbill} taskTotalCost={item?.totalcost} setDeletePopup={setDeletePopupIndex2} taskDetails={taskDetails} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
+                                item?.subtasks?.map((taskDetails, taskIndex) => <SingleSubTask setQuoteSubTotal={setQuoteSubTotal} taskId={item?.id} quoteId={quoteId} subtotalbill={subtotalbill} taskTotalCost={item?.totalcost} setDeletePopup={setDeletePopupIndex2} taskDetails={taskDetails} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
                             }
                             <Button onClick={() => { addNewSubTask(item.id) }} variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
                         </tbody>

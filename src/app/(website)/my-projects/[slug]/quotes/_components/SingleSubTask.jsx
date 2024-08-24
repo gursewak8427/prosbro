@@ -18,16 +18,15 @@ import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, 
 
 const toNum = (val) => parseFloat(val?.toString()?.replaceAll("$", ""))
 
-export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, setDeletePopup, taskDetails, taskIndex, isEditable, index }) => {
+export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, taskId, quoteId, setDeletePopup, taskDetails, taskIndex, isEditable, index }) => {
     const dispatch = useDispatch();
+    const [isFirst, setFirst] = useState(true)
     const [tempTotalCost, setTempTotalCost] = useState(0)
     const [tempTotalBil, setTempTotalBill] = useState(0)
-    const [material, setMaterial] = useState(0)
-    const [labour, setLabour] = useState(0)
-    const [markup, setMarkup] = useState(0)
     const [total, setTotal] = useState(0)
 
-    const [qty, setQty] = useState(0)
+    const [fd, setFd] = useState({})
+
     const [qtyType, setQtyType] = useState("")
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
@@ -47,22 +46,25 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
 
     useEffect(() => {
         setQtyType(taskDetails?.quantitytype)
-        setQty(taskDetails?.quantity || 1)
         setName(taskDetails?.name || "")
         setDescription(taskDetails?.description || "")
-        setMarkup("$" + (taskDetails?.markup || 0))
-        setMaterial("$" + (taskDetails?.material || 0))
-        setLabour("$" + (taskDetails?.labour || 0))
-    }, [JSON.stringify(taskDetails)])
+        setFd({
+            material: taskDetails?.material,
+            labour: taskDetails?.labour,
+            markup: taskDetails?.markup,
+            qty: taskDetails?.quantity,
+        })
+        setTotal(taskDetails?.totalcost) // total Cost
+    }, [])
 
-    useEffect(() => {
-        setQty(qty == 0 || !Boolean(qty) ? 1 : qty)
-    }, [qty])
+    // useEffect(() => {
+    //     setQty(qty == 0 || !Boolean(qty) ? 1 : qty)
+    // }, [qty])
 
-    useEffect(() => {
+    const updateNow = (localFd) => {
         let oldThisCost = (taskDetails?.markup + taskDetails?.material + taskDetails?.labour) * taskDetails?.quantity;
 
-        let newThisCost = (toNum(material) + toNum(labour) + toNum(markup)) * qty;
+        let newThisCost = (toNum(localFd?.material) + toNum(localFd?.labour) + toNum(localFd?.markup)) * localFd?.qty;
         let updatedTotalCost = parseFloat(taskTotalCost) - oldThisCost + newThisCost
 
         let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost + newThisCost
@@ -82,22 +84,25 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
         },
         {
             ...taskDetails,
-            "quantity": toNum(qty),
-            "material": toNum(material),
-            "labour": toNum(labour),
-            "markup": toNum(markup),
+            "quantity": toNum(localFd?.qty),
+            "material": toNum(localFd?.material),
+            "labour": toNum(localFd?.labour),
+            "markup": toNum(localFd?.markup),
             "totalcost": toNum(newThisCost),
         }]
+
+        setQuoteSubTotal(updatedSubTotalBill)
         dispatch(UpdateSubTask(listOfJson))
+    }
 
-    }, [material, labour, markup, qty])
 
+    const handleChange = e => { setFd({ ...fd, [e.target.name]: e.target.value }); updateNow({ ...fd, [e.target.name]: e.target.value }); }
 
 
     return <tr key={`${index}-${taskIndex}`}>
-        <td className='p-1 h-[100px] relative'>
+        <td className='flex flex-col p-1 h-[100px] relative'>
             {
-                taskDetails?.isCustom ?
+                isEditable ?
                     <input
                         type="text"
                         className="border rounded p-1 mb-2 transform translate-y-4"
@@ -105,7 +110,7 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     /> :
-                    <div>{taskDetails?.name} | {tempTotalCost} |  {tempTotalBil}</div>
+                    <div>{taskDetails?.name}</div>
             }
             {
                 isEditable ?
@@ -123,7 +128,7 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
             {
                 isEditable ?
                     <div className="flex flex-row justify-center">
-                        <input type="number" className="border text-center rounded py-1 w-12 mr-2" placeholder='1' value={qty} onChange={e => setQty(e.target.value)} />
+                        <input type="number" className="border text-center rounded py-1 w-12 mr-2" placeholder='1' name='qty' value={fd?.qty} onChange={handleChange} />
                         <select name="" value={qtyType} id="" className='px-2 py-1 border rounded' onChange={(e) => {
                             setQtyType(e.target.value)
                         }}>
@@ -155,7 +160,7 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
                 isEditable ?
                     <div className="flex flex-col items-center">
                         <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>Builder Cost</label>
-                        <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' value={material} onChange={e => setMaterial(`$${e.target.value?.replaceAll("$", "")}`)} />
+                        <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' name='material' value={fd?.material} onChange={handleChange} />
                         <p className='text-sm mt-2'>/{qtyType}</p>
                     </div> :
                     <div className="flex flex-row justify-center">
@@ -166,7 +171,7 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
         <td className='p-1 w-[200px] py-4'>
             {
                 isEditable ? <div className="flex flex-col items-center">
-                    <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' value={labour} onChange={e => setLabour(`$${e.target.value?.replaceAll("$", "")}`)} />
+                    <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' name='labour' value={fd?.labour} onChange={handleChange} />
                     <p className='text-sm mt-2'>/{qtyType}</p>
                 </div> :
                     <div className="flex flex-row justify-center">
@@ -178,7 +183,7 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
             {
                 isEditable ? <div className="flex flex-col items-center">
                     <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>$0.00</label>
-                    <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='0%' value={markup} onChange={e => setMarkup(`$${e.target.value?.replaceAll("$", "")}`)} />
+                    <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='0%' name='markup' value={fd?.markup} onChange={handleChange} />
                 </div> :
                     <div className="flex flex-row justify-center">
                         <span className='mx-1'>10% - $848</span>

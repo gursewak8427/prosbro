@@ -25,6 +25,7 @@ function Page() {
   const quote = useSelector(store => store.projectData.clientquote)
   const [quoteset, setQuoteset] = useState({ name: quote.name, description: quote.description, id: quote.id })
   const [quotesetstatus, setQuotesetstatus] = useState(false);
+  const [quoteSubTotal, setQuoteSubTotal] = useState(0);
 
   const handleQuoteUpdate = (e) => {
     const { name, value } = e.target
@@ -35,6 +36,8 @@ function Page() {
       })
     )
   }
+
+
   useEffect(() => {
     if (Object.keys(quote).length > 0) {
       setQuoteset({ name: quote.name, description: quote.description, id: quote.id })
@@ -54,6 +57,11 @@ function Page() {
     }
     return;
   }, [quotesetstatus, quoteset])
+
+  useEffect(() => {
+    setQuoteSubTotal(quote?.subtotalbill)
+  }, [JSON.stringify(quote?.subtotalbill)])
+
   return (
     <div className='p-8'>
       <div className='p-2 mt-5 mb-5 w-1/2'>
@@ -97,7 +105,7 @@ function Page() {
             </div>
 
           </div>
-          <TaskItems quoteId={quote?.id} subtotalbill={quote?.subtotalbill} data={quote?.tasks} isEditable={true} />
+          <TaskItems setQuoteSubTotal={setQuoteSubTotal} quoteId={quote?.id} subtotalbill={quote?.subtotalbill} data={quote?.tasks} isEditable={true} />
         </div>
 
         <div className="w-3/12 flex flex-col p-4">
@@ -106,7 +114,7 @@ function Page() {
             <h2 className='text-sm text-primary'>Edit on quote %</h2>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>Subtotal</h2>
-              <p className='text-gray-600 text-sm'>${quote.subtotalbill}</p>
+              <p className='text-gray-600 text-sm'>${quoteSubTotal}</p>
             </div>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>GST</h2>

@@ -203,12 +203,12 @@ const Slice = createSlice({
         builder.addCase(CreateSubTask.rejected, (state, action) => {
             state.error = action.payload
         })
-        builder.addCase(UpdateSubTask.fulfilled, (state, action) => {
-            state.clientquote = action.payload
-        })
-        builder.addCase(UpdateSubTask.rejected, (state, action) => {
-            state.error = action.payload
-        })
+        // builder.addCase(UpdateSubTask.fulfilled, (state, action) => {
+        //     state.clientquote = action.payload
+        // })
+        // builder.addCase(UpdateSubTask.rejected, (state, action) => {
+        //     state.error = action.payload
+        // })
         builder.addCase(FetchSingleProject.fulfilled, (state, action) => {
             state.singleproject = action.payload
         })

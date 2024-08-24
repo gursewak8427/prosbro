@@ -17,7 +17,7 @@ import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, 
 import { SingleTask } from './SingleTask';
 
 
-export const TaskItems = ({ quoteId, subtotalbill, data, isEditable }) => {
+export const TaskItems = ({ setQuoteSubTotal, quoteId, subtotalbill, data, isEditable }) => {
     const dispatch = useDispatch()
     const pathname = usePathname();
     const [deletePopupIndex1, setDeletePopupIndex1] = useState(-1)
@@ -119,7 +119,7 @@ export const TaskItems = ({ quoteId, subtotalbill, data, isEditable }) => {
         </Transition>
 
         {
-            data?.map((item, index) => <SingleTask quoteId={quoteId} subtotalbill={subtotalbill} key={index} setDeletePopupMain={handleDeletePopup} item={item} index={index} isEditable={isEditable} />)
+            data?.map((item, index) => <SingleTask setQuoteSubTotal={setQuoteSubTotal} quoteId={quoteId} subtotalbill={subtotalbill} key={index} setDeletePopupMain={handleDeletePopup} item={item} index={index} isEditable={isEditable} />)
         }
     </>
 }
