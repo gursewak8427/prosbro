@@ -1,6 +1,7 @@
 "use client"
 import { AccountBalance, Check, CheckCircleRounded, CheckRounded, FoodBank } from "@mui/icons-material";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export const Business = () => {
     const [taxNumbers, setTaxNumbers] = useState([{ name: 'GST', number: '733658314RT0001' }]);

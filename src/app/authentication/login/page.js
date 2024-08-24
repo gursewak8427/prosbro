@@ -5,7 +5,7 @@ import { useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { authtoken } from "@/app/redux/AuthSlice";
+import { authtoken, profileAction } from "@/app/redux/AuthSlice";
 
 
 const Page = () => {
@@ -25,6 +25,7 @@ const Page = () => {
           draggable: true,
         });
         dispatch(authtoken(response.data.data.token))
+        dispatch(profileAction([response.data.data.login,response.data.data.profile]))
         router.push(('/'))
       }
     } catch (error) {

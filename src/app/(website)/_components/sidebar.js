@@ -16,16 +16,26 @@ import HelpIcon from '@mui/icons-material/Help';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { usePathname } from 'next/navigation';
 import { AccountCircleOutlined, HelpOutline } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { FetchProfile } from '@/app/redux/AuthSlice';
 
 
 
 const Sidebar = () => {
   const pathname = usePathname();
   const [myLocation, setLocation] = useState("")
+  const profile = useSelector(store => store.userData.profile)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setLocation(pathname?.split("?")[0])
   }, [pathname])
+
+  useEffect(() => {
+    if (!profile.length) {
+      dispatch(FetchProfile())
+    }
+  }, [])
 
   const items = [
     { text: 'My projects', icon: <GridViewIcon className="h-5 w-5" />, href: '/my-projects?search=&tab=all&view=list' },
@@ -60,7 +70,7 @@ const Sidebar = () => {
       <div className="border-t mt-10 pt-4 bg-white">
         <div className="text-sm">
           <h2 className='text-sm text-gray-600 items-center hover:bg-gray-200 cursor-pointer px-2 py-2 rounded-lg'><HelpOutline className='text-gray-500' /> Help</h2>
-          <h2 className='text-sm text-gray-600 items-center hover:bg-gray-200 cursor-pointer px-2 py-2 rounded-lg'>< AccountCircleOutlined className='text-primary' /> Gurvinder Singh</h2>
+          <h2 className='text-sm text-gray-600 items-center hover:bg-gray-200 cursor-pointer px-2 py-2 rounded-lg'>< AccountCircleOutlined className='text-primary' /> {profile[1]?.name}</h2>
         </div>
       </div>
     </div>
