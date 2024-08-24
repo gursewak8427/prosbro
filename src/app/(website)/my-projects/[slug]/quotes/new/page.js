@@ -109,19 +109,21 @@ function page() {
   }, [template_tab])
   return (
     <>
-      <div className='p-6 flex-1 bg-gray-200 shadow-md'>
+      <div className='p-6 flex-1 min-h-[85vh] max-h-[85vh] overflow-auto bg-gray-200 shadow-md'>
         <div className='flex justify-between' >
           <div className='p-2 '>
             <h1 className='text-2xl font-semibold mt-2 mb-5'>Choose a template to start your quote</h1>
-            <p className='text-gray-700'>{selectedtempletes.length ? `${selectedtempletes.length} template selected` : 'No template selected'}</p>
-            <div class="flex flex-grow-0 flex-wrap gap-4">
-              <div class="flex w-full flex-wrap gap-2">
-                {selectedtempletes.map((item, index) => (
-                  <div class="flex items-center justify-center gap-3 rounded-lg bg-neutral-300 p-2 text-sm" key={index}>
-                    <span class="overflow-ellipsis whitespace-nowrap text-center">{item.name}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer" onClick={() => { handleselected(item) }}><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path></svg>
-                  </div>
-                ))}
+            <div className='flex items-center gap-2'>
+              <p className='text-gray-700'>{selectedtempletes.length ? `${selectedtempletes.length} template selected` : 'No template selected'}</p>
+              <div class="flex flex-grow-0 flex-wrap gap-4">
+                <div class="flex w-full flex-wrap gap-2">
+                  {selectedtempletes.map((item, index) => (
+                    <div class="flex items-center justify-center gap-3 rounded-lg bg-neutral-300 p-2 text-sm" key={index}>
+                      <span class="overflow-ellipsis whitespace-nowrap text-center">{item.name}</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" class="h-5 w-5 cursor-pointer" onClick={() => { handleselected(item) }}><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path></svg>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -155,9 +157,9 @@ function page() {
 
 
       </div>
-      <div className='flex justify-center items-center py-5 bg-gray-100 '>
+      <div className='flex justify-center items-center py-5 bg-gray-100 fixed w-full bottom-0'>
         <button
-          className={`px-4 py-2 bg-gray-300 font-semibold rounded-xl ${btnstatus ? 'cursor-pointer hover:bg-gray-400' : 'cursor-not-allowed'}`}
+          className={`px-4 py-2 font-semibold rounded-xl bg-primary text-white ${btnstatus ? 'cursor-pointer hover:bg-primary-dark' : 'cursor-not-allowed'}`}
           disabled={!btnstatus}
           onClick={handleQuotecreation}
         >
