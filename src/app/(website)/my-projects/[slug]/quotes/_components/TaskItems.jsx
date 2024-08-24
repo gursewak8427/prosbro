@@ -11,6 +11,9 @@ import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
+import { useDispatch } from 'react-redux';
+import { usePathname } from 'next/navigation';
+import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask } from '@/app/redux/Project/ProjectSlice';
 
 
 const SingleSubTask = ({ setDeletePopup, taskDetails, taskIndex, isEditable, index }) => {
@@ -44,8 +47,21 @@ const SingleSubTask = ({ setDeletePopup, taskDetails, taskIndex, isEditable, ind
                         <select name="" value={qtyType} id="" className='px-2 py-1 border rounded' onChange={(e) => {
                             setQtyType(e.target.value)
                         }}>
-                            <option value="all">all</option>
+                            <option value="hour">hour</option>
                             <option value="each">each</option>
+                            <option value="day">day</option>
+                            <option value="lin.ft">lin.ft</option>
+                            <option value="sq.ft">sq.ft</option>
+                            <option value="cu.ft">cu.ft</option>
+                            <option value="lin.yad">lin.yad</option>
+                            <option value="sq.yd">sq.yd</option>
+                            <option value="cu.yd">cu.yd</option>
+                            <option value="lin.m">lin.m</option>
+                            <option value="sq.m">sq.m</option>
+                            <option value="cu.m">cu.m</option>
+                            <option value="lb">lb</option>
+                            <option value="kg">kg</option>
+                            <option value="ton">ton</option>
                         </select>
                     </div> :
                     <div className="flex flex-row justify-center">
@@ -101,7 +117,7 @@ const SingleSubTask = ({ setDeletePopup, taskDetails, taskIndex, isEditable, ind
                             <BookmarkBorderOutlined className='text-primary text-[20px] mx-1' />
                             <RemoveRedEyeIcon className='text-primary text-[20px] mx-1' />
                             <ContentCopy className='text-primary text-[20px] mx-1' />
-                            <button onClick={() => setDeletePopup(taskIndex)}><DeleteOutline className='text-red-600 text-[23px] mx-1' /></button>
+                            <button onClick={() => setDeletePopup(taskDetails?.id)}><DeleteOutline className='text-red-600 text-[23px] mx-1' /></button>
                         </div>
                     </>
                 }
@@ -111,58 +127,59 @@ const SingleSubTask = ({ setDeletePopup, taskDetails, taskIndex, isEditable, ind
 }
 
 
-const SingleTaskItem = ({ setDeletePopupMain, item: myItem, index, isEditable, key }) => {
-    const [item, setItem] = useState(myItem)
+const SingleTaskItem = ({ setDeletePopupMain, item, index, isEditable, key }) => {
+    // const [item, setItem] = useState(myItem)
     const [labourPopup, setLaboutPopup] = useState(false)
     const [deletePopupIndex2, setDeletePopupIndex2] = useState(-1)
     const [hourlyRate, setHourlyRate] = useState(75);
+    const pathname = usePathname();
+    const dispatch = useDispatch();
+    const pathSegments = pathname.split("/");
+    const slug = pathSegments[pathSegments.length - 2];
 
 
     useEffect(() => {
         setHourlyRate(item?.labourrate)
     }, [])
 
-    const [fd, setFd] = useState({
-        title: -1
+    const [quotetask, setquotetask] = useState({
+        id: 0,
+        name: item?.task?.name,
+        editable: false
     })
 
-    const setEdited = (e, itemm, value) => { // pass value as -1 to close
+    const setEditingModel = (e, name, editable) => {
         e.stopPropagation();
-
-        setFd({
-            ...fd,
-            [itemm]: value
+        setquotetask({
+            ...quotetask,
+            'name': name,
+            'editable': editable
         })
     }
 
-    const handleChange = (e) => {
+    const closeTitle = (e, editable) => {
+        e.stopPropagation();
+        setquotetask({
+            ...quotetask,
+            'editable': editable
+        })
+    }
+
+    const handleChange = (e, id) => {
         e.stopPropagation();
 
-        setFd({
-            ...fd,
-            [e.target.name]: e.target.value
+        setquotetask({
+            ...quotetask,
+            [e.target.name]: e.target.value,
+            'id': id
         })
     }
 
     const saveTitle = (e) => {
         e.stopPropagation();
-
-        let title = fd?.title;
-
-        // Send this title to API
-
-
-        // Update Local data after response
-        setItem({
-            ...item,
-            task: {
-                ...item?.task,
-                name: fd?.title
-            }
-        })
-
-        // Close Input
-        setEdited(e, "title", -1)
+        setEditingModel(e, quotetask?.name, false)
+        if (quotetask.id > 0)
+            dispatch(UpdateClientQuoteTask(quotetask))
     }
 
     const toggleLabourPopup = (e) => {
@@ -185,41 +202,14 @@ const SingleTaskItem = ({ setDeletePopupMain, item: myItem, index, isEditable, k
 
 
 
-    const addNewSubTask = () => {
-        let tempTask = {
-            id: 0,
-            name: "",
-            description: "",
-            labour: 0,
-            markup: 0,
-            material: 0,
-            quantity: 0,
-            quantitytype: "each",
-            task: 0,
-            isCustom: true, /// this is used to idenitify that this is custom task and need to update name,
-        }
-
-        setItem({
-            ...item,
-            subtasks: [...item?.subtasks, tempTask]
-        })
+    const addNewSubTask = (id) => {
+        dispatch(CreateSubTask({ task: id, slug: slug }))
     }
 
     const confirmDeleteMainTask = () => {
-        let oldSubTask = [...item?.subtasks]; // Create a shallow copy of the subtasks array
-        console.log(oldSubTask, "==oldSubTask");
-
-        // Use splice to remove the element at deletePopupIndex2
-        oldSubTask.splice(deletePopupIndex2, 1);
-
-        setItem({
-            ...item,
-            subtasks: oldSubTask, // Update the subtasks with the modified array
-        });
-
+        dispatch(DeleteSubTask({ id: deletePopupIndex2, slug: slug }))
         setDeletePopupIndex2(-1)
     }
-
 
     return <div key={index} className="my-3">
         <Transition appear show={labourPopup} as={Fragment}>
@@ -364,17 +354,17 @@ const SingleTaskItem = ({ setDeletePopupMain, item: myItem, index, isEditable, k
                         <h1 className='mr-2'><img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/media/${item?.task.icon}`} alt="" className='w-5 h-5' /></h1>
                         <div className='mr-2'>
                             {
-                                fd?.title == -1 ?
-                                    <>{item?.task?.name}</> :
-                                    <><input onClick={(e) => { e.stopPropagation() }} className='px-2 py-1 border border-gray-600 rounded-md' value={fd?.title} name="title" onChange={handleChange} /></>
+                                !quotetask.editable ?
+                                    <>{quotetask?.name}</> :
+                                    <><input onClick={(e) => { e.stopPropagation() }} className='px-2 py-1 border border-gray-600 rounded-md' value={quotetask?.name} name="name" onChange={(e) => { handleChange(e, item?.task?.id) }} /></>
                             }
                         </div>
                         {
-                            fd?.title != -1 ? <div className='flex flex-row items-center gap-2'>
+                            quotetask.editable ? <div className='flex flex-row items-center gap-2'>
                                 <button className='cursor-pointer hover:bg-gray-300 w-8 h-8 rounded-full pb-[2px]' onClick={(e) => saveTitle(e)}><Done color='success' /></button>
-                                <button className='cursor-pointer hover:bg-gray-300 w-8 h-8 rounded-full pb-[2px]' onClick={(e) => setEdited(e, "title", -1)}><Close color='warning' /></button>
+                                <button className='cursor-pointer hover:bg-gray-300 w-8 h-8 rounded-full pb-[2px]' onClick={(e) => closeTitle(e, false)}><Close color='warning' /></button>
                             </div> :
-                                isEditable && <h1 onClick={(e) => setEdited(e, "title", item?.task?.name)}><EditOutlined className='text-primary' /></h1>
+                                isEditable && <h1 onClick={(e) => { setEditingModel(e, item?.task?.name, true) }}><EditOutlined className='text-primary' /></h1>
                         }
                     </div>
                     <div className="w-1/2 flex flex-row justify-end items-center">
@@ -412,7 +402,7 @@ const SingleTaskItem = ({ setDeletePopupMain, item: myItem, index, isEditable, k
                             {
                                 item?.subtasks?.map((taskDetails, taskIndex) => <SingleSubTask setDeletePopup={setDeletePopupIndex2} taskDetails={taskDetails} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
                             }
-                            <Button onClick={addNewSubTask} variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
+                            <Button onClick={() => { addNewSubTask(item.id) }} variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
                         </tbody>
                     </table>
                 </div>
@@ -422,14 +412,11 @@ const SingleTaskItem = ({ setDeletePopupMain, item: myItem, index, isEditable, k
 }
 
 
-export const TaskItems = ({ data: myData, isEditable }) => {
-    const [data, setData] = useState([])
+export const TaskItems = ({ data, isEditable }) => {
+    const dispatch = useDispatch()
+    const pathname = usePathname();
     const [deletePopupIndex1, setDeletePopupIndex1] = useState(-1)
 
-
-    useEffect(() => {
-        setData(myData)
-    }, [JSON.stringify(myData)])
 
     const handleDeletePopup = (index, e) => {
         if (e?.stopPropagation) {
@@ -441,14 +428,16 @@ export const TaskItems = ({ data: myData, isEditable }) => {
 
 
     const confirmDeleteMainTask = () => {
-        let oldSubTask = [...data]; // Create a shallow copy of the subtasks array
-        console.log(deletePopupIndex1, "==deletePopupIndex1");
+        // let oldSubTask = [...data]; // Create a shallow copy of the subtasks array
+        // console.log(deletePopupIndex1, "==deletePopupIndex1");
 
         // Use splice to remove the element at deletePopupIndex2
-        oldSubTask.splice(deletePopupIndex1, 1);
+        // oldSubTask.splice(deletePopupIndex1, 1);
 
-        setData([...oldSubTask]);
-
+        // setData([...oldSubTask]);
+        const pathSegments = pathname.split("/");
+        const slug = pathSegments[pathSegments.length - 2];
+        dispatch(DeleteClientQuoteTask({ id: data?.[deletePopupIndex1]?.task?.id, slug: slug }))
         setDeletePopupIndex1(-1)
     }
 

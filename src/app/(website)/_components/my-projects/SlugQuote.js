@@ -1,22 +1,47 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import AddIcon from '@mui/icons-material/Add';
+import { useDispatch, useSelector } from 'react-redux';
+import { usePathname } from 'next/navigation';
+import { FetchQuotes, quoteslistAction } from '@/app/redux/Project/ProjectSlice';
+import Link from 'next/link';
+import { showToastPromise, updateToast } from '@/app/redux/toastSlice';
+import axiosInstance from '@/app/redux/AxiosInstance';
 
 function SlugQuote() {
-    const data = [
-        {
-            title: 'Project Alpha',
-            lastEditedDate: '2024-07-24',
-            status: 'Completed',
-            amount: '$10,000',
-        },
-        {
-            title: 'Project Beta',
-            lastEditedDate: '2024-07-23',
-            status: 'In Progress',
-            amount: '$8,000',
-        },
-    ];
+    const dispatch = useDispatch();
+    const pathname = usePathname();
+    const data = useSelector(store => store.projectData.quoteslist)
+    const toastId = useSelector((state) => state.toast.toastId);
+    const segments = pathname.split('/');
+    const slug = segments[segments.length - 1];
+    const handleDelete = async (id) => {
+        const requestPromise = axiosInstance.delete(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/?slug=${slug}&id=${id}`)
+        dispatch(showToastPromise({
+            promise: requestPromise,
+            messages: {
+                pending: 'Deleting quote...',
+                success: 'Quote deleted successfully!',
+                error: 'Failed to delete Quote please contact service team!!!',
+            }
+        }));
+        try {
+            const response = await requestPromise;
+            dispatch(quoteslistAction(response.data))
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Data loaded!', type: 'success', isLoading: false }
+            }));
+        } catch (error) {
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Failed to load data!', type: 'error', isLoading: false }
+            }));
+        }
+    }
+    useEffect(() => {
+        dispatch(FetchQuotes(slug))
+    }, [])
     return (
         <div className='flex flex-col gap-5 p-4'>
             <div className="flex items-center justify-between">
@@ -58,10 +83,10 @@ function SlugQuote() {
                     <tbody>
                         {data.map((item, index) => (
                             <tr key={index}>
-                                <td className="py-2 text-center px-4 border-b border-gray-200">{item.title}</td>
-                                <td className="py-2 text-center px-4 border-b border-gray-200">{item.lastEditedDate}</td>
+                                <td className="py-2 text-center px-4 border-b border-gray-200"><Link href={`/my-projects/${slug}/quotes/${item.slug}/edit`}>{item.name}</Link></td>
+                                <td className="py-2 text-center px-4 border-b border-gray-200">{item.updatedAt}</td>
                                 <td className="py-2 text-center px-4 border-b border-gray-200">{item.status}</td>
-                                <td className="py-2 text-center px-4 border-b border-gray-200">{item.amount}</td>
+                                <td className="py-2 text-center px-4 border-b border-gray-200" onClick={() => { handleDelete(item.id) }}>$ {item.totalbill}</td>
                             </tr>
                         ))}
                     </tbody>

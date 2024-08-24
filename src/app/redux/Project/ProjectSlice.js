@@ -6,8 +6,11 @@ const initialState = {
     project: {},
     projectlist: [],
     error: '',
+    message: '',
     totalprojects: 0,
-    clientquote: {}
+    clientquote: {},
+    singleproject: {},
+    quoteslist: [],
 }
 
 // Utility function to process error and convert to string
@@ -68,6 +71,67 @@ export const FetchClientQuote = createAsyncThunk("FetchClientQuote", async (data
     }
 });
 
+export const DeleteClientQuoteTask = createAsyncThunk("DeleteClientQuoteTask", async ({ id, slug }, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.delete(`${process.env.NEXT_PUBLIC_API_URL}/createquotetask/?slug=${slug}&id=${id}`);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const UpdateClientQuoteTask = createAsyncThunk("UpdateClientQuoteTask", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/createquotetask/`, data);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const DeleteSubTask = createAsyncThunk("DeleteSubTask", async ({ id, slug }, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.delete(`${process.env.NEXT_PUBLIC_API_URL}/createsubtask/?slug=${slug}&id=${id}`);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const CreateSubTask = createAsyncThunk("CreateSubTask", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/createsubtask/`, data);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const FetchSingleProject = createAsyncThunk("FetchSingleProject", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchproject/${data}`)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const FetchQuotes = createAsyncThunk("FetchQuotes", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/?slug=${data}`)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+
 const Slice = createSlice({
     name: "projectslice",
     initialState,
@@ -80,6 +144,9 @@ const Slice = createSlice({
         },
         clientQuoteAction: (state, action) => {
             state.clientquote = action.payload
+        },
+        quoteslistAction: (state, action) => {
+            state.quoteslist = action.payload
         }
     },
     // extra reducer for api calss
@@ -102,9 +169,45 @@ const Slice = createSlice({
         builder.addCase(FetchClientQuote.rejected, (state, action) => {
             state.error = action.payload
         })
+        builder.addCase(DeleteClientQuoteTask.fulfilled, (state, action) => {
+            state.clientquote = action.payload
+        })
+        builder.addCase(DeleteClientQuoteTask.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(UpdateClientQuoteTask.fulfilled, (state, action) => {
+            state.message = action.payload
+        })
+        builder.addCase(UpdateClientQuoteTask.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(DeleteSubTask.fulfilled, (state, action) => {
+            state.clientquote = action.payload
+        })
+        builder.addCase(DeleteSubTask.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(CreateSubTask.fulfilled, (state, action) => {
+            state.clientquote = action.payload
+        })
+        builder.addCase(CreateSubTask.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(FetchSingleProject.fulfilled, (state, action) => {
+            state.singleproject = action.payload
+        })
+        builder.addCase(FetchSingleProject.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(FetchQuotes.fulfilled, (state, action) => {
+            state.quoteslist = action.payload
+        })
+        builder.addCase(FetchQuotes.rejected, (state, action) => {
+            state.error = action.payload
+        })
     }
 })
 
 
-export const { isloadingAction, projectAction, clientQuoteAction } = Slice.actions;
+export const { isloadingAction, projectAction, clientQuoteAction,quoteslistAction } = Slice.actions;
 export default Slice.reducer;

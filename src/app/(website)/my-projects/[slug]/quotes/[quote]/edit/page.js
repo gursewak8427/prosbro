@@ -24,6 +24,7 @@ function Page() {
   const pathname = usePathname();
   const quote = useSelector(store => store.projectData.clientquote)
   const [quoteset, setQuoteset] = useState({ name: quote.name, description: quote.description, id: quote.id })
+  const [quotesetstatus, setQuotesetstatus] = useState(false);
 
   const handleQuoteUpdate = (e) => {
     const { name, value } = e.target
@@ -44,6 +45,15 @@ function Page() {
       dispatch(FetchClientQuote(slug))
     }
   }, [pathname, quote])
+
+  useEffect(() => {
+    if (quotesetstatus) {
+      setTimeout(() => {
+        
+      }, 3000);
+    }
+    return;
+  }, [quotesetstatus, quoteset])
   return (
     <div className='p-8'>
       <div className='p-2 mt-5 mb-5 w-1/2'>

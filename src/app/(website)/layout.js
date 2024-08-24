@@ -17,7 +17,8 @@ export default function WebsiteLayout({ children }) {
   useEffect(() => {
     const pathSegments = pathname.split("/");
     const lastSegment = pathSegments[pathSegments.length - 2];
-    if (lastSegment === "quotes" || lastSegment === "new") {
+    const secondlastSegment = pathSegments[pathSegments.length - 3];
+    if (secondlastSegment === "quotes" || lastSegment === "new") {
       setShow(false)
     } else {
       setShow(true)

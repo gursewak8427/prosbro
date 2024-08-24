@@ -10,6 +10,8 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import Link from 'next/link';
 import axiosInstance from '@/app/redux/AxiosInstance';
 import { EditOutlined } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { FetchSingleProject } from '@/app/redux/Project/ProjectSlice';
 
 const SlugDescription = dynamic(() => import('../../_components/my-projects/SlugDiscription'), { ssr: false })
 const SlugFiles = dynamic(() => import('../../_components/my-projects/SlugFiles'), { ssr: false })
@@ -25,8 +27,9 @@ const SlugLogs = dynamic(() => import('../../_components/my-projects/SlugLogs'),
 // Import other components similarly...
 
 function Page() {
+  const dispatch = useDispatch();
+  const project = useSelector(store=>store.projectData.singleproject)
   const [activeTab, setActiveTab] = useState('');
-  const [project, setProject] = useState({})
   const router = useRouter();
   const searchParams = useSearchParams()
   const search = searchParams.get('tab')
@@ -69,16 +72,8 @@ function Page() {
 
   useEffect(() => {
     const segments = pathname.split('/');
-    const lastSegment = segments[segments.length - 1];
-    const getclients = async (lastSegment) => {
-      try {
-        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchproject/${lastSegment}`)
-        setProject(response.data)
-      } catch (error) {
-
-      }
-    }
-    getclients(lastSegment);
+    const slug = segments[segments.length - 1];
+    dispatch(FetchSingleProject(slug))
   }, [pathname])
   return (
     <div className="w-full bg-gray-200 min-h-screen">
