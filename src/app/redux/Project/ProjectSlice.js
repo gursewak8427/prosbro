@@ -111,6 +111,16 @@ export const CreateSubTask = createAsyncThunk("CreateSubTask", async (data, { re
     }
 });
 
+export const UpdateSubTask = createAsyncThunk("UpdateSubTask", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/createsubtask/`, data);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
 export const FetchSingleProject = createAsyncThunk("FetchSingleProject", async (data, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchproject/${data}`)
@@ -191,6 +201,12 @@ const Slice = createSlice({
             state.clientquote = action.payload
         })
         builder.addCase(CreateSubTask.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(UpdateSubTask.fulfilled, (state, action) => {
+            state.clientquote = action.payload
+        })
+        builder.addCase(UpdateSubTask.rejected, (state, action) => {
             state.error = action.payload
         })
         builder.addCase(FetchSingleProject.fulfilled, (state, action) => {

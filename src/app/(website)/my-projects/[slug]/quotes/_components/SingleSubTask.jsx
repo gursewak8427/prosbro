@@ -13,12 +13,13 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
-import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask } from '@/app/redux/Project/ProjectSlice';
+import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
 
 
 const toNum = (val) => parseFloat(val?.toString()?.replaceAll("$", ""))
 
 export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, setDeletePopup, taskDetails, taskIndex, isEditable, index }) => {
+    const dispatch = useDispatch();
     const [tempTotalCost, setTempTotalCost] = useState(0)
     const [tempTotalBil, setTempTotalBill] = useState(0)
     const [material, setMaterial] = useState(0)
@@ -87,8 +88,7 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
             "markup": toNum(markup),
             "totalcost": toNum(newThisCost),
         }]
-
-        console.log(listOfJson, "--listOfJson");
+        dispatch(UpdateSubTask(listOfJson))
 
     }, [material, labour, markup, qty])
 
