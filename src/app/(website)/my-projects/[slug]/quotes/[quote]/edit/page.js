@@ -49,7 +49,7 @@ function Page() {
   useEffect(() => {
     if (quotesetstatus) {
       setTimeout(() => {
-        
+
       }, 3000);
     }
     return;
@@ -97,7 +97,7 @@ function Page() {
             </div>
 
           </div>
-          <TaskItems data={quote?.tasks} isEditable={true} />
+          <TaskItems quoteId={quote?.id} subtotalbill={quote?.subtotalbill} data={quote?.tasks} isEditable={true} />
         </div>
 
         <div className="w-3/12 flex flex-col p-4">
