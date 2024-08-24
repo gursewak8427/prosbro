@@ -63,30 +63,32 @@ export const SingleSubTask = ({ subtotalbill, taskTotalCost, taskId, quoteId, se
 
         let newThisCost = (toNum(material) + toNum(labour) + toNum(markup)) * qty;
         let updatedTotalCost = parseFloat(taskTotalCost) - oldThisCost + newThisCost
-        
+
         let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost + newThisCost
-        
+
         console.log({ oldThisCost, newThisCost, updatedTotalCost, updatedSubTotalBill, subtotalbill });
         setTempTotalCost(updatedTotalCost) // Single Task Total Cost
         setTempTotalBill(updatedSubTotalBill) // Bill
         setTotal(newThisCost) // total Cost
 
-        let jsonData = {
+        let listOfJson = [{
+            "id": quoteId,
+            "subtotalbill": updatedSubTotalBill,
+        },
+        {
+            "id": taskId,
+            "totalcost": updatedTotalCost,
+        },
+        {
             ...taskDetails,
             "quantity": toNum(qty),
             "material": toNum(material),
             "labour": toNum(labour),
             "markup": toNum(markup),
             "totalcost": toNum(newThisCost),
+        }]
 
-            "taskId": taskId,
-            "taskTotalCost": updatedTotalCost,
-
-            "quoteId": quoteId,
-            "quoteSubTotal": updatedSubTotalBill,
-        }
-
-        console.log(jsonData, "--jsonData");
+        console.log(listOfJson, "--listOfJson");
 
     }, [material, labour, markup, qty])
 
