@@ -163,7 +163,7 @@ export const FetchQuotes = createAsyncThunk("FetchQuotes", async (data, { reject
 
 export const PatchQuotes = createAsyncThunk("PatchQuotes", async (data, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.patch(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/?slug=${data}`)
+        const response = await axiosInstance.patch(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/`,data)
         return response.data;
     } catch (error) {
         const processederror = processError(error.response?.data || error.message)
