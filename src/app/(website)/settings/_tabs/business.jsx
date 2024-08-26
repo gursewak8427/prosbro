@@ -8,6 +8,7 @@ export const Business = () => {
     const dispatch = useDispatch();
     const profile = useSelector(store => store.userData.busniessprofile);
     const [taxNumbers, setTaxNumbers] = useState([]);
+    const [form, setForm] = useState({})
 
     const addTaxNumber = () => {
         setTaxNumbers([...taxNumbers, { name: '', number: '' }]);
@@ -30,6 +31,7 @@ export const Business = () => {
             return
         }
         setTaxNumbers(profile.tax)
+        setForm(profile)
     }, [profile])
     return (<>
         <div className="w-full p-4 bg-white rounded-lg shadow-md">
@@ -46,7 +48,7 @@ export const Business = () => {
                     <label className="block text-sm font-medium text-gray-700">Company name</label>
                     <input
                         type="text"
-                        value={profile?.name}
+                        value={form?.name}
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                 </div>
@@ -54,7 +56,7 @@ export const Business = () => {
                     <label className="block text-sm font-medium text-gray-700">Company address</label>
                     <input
                         type="text"
-                        value={profile?.address}
+                        value={form?.address}
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                 </div>
@@ -62,7 +64,7 @@ export const Business = () => {
                     <label className="block text-sm font-medium text-gray-700">Company website</label>
                     <input
                         type="text"
-                        value={profile?.website}
+                        value={form?.website}
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                 </div>
@@ -78,11 +80,10 @@ export const Business = () => {
                 <input
                     type="text"
                     placeholder="Add your business license number Ex: 8352285ABC31"
-                    value={profile?.license}
+                    value={form?.license}
                     className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                 />
             </div>
-
             {taxNumbers.map((tax, index) => (
                 <div key={index} className="flex items-center space-x-4 mb-4">
                     <div className="w-1/4">

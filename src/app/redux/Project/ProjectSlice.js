@@ -91,6 +91,16 @@ export const UpdateClientQuoteTask = createAsyncThunk("UpdateClientQuoteTask", a
     }
 });
 
+export const PatchClientQuoteTask = createAsyncThunk("PatchClientQuoteTask", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.patch(`${process.env.NEXT_PUBLIC_API_URL}/createquotetask/`, data);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
 export const DeleteSubTask = createAsyncThunk("DeleteSubTask", async ({ id, slug }, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.delete(`${process.env.NEXT_PUBLIC_API_URL}/createsubtask/?slug=${slug}&id=${id}`);
@@ -144,6 +154,16 @@ export const FetchSingleProject = createAsyncThunk("FetchSingleProject", async (
 export const FetchQuotes = createAsyncThunk("FetchQuotes", async (data, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/?slug=${data}`)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const PatchQuotes = createAsyncThunk("PatchQuotes", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.patch(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/?slug=${data}`)
         return response.data;
     } catch (error) {
         const processederror = processError(error.response?.data || error.message)
@@ -223,6 +243,18 @@ const Slice = createSlice({
             state.clientquote = action.payload
         })
         builder.addCase(PatchSubTask.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(PatchQuotes.fulfilled, (state, action) => {
+            state.clientquote = action.payload
+        })
+        builder.addCase(PatchQuotes.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(PatchClientQuoteTask.fulfilled, (state, action) => {
+            state.clientquote = action.payload
+        })
+        builder.addCase(PatchClientQuoteTask.rejected, (state, action) => {
             state.error = action.payload
         })
         builder.addCase(FetchSingleProject.fulfilled, (state, action) => {
