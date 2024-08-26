@@ -1,11 +1,16 @@
 
 "use client"
 
+import { FetchDefQuotetaxes, FetchProjectProfile } from "@/app/redux/AuthSlice";
 import { Attachment, AttachmentOutlined, AttachmentTwoTone, DeleteOutline, UploadFile } from "@mui/icons-material"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export const ProjectSettings = () => {
-    const [payments, setPayments] = useState([{ title: 'Begining of Project', amount: '20' }]);
+    const dispatch = useDispatch();
+    const profile = useSelector(store => store.userData.projectprofile);
+    const taxes = useSelector(store => store.userData.defaultquotetaxes);
+    const [payments, setPayments] = useState([]);
 
     const addPayments = () => {
         setPayments([...payments, { title: '', amount: '0' }]);
@@ -22,7 +27,14 @@ export const ProjectSettings = () => {
         );
         setPayments(updatedData);
     };
-
+    useEffect(() => {
+        if (!Object.keys(profile).length) {
+            dispatch(FetchProjectProfile())
+            dispatch(FetchDefQuotetaxes())
+            return
+        }
+        setPayments(profile.paymentschedule)
+    }, [profile])
     return (<>
         <div className="w-full p-4 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Project Settings</h2>
@@ -31,36 +43,7 @@ export const ProjectSettings = () => {
                 <h3 className="text-lg font-semibold">Default terms and conditions</h3>
                 <textarea
                     className="w-full mt-2 p-3 border border-gray-300 rounded-md bg-gray-100 h-[400px]"
-                    defaultValue={`Purpose
-The purpose of this Agreement is to set forth the terms and conditions under which Contractor will perform the construction work described above for Client.
-
-Scope of Work
-The Contractor shall perform the construction work described in this quote in accordance with all applicable laws and regulations and in accordance with the plans and specifications provided.
-
-...
-
-Payment Terms
-The Contractor shall be solely responsible to take the necessary steps to protect the health and ensure the safety and physical well-being of construction workers.
-Purpose
-The purpose of this Agreement is to set forth the terms and conditions under which Contractor will perform the construction work described above for Client.
-
-Scope of Work
-The Contractor shall perform the construction work described in this quote in accordance with all applicable laws and regulations and in accordance with the plans and specifications provided.
-
-...
-
-Payment Terms
-The Contractor shall be solely responsible to take the necessary steps to protect the health and ensure the safety and physical well-being of construction workers.
-Purpose
-The purpose of this Agreement is to set forth the terms and conditions under which Contractor will perform the construction work described above for Client.
-
-Scope of Work
-The Contractor shall perform the construction work described in this quote in accordance with all applicable laws and regulations and in accordance with the plans and specifications provided.
-
-...
-
-Payment Terms
-The Contractor shall be solely responsible to take the necessary steps to protect the health and ensure the safety and physical well-being of construction workers.`}
+                    value={profile?.tc}
                 />
             </div>
 
@@ -71,10 +54,10 @@ The Contractor shall be solely responsible to take the necessary steps to protec
                     {
                         payments?.map((payDetails, index) => {
                             return <div className="flex items-center space-x-4">
-                                <input type="text" value={payDetails?.title} className="p-2 border border-gray-300 rounded-md bg-gray-100 w-1/2" />
+                                <input type="text" value={payDetails?.name} className="p-2 border border-gray-300 rounded-md bg-gray-100 w-1/2" />
                                 <input
                                     type="text"
-                                    value={`${payDetails?.amount}%`}
+                                    value={`${payDetails?.number}%`}
                                     className="w-20 p-2 border border-gray-300 rounded-md bg-gray-100 text-center"
                                 />
                                 <button onClick={() => removePayments(index)} className="text-red-500">
@@ -92,9 +75,8 @@ The Contractor shall be solely responsible to take the necessary steps to protec
                 <div className="flex items-center space-x-4">
                     <input
                         type="text"
-                        value="7"
+                        value={profile?.quotevalidity}
                         className="w-20 p-2 border border-gray-300 rounded-md bg-gray-100 text-center"
-                        readOnly
                     />
                     <span className="text-gray-700">days</span>
                 </div>
@@ -120,11 +102,15 @@ The Contractor shall be solely responsible to take the necessary steps to protec
             <p className="mb-2 text-sm text-gray-600">
                 Used as default for new projects created. If none set, taxes will be based on project location.
             </p>
-            <div className="flex justify-between items-center mb-2 w-1/2">
-                <span className="font-medium">GST</span>
-                <span className="text-gray-700">5%</span>
-                <span className="text-gray-700">Material & labor</span>
-            </div>
+            {
+                taxes.map((item, index) => (
+                    <div className="flex justify-between items-center mb-2 w-1/2" key={index}>
+                        <span className="font-medium">{item.name}</span>
+                        <span className="text-gray-700">{item.number}%</span>
+                        <span className="text-gray-700">{item.type}</span>
+                    </div>
+                ))
+            }
             <button className="text-blue-500 text-sm">Edit taxes</button>
 
         </div>

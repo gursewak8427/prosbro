@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
 import CallIcon from '@mui/icons-material/Call';
 import AddIcon from '@mui/icons-material/Add';
@@ -15,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
 import { TaskItems } from '../../_components/TaskItems'
 import { FetchClientQuote } from '@/app/redux/Project/ProjectSlice';
-import Link from 'next/link';
 
 
 function Page() {

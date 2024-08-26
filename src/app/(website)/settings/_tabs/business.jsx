@@ -1,10 +1,13 @@
 "use client"
-import { AccountBalance, Check, CheckCircleRounded, CheckRounded, FoodBank } from "@mui/icons-material";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { FetchBusniessProfile } from "@/app/redux/AuthSlice";
+import { AccountBalance, Check, CheckCircleRounded } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export const Business = () => {
-    const [taxNumbers, setTaxNumbers] = useState([{ name: 'GST', number: '733658314RT0001' }]);
+    const dispatch = useDispatch();
+    const profile = useSelector(store => store.userData.busniessprofile);
+    const [taxNumbers, setTaxNumbers] = useState([]);
 
     const addTaxNumber = () => {
         setTaxNumbers([...taxNumbers, { name: '', number: '' }]);
@@ -21,14 +24,20 @@ export const Business = () => {
         );
         setTaxNumbers(updatedTaxNumbers);
     };
-
+    useEffect(() => {
+        if (!Object.keys(profile).length) {
+            dispatch(FetchBusniessProfile())
+            return
+        }
+        setTaxNumbers(profile.tax)
+    }, [profile])
     return (<>
         <div className="w-full p-4 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">Business</h2>
             <div className="flex items-center space-x-4">
                 <div className="w-44 h-44 bg-gray-200 overflow-hidden hover:bg-black hover:bg-opacity-20 group relative">
                     {/* Replace with your image source */}
-                    <img src="https://res.cloudinary.com/dzq7uzhji/image/upload/d_no-company-logo.jpg/pzpjqjmfhulxp4actfrc.jpg" alt="Business Logo" className="object-cover w-full h-full z-30 rounded-lg" />
+                    <img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${profile?.icon}`} alt="Business Logo" className="object-cover w-full h-full z-30 rounded-lg" />
                     <button className="bg-gray-300 hover:bg-gray-400 text-black px-3 py-1 rounded-t-md hidden group-hover:block absolute bottom-0 w-full z-50">Edit</button>
                 </div>
             </div>
@@ -37,7 +46,7 @@ export const Business = () => {
                     <label className="block text-sm font-medium text-gray-700">Company name</label>
                     <input
                         type="text"
-                        value="AGH Renovation Limited"
+                        value={profile?.name}
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                 </div>
@@ -45,7 +54,7 @@ export const Business = () => {
                     <label className="block text-sm font-medium text-gray-700">Company address</label>
                     <input
                         type="text"
-                        value="2016 Redwood Crescent SE, Calgary, Alberta, T2B 1R7, Canada"
+                        value={profile?.address}
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                 </div>
@@ -53,7 +62,7 @@ export const Business = () => {
                     <label className="block text-sm font-medium text-gray-700">Company website</label>
                     <input
                         type="text"
-                        value="https://www.aghrenovation.ca"
+                        value={profile?.website}
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                 </div>
@@ -69,6 +78,7 @@ export const Business = () => {
                 <input
                     type="text"
                     placeholder="Add your business license number Ex: 8352285ABC31"
+                    value={profile?.license}
                     className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                 />
             </div>
