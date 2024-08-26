@@ -13,7 +13,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
-import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask } from '@/app/redux/Project/ProjectSlice';
+import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
 import { SingleSubTask } from './SingleSubTask';
 
 
@@ -102,6 +102,31 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
     const confirmDeleteMainTask = () => {
         dispatch(DeleteSubTask({ id: deletePopupIndex2, slug: slug }))
         setDeletePopupIndex2(-1)
+        updateNow(deletePopupIndex2) // update cost also after delete 
+    }
+
+    const updateNow = (subTaskId) => {
+        let taskDetails = item?.subtasks.filter(t => t?.id == subTaskId)[0];
+        let oldThisCost = taskDetails?.totalcost;
+
+        console.log({oldThisCost})
+        console.log(item?.totalcost)
+        console.log(subtotalbill)
+
+        let updatedTotalCost = parseFloat(item?.totalcost) - oldThisCost
+        let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost
+
+        let listOfJson = [{
+            "id": quoteId,
+            "subtotalbill": updatedSubTotalBill,
+        },
+        {
+            "id": item?.id,
+            "totalcost": updatedTotalCost,
+        }]
+
+        setQuoteSubTotal(updatedSubTotalBill)
+        dispatch(UpdateSubTask(listOfJson))
     }
 
     return <div key={index} className="my-3">

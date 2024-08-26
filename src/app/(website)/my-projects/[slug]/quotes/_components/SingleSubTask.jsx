@@ -28,8 +28,6 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
     const [fd, setFd] = useState({})
 
     const [qtyType, setQtyType] = useState("")
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
 
     useEffect(() => {
         console.log(subtotalbill, "--subtotalbill");
@@ -46,16 +44,16 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
 
     useEffect(() => {
         setQtyType(taskDetails?.quantitytype)
-        setName(taskDetails?.name || "")
-        setDescription(taskDetails?.description || "")
         setFd({
+            name: taskDetails?.name,
+            description: taskDetails?.description,
             material: taskDetails?.material,
             labour: taskDetails?.labour,
             markup: taskDetails?.markup,
             qty: taskDetails?.quantity,
         })
         setTotal(taskDetails?.totalcost) // total Cost
-    }, [])
+    }, [JSON.stringify(taskDetails)])
 
     // useEffect(() => {
     //     setQty(qty == 0 || !Boolean(qty) ? 1 : qty)
@@ -74,6 +72,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
         setTempTotalBill(updatedSubTotalBill) // Bill
         setTotal(newThisCost) // total Cost
 
+
         let listOfJson = [{
             "id": quoteId,
             "subtotalbill": updatedSubTotalBill,
@@ -82,8 +81,10 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             "id": taskId,
             "totalcost": updatedTotalCost,
         },
-        {
+{
             ...taskDetails,
+            "name": localFd?.name,
+            "description": localFd?.description,
             "quantity": toNum(localFd?.qty),
             "material": toNum(localFd?.material),
             "labour": toNum(localFd?.labour),
@@ -96,7 +97,10 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
     }
 
 
-    const handleChange = e => { setFd({ ...fd, [e.target.name]: e.target.value }); updateNow({ ...fd, [e.target.name]: e.target.value }); }
+    const handleChange = e => {
+        setFd({ ...fd, [e.target.name]: e.target.value });
+        updateNow({ ...fd, [e.target.name]: e.target.value });
+    }
 
 
     return <tr key={`${index}-${taskIndex}`}>
@@ -107,8 +111,9 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
                         type="text"
                         className="border rounded p-1 mb-2 transform translate-y-4"
                         placeholder='Enter Name'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        defaultValue={fd?.name}
+                        name='name'
+                        onBlur={handleChange}
                     /> :
                     <div>{taskDetails?.name}</div>
             }
@@ -118,8 +123,9 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
                         type="text"
                         className="border rounded p-1 transform translate-y-4"
                         placeholder='Enter description'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        defaultValue={fd?.description}
+                        name='description'
+                        onBlur={handleChange}
                     /> :
                     taskDetails?.description
             }
