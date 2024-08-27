@@ -13,16 +13,19 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
-import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
+import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, PatchClientQuoteTask, PatchQuotes, PatchSubTask, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
 import { SingleSubTask } from './SingleSubTask';
 
+const toNum = (val) => parseFloat(val?.toString()?.replaceAll("$", "")) || 0
 
 
 export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeletePopupMain, item, index, isEditable, key }) => {
     // const [item, setItem] = useState(myItem)
     const [labourPopup, setLaboutPopup] = useState(false)
+    const [totalPriceChangeModal, setTotalPriceChangeModal] = useState(false)
     const [deletePopupIndex2, setDeletePopupIndex2] = useState(-1)
     const [hourlyRate, setHourlyRate] = useState(75);
+    const [totalPrice, setTotalPrice] = useState(75);
     const pathname = usePathname();
     const dispatch = useDispatch();
     const pathSegments = pathname.split("/");
@@ -33,7 +36,9 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
         console.log(item, "--item");
 
         setHourlyRate(item?.labourrate)
-    }, [])
+        setTotalPrice(item?.totalcost)
+
+    }, [JSON.stringify(item)])
 
     const [quotetask, setquotetask] = useState({
         id: 0,
@@ -109,25 +114,65 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
         let taskDetails = item?.subtasks.filter(t => t?.id == subTaskId)[0];
         let oldThisCost = taskDetails?.totalcost;
 
-        console.log({oldThisCost})
+        console.log({ oldThisCost })
         console.log(item?.totalcost)
         console.log(subtotalbill)
 
         let updatedTotalCost = parseFloat(item?.totalcost) - oldThisCost
         let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost
 
-        let listOfJson = [{
-            "id": quoteId,
-            "subtotalbill": updatedSubTotalBill,
-        },
-        {
-            "id": item?.id,
-            "totalcost": updatedTotalCost,
-        }]
+
 
         setQuoteSubTotal(updatedSubTotalBill)
-        dispatch(UpdateSubTask(listOfJson))
+        dispatch(PatchQuotes({
+            "id": quoteId,
+            "subtotalbill": updatedSubTotalBill,
+        }))
+        dispatch(PatchClientQuoteTask({
+            "qid": quoteId,
+            "id": item?.id,
+            "totalcost": updatedTotalCost,
+        }))
     }
+
+    const updateLabourRate = () => {
+        dispatch(PatchClientQuoteTask({
+            "qid": quoteId,
+            "id": item?.id,
+            "labourrate": hourlyRate,
+        }))
+
+        item?.subtasks?.map(subTask => {
+            dispatch(PatchSubTask({
+                "qid": quoteId,
+                "id": subTask?.id,
+                "labour": toNum(hourlyRate) * toNum(subTask?.labourtime),
+                "labourperhour": hourlyRate,
+            }))
+        })
+
+        setLaboutPopup(false)
+    }
+
+    const updateTotalPrice = () => {
+        dispatch(PatchClientQuoteTask({
+            "qid": quoteId,
+            "id": item?.id,
+            "totalcost": totalPrice,
+        }))
+
+        item?.subtasks?.map(subTask => {
+            dispatch(PatchSubTask({
+                "qid": quoteId,
+                "id": subTask?.id,
+                "labour": 0,
+                "markup": 0,
+                "material": 0,
+            }))
+        })
+        setTotalPriceChangeModal(false)
+    }
+
 
     return <div key={index} className="my-3">
         <Transition appear show={labourPopup} as={Fragment}>
@@ -183,13 +228,87 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                     </div>
                                     <div className="flex justify-end space-x-4">
                                         <button
-                                            onClick={toggleLabourPopup}
+                                            onClick={() => { setHourlyRate(item?.labourrate); setLaboutPopup(false); }}
                                             className="px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                                         >
                                             Cancel
                                         </button>
-                                        <button className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">
+                                        <button
+                                            onClick={updateLabourRate}
+                                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">
                                             Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </Dialog.Panel>
+                        </Transition.Child>
+                    </div>
+                </div>
+            </Dialog>
+        </Transition>
+
+        {/* Change Total Modal */}
+        <Transition appear show={totalPriceChangeModal} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={() => setTotalPriceChangeModal(false)}>
+                <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className="fixed inset-0 bg-black bg-opacity-60" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                    <div className="flex min-h-full items-center justify-center p-4 text-center">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="ease-out duration-300"
+                            enterFrom="opacity-0 scale-95"
+                            enterTo="opacity-100 scale-100"
+                            leave="ease-in duration-200"
+                            leaveFrom="opacity-100 scale-100"
+                            leaveTo="opacity-0 scale-95"
+                        >
+                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                                <div className="bg-white rounded-lg">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h2 className="text-lg font-semibold">Category price override</h2>
+                                        <button onClick={toggleLabourPopup} className="text-gray-600 hover:text-gray-900">
+                                            <CloseOutlined />
+                                        </button>
+                                    </div>
+                                    <div className="mb-4">
+                                        <div className="bg-orange-100 text-orange-600 p-2 rounded mt-2 text-sm flex items-center">
+                                            <div className="mr-2"><WarningRounded /></div>
+                                            Warning, modifying the price of the category directly will delete all tasks unit prices. The global markup will not apply on this category.
+                                        </div>
+                                    </div>
+                                    <div className="mb-4">
+                                        <div className="flex items-center space-x-2">
+                                            <input
+                                                type="text"
+                                                value={`$${totalPrice}`}
+                                                onChange={(e) => setTotalPrice(parseInt(e.target.value?.replaceAll("$", "") || 0))}
+                                                className="w-28 p-2 border-b-2 border-gray-400 focus:outline-none"
+                                            />
+                                            <span className="text-gray-700">/hour</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-end space-x-4">
+                                        <button
+                                            onClick={() => setTotalPriceChangeModal(false)}
+                                            className="px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={updateTotalPrice}
+                                            className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">
+                                            Change
                                         </button>
                                     </div>
                                 </div>
@@ -293,11 +412,18 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                 <p className='text-sm'>Labour Rate: ${item?.labourrate}/h <button onClick={toggleLabourPopup}><EditOutlined className='text-primary' /></button></p>
                             </div>
                         }
-                        {
+                        {/* {
                             isEditable ?
-                                <input value={item?.totalcost} placeholder={`$${item?.totalcost}`} className='w-[150px] border border-gray-400 rounded-lg px-1 py-1 text-sm'></input> :
+                                <input onChange={(e) => handleChangeTotalPrice(e.target.value)} defaultValue={item?.totalcost} placeholder={`$${item?.totalcost}`} className='w-[150px] border border-gray-400 rounded-lg px-1 py-1 text-sm'></input> :
                                 <span className='mx-4 font-semibold'>${item?.totalcost}</span>
-                        }
+                        } */}
+                        <div className='mx-4 bg-gray-200 py-1 px-2 pt-[6px] flex gap-1 rounded-xl'>
+                            <span>${item?.totalcost}</span>
+                            {
+                                isEditable &&
+                                <button onClick={(e) => { e.stopPropagation(); setTotalPriceChangeModal(true) }}><EditOutlined className='text-primary text-xl mb-1' /></button>
+                            }
+                        </div>
                         {
                             isEditable &&
                             <button onClick={(e) => setDeletePopupMain(index, e)}><DeleteOutline className='text-red-600' /></button>

@@ -1,5 +1,5 @@
 "use client"
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -13,13 +13,14 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
-import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
+import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, PatchSubTask, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
+import { FaCalculator } from "react-icons/fa";
 
-
-const toNum = (val) => parseFloat(val?.toString()?.replaceAll("$", ""))
+const toNum = (val) => parseFloat(val?.toString()?.replaceAll("$", "")) || 0
 
 export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, taskId, quoteId, setDeletePopup, taskDetails, taskIndex, isEditable, index }) => {
     const dispatch = useDispatch();
+    const [labourCalc, setLabourCalc] = useState(false)
     const [isFirst, setFirst] = useState(true)
     const [tempTotalCost, setTempTotalCost] = useState(0)
     const [tempTotalBil, setTempTotalBill] = useState(0)
@@ -28,6 +29,20 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
     const [fd, setFd] = useState({})
 
     const [qtyType, setQtyType] = useState("")
+
+    const labourCalcRef = useRef(null);
+    const labourCalcButtonRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => labourCalcRef.current && !labourCalcRef.current.contains(event.target) && labourCalcButtonRef.current && !labourCalcButtonRef.current.contains(event.target) ? setLabourCalc(false) : null
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+
 
     useEffect(() => {
         console.log(subtotalbill, "--subtotalbill");
@@ -51,6 +66,8 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             labour: taskDetails?.labour,
             markup: taskDetails?.markup,
             qty: taskDetails?.quantity,
+            labourtime: taskDetails?.labourtime,
+            labourperhour: taskDetails?.labourperhour,
         })
         setTotal(taskDetails?.totalcost) // total Cost
     }, [JSON.stringify(taskDetails)])
@@ -81,7 +98,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             "id": taskId,
             "totalcost": updatedTotalCost,
         },
-{
+        {
             ...taskDetails,
             "name": localFd?.name,
             "description": localFd?.description,
@@ -96,10 +113,41 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
         dispatch(UpdateSubTask(listOfJson))
     }
 
+    const handleChange = (e, isDollarValue) => {
+        let value = isDollarValue ? toNum(e?.target?.value) : e?.target?.value;
 
-    const handleChange = e => {
-        setFd({ ...fd, [e.target.name]: e.target.value });
-        updateNow({ ...fd, [e.target.name]: e.target.value });
+        setFd({ ...fd, [e.target.name]: value });
+
+        if (["labour"]?.includes(e?.target?.name)) {
+            handleLabourChange({ ...fd, [e.target.name]: value });
+            return;
+        }
+
+        if (["labourtime", "labourperhour"]?.includes(e?.target?.name)) {
+            updateLabourCalculator({ ...fd, [e.target.name]: value });
+            return;
+        }
+
+        updateNow({ ...fd, [e.target.name]: value });
+    }
+
+    const handleLabourChange = (data) => {
+        dispatch(PatchSubTask({
+            "qid": quoteId,
+            "id": taskDetails?.id,
+            "labour": toNum(data?.labour),
+            "labourtime": toNum(data?.labour) / data?.labourperhour,
+        }))
+    }
+
+    const updateLabourCalculator = (data) => {
+        dispatch(PatchSubTask({
+            "qid": quoteId,
+            "id": taskDetails?.id,
+            "labour": parseFloat(data?.labourtime) * parseFloat(data?.labourperhour),
+            "labourtime": data?.labourtime,
+            "labourperhour": data?.labourperhour
+        }))
     }
 
 
@@ -176,8 +224,43 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
         </td>
         <td className='p-1 w-[200px] py-4'>
             {
-                isEditable ? <div className="flex flex-col items-center">
-                    <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' name='labour' value={fd?.labour} onChange={handleChange} />
+                isEditable ? <div className="flex flex-col items-center justify-center">
+                    <div className="flex items-center gap-2 relative">
+                        <input type="text" className="border text-center rounded py-1 w-[150px]" placeholder='$1' name='labour' value={`$${fd?.labour}`} onChange={(e) => handleChange(e, true)} />
+                        <div ref={labourCalcButtonRef} className="calc w-12" onClick={() => setLabourCalc(true)}>
+                            <FaCalculator className='text-gray-600 cursor-pointer hover:text-primary' />
+                        </div>
+                        {
+                            labourCalc &&
+                            <div ref={labourCalcRef} className="absolute top-[125%] rounded shadow-xl bg-white border z-50">
+                                <div class="p-4 border">
+                                    <h3 class="text-md font-semibold">Labor price details</h3>
+                                    <p class="text-xs mt-2">To complete <span class="font-bold">{taskDetails?.quantity} {qtyType}</span> of this task, it will take me approximately <span class="font-bold">{fd?.labourtime} hour(s)</span> of work at a cost of <span class="font-bold">${fd?.labourperhour}</span> per hour.</p>
+
+                                    <div class="flex items-center mt-4">
+                                        <div className="flex-col">
+                                            <div className="flex items-center">
+                                                <input type="text" onChange={(e) => handleChange(e, true)} name='labourtime' value={fd?.labourtime?.toString()?.replaceAll("$", "")} class="w-16 border px-2 py-1 rounded-md text-center text-sm mr-1" />
+                                                <span class="text-gray-600 text-sm">hrs</span>
+                                                <span class="text-gray-600 text-sm ml-2"><CloseOutlined /></span>
+                                                <input type="text" onChange={(e) => handleChange(e, true)} name='labourperhour' value={`$${fd?.labourperhour?.toString()?.replaceAll("$", "")}`} class="w-20 border px-2 py-1 rounded-md text-center text-sm mx-1" />
+                                                <span class="text-gray-600 text-sm">/hr</span>
+                                            </div>
+                                            <div class="mt-4 border-t-2 flex justify-center items-center p-2">
+                                                <input type="text" disabled readOnly value={taskDetails?.quantity} class="w-16 border px-2 py-1 rounded-md text-center text-sm mr-1" />
+                                                <span class="text-gray-600 text-sm">each</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center ml-4 text-sm">
+                                            <span class="text-gray-600">=</span>
+                                            <span class="font-bold text-sm mx-2">${fd?.labour}</span>
+                                            <span class="text-gray-600">/{qtyType}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
                     <p className='text-sm mt-2'>/{qtyType}</p>
                 </div> :
                     <div className="flex flex-row justify-center">
