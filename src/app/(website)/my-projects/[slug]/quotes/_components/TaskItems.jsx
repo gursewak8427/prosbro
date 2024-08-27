@@ -13,7 +13,7 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
-import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, UpdateClientQuoteTask } from '@/app/redux/Project/ProjectSlice';
+import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, PatchQuotes, UpdateClientQuoteTask } from '@/app/redux/Project/ProjectSlice';
 import { SingleTask } from './SingleTask';
 
 
@@ -44,7 +44,23 @@ export const TaskItems = ({ setQuoteSubTotal, quoteId, subtotalbill, data, isEdi
         const slug = pathSegments[pathSegments.length - 2];
         dispatch(DeleteClientQuoteTask({ id: data?.[deletePopupIndex1]?.task?.id, slug: slug }))
         setDeletePopupIndex1(-1)
+        updateAfterDeleteMainTask(deletePopupIndex1) // update cost also after delete 
     }
+
+    const updateAfterDeleteMainTask = (mainTaskIndex) => {
+        let taskDetails = data[mainTaskIndex];
+        let oldThisCost = taskDetails?.totalcost;
+
+        let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost
+
+
+        setQuoteSubTotal(updatedSubTotalBill)
+        dispatch(PatchQuotes({
+            "id": quoteId,
+            "subtotalbill": updatedSubTotalBill,
+        }))
+    }
+
 
 
     useEffect(() => {
@@ -118,8 +134,9 @@ export const TaskItems = ({ setQuoteSubTotal, quoteId, subtotalbill, data, isEdi
             </Dialog>
         </Transition>
 
+
         {
-            data?.map((item, index) => <SingleTask setQuoteSubTotal={setQuoteSubTotal} quoteId={quoteId} subtotalbill={subtotalbill} key={index} setDeletePopupMain={handleDeletePopup} item={item} index={index} isEditable={isEditable} />)
+            data?.map((item, index) => <div key={`main-task-${index}`}><SingleTask setQuoteSubTotal={setQuoteSubTotal} quoteId={quoteId} subtotalbill={subtotalbill} key={index} setDeletePopupMain={handleDeletePopup} item={item} index={index} isEditable={isEditable} /></div>)
         }
     </>
 }

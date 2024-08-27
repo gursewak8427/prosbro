@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import CallIcon from '@mui/icons-material/Call';
@@ -13,17 +13,22 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
 import { TaskItems } from '../../_components/TaskItems'
-import { FetchClientQuote } from '@/app/redux/Project/ProjectSlice';
+import { FetchCategories, FetchClientQuote } from '@/app/redux/Project/ProjectSlice';
 
+import { Dialog, Transition } from '@headlessui/react';
+import { CloseOutlined } from '@mui/icons-material';
+import Image from 'next/image';
 
 function Page() {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
+  const categorieslist = useSelector(store => store.projectData.categorieslist)
   const quote = useSelector(store => store.projectData.clientquote)
   const [quoteset, setQuoteset] = useState({ name: quote.name, description: quote.description, id: quote.id })
   const [quotesetstatus, setQuotesetstatus] = useState(false);
   const [quoteSubTotal, setQuoteSubTotal] = useState(0);
+  const [categoryPopup, setcategoryPopup] = useState(false)
 
   const handleQuoteUpdate = (e) => {
     const { name, value } = e.target
@@ -35,6 +40,9 @@ function Page() {
     )
   }
 
+  useEffect(() => {
+    dispatch(FetchCategories())
+  }, [])
 
   useEffect(() => {
     if (Object.keys(quote).length > 0) {
@@ -62,6 +70,81 @@ function Page() {
 
   return (
     <div className='p-8'>
+      {/* Category Popup */}
+      <Transition appear show={categoryPopup} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={() => setcategoryPopup(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-60" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl text-left align-middle shadow-xl transition-all z-50 bg-white">
+                  {/* Modal Background */}
+                  <div className="">
+                    {/* Modal Content */}
+                    <div className="rounded-lg w-full max-w-2xl p-4">
+                      {/* Modal Header */}
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-lg font-semibold">Add a category</h2>
+                        <button onClick={() => setcategoryPopup(false)} className="text-gray-600 hover:text-gray-900">
+                          <CloseOutlined />
+                        </button>
+                      </div>
+                      {/* Search Input */}
+                      <div className="relative mb-4">
+                        <input type="text" placeholder="Search category" className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 absolute right-3 top-3" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l4.392 4.393-1.414 1.414-4.392-4.393zM8 14A6 6 0 108 2a6 6 0 000 12z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      {/* Category List */}
+                      <div className="overflow-y-auto pr-2 max-h-[40vh]">
+                        <ul className="space-y-2">
+                          {/* Repeat similar structure for other categories */}
+                          {categorieslist?.map((categoryData, categoryIndex) => {
+                            return <li key={`category-${categoryIndex}`} className="flex items-center justify-between p-2 border rounded-lg hover:bg-gray-100">
+                              <span className="flex items-center gap-3">
+                                <Image src={`${process.env.NEXT_PUBLIC_BACKENDURL}${categoryData?.icon}`} width={20} height={20} />
+                                <span>{categoryData?.name}</span>
+                              </span>
+                              <input type="checkbox" className="form-checkbox h-4 w-4 text-indigo-600" />
+                            </li>
+                          })}
+                          {/* Add more categories as needed */}
+                        </ul>
+                      </div>
+                      {/* Modal Footer */}
+                      <div className="flex justify-end space-x-4 mt-6">
+                        <button className="px-4 py-2 border rounded-lg hover:bg-gray-100" onClick={() => setcategoryPopup(false)}>Cancel</button>
+                        <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Confirm</button>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+
       <div className='p-2 mt-5 mb-5 w-1/2'>
         <h1 className='text-3xl font-bold mb-2 '>
           <input
@@ -94,7 +177,7 @@ function Page() {
         <div className='w-9/12'>
           <div className='flex justify-between items-center'>
             <div className='flex justify-between gap-5'>
-              <button className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><AddIcon /> Add a category</button>
+              <button onClick={() => setcategoryPopup(true)} className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><AddIcon /> Add a category</button>
               <button className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><BookIcon /> Save as new template</button>
               <button className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><PaidIcon /> Sub. price request</button>
             </div>

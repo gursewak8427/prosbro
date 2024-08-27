@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function POST(req) {
   try {
     const data = await req.json();
-    const response = await axios.post(`${process.env.BACKENDURL}/authentication/login/`, data);
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKENDURL}/authentication/login/`, data);
     const token = response.data['token'];
     const expires = new Date(response.data['expires']);
     const res = NextResponse.json({ status: 'success', data: response.data });

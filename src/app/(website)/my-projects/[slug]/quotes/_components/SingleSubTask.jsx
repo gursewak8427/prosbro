@@ -65,6 +65,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             material: taskDetails?.material,
             labour: taskDetails?.labour,
             markup: taskDetails?.markup,
+            markuppercentage: taskDetails?.markuppercentage,
             qty: taskDetails?.quantity,
             labourtime: taskDetails?.labourtime,
             labourperhour: taskDetails?.labourperhour,
@@ -77,22 +78,28 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
     // }, [qty])
 
     const updateNow = (localFd) => {
-        let oldThisCost = (taskDetails?.markup + taskDetails?.material + taskDetails?.labour) * taskDetails?.quantity;
+        let total = (toNum(localFd?.material) + taskDetails?.labour) * toNum(localFd?.qty);
 
-        let newThisCost = (toNum(localFd?.material) + toNum(localFd?.labour) + toNum(localFd?.markup)) * localFd?.qty;
+        let markupPercentage = taskDetails?.markuppercentage;
+        let markupValue = (markupPercentage / 100) * total;
+
+        let oldThisCost = (markupValue + localFd?.material + taskDetails?.labour) * toNum(localFd?.qty);
+
+
+        let newThisCost = (toNum(localFd?.material) + toNum(localFd?.labour) + toNum(markupValue)) * toNum(localFd?.qty);
         let updatedTotalCost = parseFloat(taskTotalCost) - oldThisCost + newThisCost
 
         let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost + newThisCost
 
         console.log({ oldThisCost, newThisCost, updatedTotalCost, updatedSubTotalBill, subtotalbill });
         setTempTotalCost(updatedTotalCost) // Single Task Total Cost
-        setTempTotalBill(updatedSubTotalBill) // Bill
+        setQuoteSubTotal(updatedSubTotalBill) // Bill
         setTotal(newThisCost) // total Cost
 
 
         let listOfJson = [{
             "id": quoteId,
-            "subtotalbill": updatedSubTotalBill,
+            "subtotalbill": updatedSubTotalBill?.toFixed(2),
         },
         {
             "id": taskId,
@@ -104,19 +111,26 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             "description": localFd?.description,
             "quantity": toNum(localFd?.qty),
             "material": toNum(localFd?.material),
-            "labour": toNum(localFd?.labour),
-            "markup": toNum(localFd?.markup),
+            "markup": markupValue?.toFixed(2),
             "totalcost": toNum(newThisCost),
         }]
 
-        setQuoteSubTotal(updatedSubTotalBill)
         dispatch(UpdateSubTask(listOfJson))
+        setFd({
+            ...localFd,
+            markup: markupValue?.toFixed(2)
+        })
     }
 
     const handleChange = (e, isDollarValue) => {
         let value = isDollarValue ? toNum(e?.target?.value) : e?.target?.value;
 
         setFd({ ...fd, [e.target.name]: value });
+
+        if (["markuppercentage"]?.includes(e?.target?.name)) {
+            handleMarkupChange({ ...fd, [e.target.name]: value });
+            return;
+        }
 
         if (["labour"]?.includes(e?.target?.name)) {
             handleLabourChange({ ...fd, [e.target.name]: value });
@@ -131,23 +145,161 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
         updateNow({ ...fd, [e.target.name]: value });
     }
 
-    const handleLabourChange = (data) => {
-        dispatch(PatchSubTask({
-            "qid": quoteId,
-            "id": taskDetails?.id,
-            "labour": toNum(data?.labour),
-            "labourtime": toNum(data?.labour) / data?.labourperhour,
-        }))
+    const handleMarkupChange = (localFd) => {
+        let total = parseFloat((toNum(localFd?.material) + toNum(localFd?.labour)) * localFd?.qty);
+
+        let markupPercentage = toNum(localFd?.markuppercentage) || 0;
+        let markupValue = (markupPercentage / 100) * total;
+
+        let addedMarkupToTotal = total + markupValue;
+        setTotal(addedMarkupToTotal) // total Cost
+
+        let updatedTotalCost = parseFloat(taskTotalCost) + markupValue;
+        setTempTotalBill(updatedTotalCost) // Bill
+
+        let updatedSubTotalBill = parseFloat(subtotalbill) + markupValue;
+        setQuoteSubTotal(updatedSubTotalBill) // Single Task Total Cost
+
+
+        let listOfJson = [{
+            "id": quoteId,
+            "subtotalbill": updatedSubTotalBill?.toFixed(2),
+        },
+        {
+            "id": taskId,
+            "totalcost": updatedTotalCost?.toFixed(2),
+        },
+        {
+            ...taskDetails,
+            "markup": markupValue?.toFixed(2),
+            "markuppercentage": markupPercentage?.toFixed(2),
+        }]
+
+        dispatch(UpdateSubTask(listOfJson))
+        setFd({
+            ...localFd,
+            markup: markupValue?.toFixed(2)
+        })
     }
 
-    const updateLabourCalculator = (data) => {
-        dispatch(PatchSubTask({
+    const handleLabourChange = (localFd) => {
+
+        let total = (taskDetails?.material + localFd?.labour) * taskDetails?.quantity;
+
+        let markupPercentage = taskDetails?.markuppercentage;
+        let markupValue = (markupPercentage / 100) * total;
+
+        console.log(markupValue, "---markupValue");
+
+
+        let oldThisCost = (markupValue + taskDetails?.material + localFd?.labour) * taskDetails?.quantity;
+
+
+        let newThisCost = (toNum(localFd?.material) + toNum(localFd?.labour) + toNum(markupValue)) * localFd?.qty;
+        let updatedTotalCost = parseFloat(taskTotalCost) - oldThisCost + newThisCost
+
+        let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost + newThisCost
+
+        console.log({ oldThisCost, newThisCost, updatedTotalCost, updatedSubTotalBill, subtotalbill });
+        setTempTotalCost(updatedTotalCost) // Single Task Total Cost
+        setQuoteSubTotal(updatedSubTotalBill) // Bill
+        setTotal(newThisCost) // total Cost
+
+
+        let listOfJson = [{
+            "id": quoteId,
+            "subtotalbill": updatedSubTotalBill?.toFixed(2),
+        },
+        {
+            "id": taskId,
+            "totalcost": updatedTotalCost,
+        },
+        {
+            ...taskDetails,
+            "totalcost": toNum(newThisCost),
             "qid": quoteId,
             "id": taskDetails?.id,
-            "labour": parseFloat(data?.labourtime) * parseFloat(data?.labourperhour),
-            "labourtime": data?.labourtime,
-            "labourperhour": data?.labourperhour
-        }))
+            "labour": toNum(localFd?.labour),
+            "labourtime": toNum(localFd?.labour) / localFd?.labourperhour,
+        }]
+
+        dispatch(UpdateSubTask(listOfJson))
+        setFd({
+            ...localFd,
+            markup: markupValue?.toFixed(2)
+        })
+
+        // dispatch(PatchSubTask({
+        //     "qid": quoteId,
+        //     "id": taskDetails?.id,
+        //     "labour": toNum(data?.labour),
+        //     "labourtime": toNum(data?.labour) / data?.labourperhour,
+        // }))
+    }
+
+    const updateLabourCalculator = (localFd) => {
+        let newLabourValue = parseFloat(toNum(localFd?.labourtime)) * parseFloat(toNum(localFd?.labourperhour))
+
+        let total = (toNum(localFd?.material) + newLabourValue) * toNum(localFd?.qty);
+
+        let markupPercentage = localFd?.markuppercentage;
+        let markupValue = (markupPercentage / 100) * total;
+
+        console.log(newLabourValue, "---newLabourValue");
+        console.log(total, "---total");
+        console.log(markupValue, "---markupValue");
+        console.log(localFd, "---localFd");
+
+
+        let oldThisCost = (markupValue + toNum(localFd?.material) + newLabourValue) * toNum(localFd?.qty);
+
+
+        let newThisCost = (toNum(localFd?.material) + (newLabourValue) + toNum(markupValue)) * toNum(localFd?.qty);
+
+        let updatedTotalCost = parseFloat(taskTotalCost) - oldThisCost + newThisCost
+
+        let updatedSubTotalBill = parseFloat(subtotalbill) - oldThisCost + newThisCost
+
+        setTempTotalCost(updatedTotalCost) // Single Task Total Cost
+        setQuoteSubTotal(updatedSubTotalBill) // Bill
+        setTotal(newThisCost) // total Cost
+
+
+        let listOfJson = [{
+            "id": quoteId,
+            "subtotalbill": updatedSubTotalBill?.toFixed(2),
+        },
+        {
+            "id": taskId,
+            "totalcost": updatedTotalCost,
+        },
+        {
+            ...taskDetails,
+            "totalcost": toNum(newThisCost),
+            "qid": quoteId,
+            "id": taskDetails?.id,
+            "labour": newLabourValue,
+            "material": toNum(localFd?.material),
+            "markup": markupValue?.toFixed(2),
+            "labourtime": localFd?.labourtime,
+            "labourperhour": localFd?.labourperhour
+        }]
+
+        dispatch(UpdateSubTask(listOfJson))
+        setFd({
+            ...localFd,
+            labour: newLabourValue?.toFixed(2),
+            markup: markupValue?.toFixed(2)
+        })
+
+
+        // dispatch(PatchSubTask({
+        //     "qid": quoteId,
+        //     "id": taskDetails?.id,
+        //     "labour": parseFloat(data?.labourtime) * parseFloat(data?.labourperhour),
+        //     "labourtime": data?.labourtime,
+        //     "labourperhour": data?.labourperhour
+        // }))
     }
 
 
@@ -271,8 +423,8 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
         <td className='p-1 py-4'>
             {
                 isEditable ? <div className="flex flex-col items-center">
-                    <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>$0.00</label>
-                    <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='0%' name='markup' value={fd?.markup} onChange={handleChange} />
+                    <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>${fd?.markup}</label>
+                    <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='0%' name='markuppercentage' value={fd?.markuppercentage} onChange={handleChange} />
                 </div> :
                     <div className="flex flex-row justify-center">
                         <span className='mx-1'>10% - $848</span>

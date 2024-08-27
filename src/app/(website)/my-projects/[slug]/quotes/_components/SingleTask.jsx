@@ -107,10 +107,10 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
     const confirmDeleteMainTask = () => {
         dispatch(DeleteSubTask({ id: deletePopupIndex2, slug: slug }))
         setDeletePopupIndex2(-1)
-        updateNow(deletePopupIndex2) // update cost also after delete 
+        updateAfterDeleteSubTask(deletePopupIndex2) // update cost also after delete 
     }
 
-    const updateNow = (subTaskId) => {
+    const updateAfterDeleteSubTask = (subTaskId) => {
         let taskDetails = item?.subtasks.filter(t => t?.id == subTaskId)[0];
         let oldThisCost = taskDetails?.totalcost;
 

@@ -12,7 +12,7 @@ async function Page() {
     const headers = {
       'Authorization': 'Bearer ' + authToken.value
     };
-    const response = await axios.get(`${process.env.BACKENDURL}/fetchprojectsinvoiceamt/`, { headers })
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKENDURL}/fetchprojectsinvoiceamt/`, { headers })
   } catch (error) {
     console.log(error);
   }
