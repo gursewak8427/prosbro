@@ -11,6 +11,7 @@ const initialState = {
     clientquote: {},
     singleproject: {},
     quoteslist: [],
+    categorieslist: [],
 }
 
 // Utility function to process error and convert to string
@@ -163,7 +164,17 @@ export const FetchQuotes = createAsyncThunk("FetchQuotes", async (data, { reject
 
 export const PatchQuotes = createAsyncThunk("PatchQuotes", async (data, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.patch(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/`,data)
+        const response = await axiosInstance.patch(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/`, data)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const FetchCategories = createAsyncThunk("FetchCategories", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchcategories/`)
         return response.data;
     } catch (error) {
         const processederror = processError(error.response?.data || error.message)
@@ -269,9 +280,15 @@ const Slice = createSlice({
         builder.addCase(FetchQuotes.rejected, (state, action) => {
             state.error = action.payload
         })
+        builder.addCase(FetchCategories.fulfilled, (state, action) => {
+            state.categorieslist = action.payload
+        })
+        builder.addCase(FetchCategories.rejected, (state, action) => {
+            state.error = action.payload
+        })
     }
 })
 
 
-export const { isloadingAction, projectAction, clientQuoteAction,quoteslistAction } = Slice.actions;
+export const { isloadingAction, projectAction, clientQuoteAction, quoteslistAction } = Slice.actions;
 export default Slice.reducer;
