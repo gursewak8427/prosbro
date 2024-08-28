@@ -1,38 +1,23 @@
 "use client"
-import React, { useState } from 'react'
-import PersonIcon from '@mui/icons-material/Person';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import EmailIcon from '@mui/icons-material/Email';
-import CallIcon from '@mui/icons-material/Call';
-import AddIcon from '@mui/icons-material/Add';
-import BookIcon from '@mui/icons-material/Book';
-import PaidIcon from '@mui/icons-material/Paid';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useEffect, useState } from 'react'
 import ErrorIcon from '@mui/icons-material/Error';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-
-
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useDispatch } from 'react-redux';
-import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
-import { useRouter } from 'next/navigation';
-import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, EditOutlined } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { usePathname, useRouter } from 'next/navigation';
+import { DeleteOutline } from '@mui/icons-material';
+import { FetchClientQuote } from '@/app/redux/Project/ProjectSlice';
+import { FetchDefQuotetaxes, FetchProjectProfile } from '@/app/redux/AuthSlice';
 
 
 function Page() {
+  const quote = useSelector(store => store.projectData.clientquote)
+  const profile = useSelector(store => store.userData.projectprofile);
+  const taxes = useSelector(store => store.userData.defaultquotetaxes);
+  const pathname = usePathname();
   const dispatch = useDispatch();
   const router = useRouter()
-  const [payments, setPayments] = useState([
-    { id: 1, label: "Beginning of project", percentage: 40, amount: 13212.42 },
-    { id: 2, label: "Middle of project", percentage: 40, amount: 13212.42 },
-    { id: 3, label: "End of project", percentage: 20, amount: 6606.21 },
-  ]);
+  const [payments, setPayments] = useState([]);
+  const [validityDate, setValidityDate] = useState('');
 
   const addPayment = () => {
     setPayments([
@@ -53,6 +38,39 @@ function Page() {
     );
   };
 
+  useEffect(() => {
+    if (Object.keys(quote).length > 0) {
+      console.log('data ava');
+      return
+    } else {
+      const pathSegments = pathname.split("/");
+      const slug = pathSegments[pathSegments.length - 2];
+      dispatch(FetchClientQuote(slug))
+    }
+  }, [pathname, quote])
+
+  useEffect(() => {
+    if (!Object.keys(profile).length) {
+      dispatch(FetchProjectProfile())
+      dispatch(FetchDefQuotetaxes())
+      return
+    }
+    setPayments(profile.paymentschedule)
+  }, [profile])
+
+  useEffect(() => {
+    if (typeof profile.quotevalidity === 'number' && !isNaN(profile.quotevalidity)) {
+      const currentDate = new Date();
+      const validDate = new Date(currentDate);
+      validDate.setDate(validDate.getDate() + profile.quotevalidity);
+
+      const formattedDate = validDate.toISOString().split('T')[0];
+      setValidityDate(formattedDate);
+    } else {
+      console.warn('Invalid or undefined profile.quotevalidity');
+      // Optionally, you could set a default date or handle this case as needed
+    }
+  }, [profile.quotevalidity]);
   return (
     <div className='p-8'>
       <div className='p-2 mt-5 mb-5 w-1/2'>
@@ -63,26 +81,26 @@ function Page() {
         <div className='w-9/12'>
           <div className="bg-gray-100 p-4 rounded-lg">
             <div className="bg-white p-4">
-              {payments.map((payment) => (
+              {payments.map((payment, index) => (
                 <div
-                  key={payment.id}
+                  key={index}
                   className="flex w-3/4 items-center mb-3 space-x-2 border rounded p-2 "
                 >
                   <input
                     type="text"
-                    value={payment.label}
-                    onChange={(e) => handleLabelChange(payment.id, e.target.value)}
+                    value={payment?.name}
+                    onChange={(e) => handleLabelChange(payment?.id, e.target.value)}
                     className="flex-1 p-2 border border-gray-300 rounded focus:ring focus:ring-blue-500"
                   />
                   <input
                     type="number"
-                    value={payment.percentage}
+                    value={payment?.number}
                     onChange={(e) => null}
                     className="w-20 p-2 text-right border border-gray-300 rounded focus:ring focus:ring-blue-500"
                   />
-                  <span className="w-28 text-right">${payment.amount.toFixed(2)}</span>
+                  <span className="w-28 text-right">${payment?.amount?.toFixed(2)}</span>
                   <button
-                    onClick={() => removePayment(payment.id)}
+                    onClick={() => removePayment(payment?.id)}
                     className="text-red-500 hover:text-red-700"
                   >
                     <DeleteOutline />
@@ -115,8 +133,9 @@ function Page() {
                 <input
                   type="date"
                   className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={validityDate}
                 />
-                <span className="text-gray-700">Duration: 7 days</span>
+                <span className="text-gray-700">Duration: {profile.quotevalidity} days</span>
               </div>
               <p className="text-gray-500 text-sm">
                 Your client will be notified by SMS and Email 2 days before and the same day it expires
@@ -128,12 +147,8 @@ function Page() {
               <label className="block text-gray-700 font-medium mb-2">Terms and conditions</label>
               <textarea
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows="4"
-                defaultValue="Purpose
-The purpose of this Agreement is to set forth the terms and conditions under which Contractor will perform the construction work described above for Client.
-
-Scope of Work
-The Contractor shall perform the construction work described in this quote in accordance with all applicable laws and regulations and in accordance with the plans and specifications provided."
+                rows="6"
+                value={profile?.tc}
               />
               <div className="flex items-center mt-2">
                 <input

@@ -13,11 +13,12 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
 import { TaskItems } from '../../_components/TaskItems'
-import { FetchCategories, FetchClientQuote } from '@/app/redux/Project/ProjectSlice';
+import { FetchCategories, FetchClientQuote, UpdateQuote } from '@/app/redux/Project/ProjectSlice';
 
 import { Dialog, Transition } from '@headlessui/react';
 import { CloseOutlined } from '@mui/icons-material';
 import Image from 'next/image';
+import { FetchDefQuotetaxes, FetchProjectProfile } from '@/app/redux/AuthSlice';
 
 function Page() {
   const dispatch = useDispatch();
@@ -25,13 +26,17 @@ function Page() {
   const pathname = usePathname();
   const categorieslist = useSelector(store => store.projectData.categorieslist)
   const quote = useSelector(store => store.projectData.clientquote)
+  const taxes = useSelector(store => store.userData.defaultquotetaxes);
+  const profile = useSelector(store => store.userData.projectprofile);
   const [quoteset, setQuoteset] = useState({ name: quote.name, description: quote.description, id: quote.id })
   const [quotesetstatus, setQuotesetstatus] = useState(false);
   const [quoteSubTotal, setQuoteSubTotal] = useState(0);
   const [categoryPopup, setcategoryPopup] = useState(false)
+  const [totalbillamount, settotalbillamount] = useState(0)
 
   const handleQuoteUpdate = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
+    setQuotesetstatus(true)
     setQuoteset(
       (prevdata) => ({
         ...prevdata,
@@ -55,19 +60,30 @@ function Page() {
     }
   }, [pathname, quote])
 
-  useEffect(() => {
+  const updateQuotename = () => {
     if (quotesetstatus) {
-      setTimeout(() => {
-
-      }, 3000);
+      dispatch(UpdateQuote(quoteset))
     }
     return;
-  }, [quotesetstatus, quoteset])
+  }
 
   useEffect(() => {
     setQuoteSubTotal(quote?.subtotalbill)
+    const quoteSubTotal = quote?.subtotalbill;
+    let value = 0;
+    taxes.forEach(item => {
+      value = value + (item.number / 100) * quoteSubTotal;
+    });
+    settotalbillamount(quoteSubTotal + value)
   }, [JSON.stringify(quote?.subtotalbill)])
 
+  useEffect(() => {
+    if (!Object.keys(profile).length) {
+      dispatch(FetchProjectProfile())
+      dispatch(FetchDefQuotetaxes())
+      return
+    }
+  }, [profile])
   return (
     <div className='p-8'>
       {/* Category Popup */}
@@ -154,6 +170,7 @@ function Page() {
             id="name"
             value={quoteset.name}
             onChange={(e) => { handleQuoteUpdate(e) }}
+            onBlur={updateQuotename}
           />
         </h1>
         <p className='text-gray-600 '>
@@ -164,6 +181,7 @@ function Page() {
             id="description"
             value={quoteset.description}
             onChange={(e) => { handleQuoteUpdate(e) }}
+            onBlur={updateQuotename}
           />
         </p>
       </div>
@@ -197,18 +215,24 @@ function Page() {
             <h2 className='text-sm text-primary'>Edit on quote %</h2>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className='text-gray-500 text-sm'>Subtotal</h2>
-              <p className='text-gray-600 text-sm'>${quoteSubTotal}</p>
+              <p className='text-gray-600 text-sm'>${quoteSubTotal?.toFixed(2)}</p>
             </div>
-            <div className='mb-4 mt-4 flex justify-between'>
-              <h2 className='text-gray-500 text-sm'>GST</h2>
-              <p className='text-gray-600 text-sm'>$65.00</p>
-            </div>
+            {
+              taxes.map((item, index) => {
+                return (
+                  <div className='mb-4 mt-4 flex justify-between' key={index}>
+                    <h2 className='text-gray-500 text-sm'>{item.name} {item.number}%</h2>
+                    <p className='text-gray-600 text-sm'>${((item.number / 100) * quoteSubTotal).toFixed(2)}</p>
+                  </div>
+                );
+              })
+            }
             <div className='mb-4 mt-4 flex justify-between'>
               <button className='text-sm text-primary'>Edit taxes</button>
             </div>
             <div className='mb-4 mt-4 flex justify-between'>
               <h2 className=' text-lg font-semibold'>Total</h2>
-              <p className='text-lg font-semibold'>${quote.totalbill}</p>
+              <p className='text-lg font-semibold'>${totalbillamount?.toFixed(2)}</p>
             </div>
 
             <button onClick={() => {
@@ -217,7 +241,7 @@ function Page() {
             }} className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next Add Details</button>
             {/* <button className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700'>Submit Payment</button> */}
             <div className='mb-2 mt-2 flex justify-center items-center'>
-              <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Clint preview - PDF</button>
+              <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Client preview - PDF</button>
             </div>
             <div className='mb-2 mt-2 flex justify-center items-center'>
               <button className='text-sm font-semibold text-primary'>Scope of work (no prices)</button>

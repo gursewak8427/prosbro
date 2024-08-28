@@ -10,6 +10,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
@@ -42,6 +43,15 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
         };
     }, []);
 
+    const handleIconClick = (value) => {
+        const customEvent = {
+            target: {
+                name: 'clientvisible',
+                value: value
+            }
+        };
+        handleChange(customEvent);
+    };
 
 
     useEffect(() => {
@@ -69,6 +79,8 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             qty: taskDetails?.quantity,
             labourtime: taskDetails?.labourtime,
             labourperhour: taskDetails?.labourperhour,
+            materialprice: taskDetails?.materialprice,
+            clientvisible: taskDetails?.clientvisible,
         })
         setTotal(taskDetails?.totalcost) // total Cost
     }, [JSON.stringify(taskDetails)])
@@ -113,6 +125,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             "material": toNum(localFd?.material),
             "markup": markupValue?.toFixed(2),
             "totalcost": toNum(newThisCost),
+            "clientvisible": localFd?.clientvisible,
         }]
 
         dispatch(UpdateSubTask(listOfJson))
@@ -124,6 +137,8 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
 
     const handleChange = (e, isDollarValue) => {
         let value = isDollarValue ? toNum(e?.target?.value) : e?.target?.value;
+        console.log(e.target.name);
+        console.log(value);
 
         setFd({ ...fd, [e.target.name]: value });
 
@@ -365,7 +380,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
             {
                 isEditable ?
                     <div className="flex flex-col items-center">
-                        <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>Builder Cost</label>
+                        <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>{fd?.materialprice}</label>
                         <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' name='material' value={fd?.material} onChange={handleChange} />
                         <p className='text-sm mt-2'>/{qtyType}</p>
                     </div> :
@@ -440,9 +455,12 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, taskTotalCost, t
                         <p className='text-sm mt-2'>${total}/{qtyType}</p>
 
                         <div className='flex justify-end items-center transform translate-y-4'>
-                            <BookmarkBorderOutlined className='text-primary text-[20px] mx-1' />
-                            <RemoveRedEyeIcon className='text-primary text-[20px] mx-1' />
-                            <ContentCopy className='text-primary text-[20px] mx-1' />
+                            {/* <BookmarkBorderOutlined className='text-primary text-[20px] mx-1' /> */}
+
+                            {
+                                fd?.clientvisible ? <RemoveRedEyeIcon className='text-primary text-[20px] mx-1' onClick={() => { handleIconClick(false) }} /> : <VisibilityOffIcon className='text-primary text-[20px] mx-1' onClick={() => { handleIconClick(true) }} />
+                            }
+                            {/* <ContentCopy className='text-primary text-[20px] mx-1' /> */}
                             <button onClick={() => setDeletePopup(taskDetails?.id)}><DeleteOutline className='text-red-600 text-[23px] mx-1' /></button>
                         </div>
                     </>

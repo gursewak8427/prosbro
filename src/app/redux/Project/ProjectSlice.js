@@ -172,9 +172,19 @@ export const PatchQuotes = createAsyncThunk("PatchQuotes", async (data, { reject
     }
 });
 
+export const UpdateQuote = createAsyncThunk("UpdateQuote", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotes/`, data)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
 export const FetchCategories = createAsyncThunk("FetchCategories", async (data, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchcategories/`)
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchcategories/`, data)
         return response.data;
     } catch (error) {
         const processederror = processError(error.response?.data || error.message)

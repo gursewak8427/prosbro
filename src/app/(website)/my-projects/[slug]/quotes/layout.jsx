@@ -7,7 +7,7 @@ import { Step, StepLabel, Stepper } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
 
-const steps = ['Edit', 'Add detials', 'Customize', 'Preview'];
+const steps = ['Edit', 'Add details', 'Customize', 'Preview'];
 
 const pathname_map_step = {
     'edit': 0, 'add-details': 1, 'customize': 2, 'preview': 3
