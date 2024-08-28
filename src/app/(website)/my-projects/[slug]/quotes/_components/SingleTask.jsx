@@ -387,7 +387,7 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                 id="panel1-header"
             >
                 <div className="w-full flex flex-row justify-between items-center">
-                    <div className="w-1/2 flex flex-row items-center">
+                    <div className="w-1/2 flex flex-row items-center group">
                         <h1 className='mr-2'><img src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/media/${item?.task.icon}`} alt="" className='w-5 h-5' /></h1>
                         <div className='mr-2'>
                             {
@@ -401,14 +401,14 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                 <button className='cursor-pointer hover:bg-gray-300 w-8 h-8 rounded-full pb-[2px]' onClick={(e) => saveTitle(e)}><Done color='success' /></button>
                                 <button className='cursor-pointer hover:bg-gray-300 w-8 h-8 rounded-full pb-[2px]' onClick={(e) => closeTitle(e, false)}><Close color='warning' /></button>
                             </div> :
-                                isEditable && <h1 onClick={(e) => { setEditingModel(e, item?.task?.name, true) }}><EditOutlined className='text-primary' /></h1>
+                                isEditable && <h1 className='group-hover:block hidden' onClick={(e) => { setEditingModel(e, item?.task?.name, true) }}><EditOutlined className='text-primary' /></h1>
                         }
                     </div>
                     <div className="w-1/2 flex flex-row justify-end items-center">
                         {
                             isEditable &&
                             <div className="flex flex-col justify-end items-end mr-2">
-                                <p className='text-sm'>Estimate Labour time: {item?.estimateLabourTimeHours}h</p>
+                                <p className='text-sm'>Estimate Labour time: {item?.subtasks?.reduce((prev, curr) => prev += (curr?.labourtime || 0), 0)}h</p>
                                 <p className='text-sm'>Labour Rate: ${item?.labourrate}/h <button onClick={toggleLabourPopup}><EditOutlined className='text-primary' /></button></p>
                             </div>
                         }
@@ -417,11 +417,11 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                 <input onChange={(e) => handleChangeTotalPrice(e.target.value)} defaultValue={item?.totalcost} placeholder={`$${item?.totalcost}`} className='w-[150px] border border-gray-400 rounded-lg px-1 py-1 text-sm'></input> :
                                 <span className='mx-4 font-semibold'>${item?.totalcost}</span>
                         } */}
-                        <div className='mx-4 bg-gray-200 py-1 px-2 pt-[6px] flex gap-1 rounded-xl'>
+                        <div className='mx-4 min-w-[150px] bg-gray-200 py-1 px-2 pt-[6px] flex gap-1 rounded-xl justify-center group relative' onClick={(e) => { e.stopPropagation(); setTotalPriceChangeModal(true) }}>
                             <span>${item?.totalcost}</span>
                             {
                                 isEditable &&
-                                <button onClick={(e) => { e.stopPropagation(); setTotalPriceChangeModal(true) }}><EditOutlined className='text-primary text-xl mb-1' /></button>
+                                <button className='group-hover:block hidden absolute right-4'><EditOutlined className='text-primary text-xl mb-1' /></button>
                             }
                         </div>
                         {

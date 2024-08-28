@@ -146,8 +146,9 @@ function Page() {
       </Transition>
 
       <div className='p-2 mt-5 mb-5 w-1/2'>
-        <h1 className='text-3xl font-bold mb-2 '>
+        <h1 className='text-3xl font-bold mb-2'>
           <input
+            className='w-full bg-transparent'
             type="text"
             name="name"
             id="name"
@@ -157,6 +158,7 @@ function Page() {
         </h1>
         <p className='text-gray-600 '>
           <input
+            className='w-full bg-transparent'
             type="text"
             name="description"
             id="description"
