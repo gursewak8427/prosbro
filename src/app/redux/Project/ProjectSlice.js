@@ -12,6 +12,7 @@ const initialState = {
     singleproject: {},
     quoteslist: [],
     categorieslist: [],
+    quoteadditionalinformation: {},
 }
 
 // Utility function to process error and convert to string
@@ -192,6 +193,56 @@ export const FetchCategories = createAsyncThunk("FetchCategories", async (data, 
     }
 });
 
+export const FetchQuoteAddinformation = createAsyncThunk("FetchQuoteAddinformation", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchquoteaddidetails/?slug=${data}`,)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const UpdateQuoteAddinformation = createAsyncThunk("UpdateQuoteAddinformation", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/fetchquoteaddidetails/`, data)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const DeleteQuotePaySchedule = createAsyncThunk("DeleteQuotePaySchedule", async ({ slug, id }, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.delete(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotepayschedule/?slug=${slug}&id=${id}`,)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const CreateQuotePaySchedule = createAsyncThunk("CreateQuotePaySchedule", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.post(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotepayschedule/`, data)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const UpdateQuotePaySchedule = createAsyncThunk("UpdateQuotePaySchedule", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/fetchquotepayschedule/`, data)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
 
 const Slice = createSlice({
     name: "projectslice",
@@ -294,6 +345,24 @@ const Slice = createSlice({
             state.categorieslist = action.payload
         })
         builder.addCase(FetchCategories.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(FetchQuoteAddinformation.fulfilled, (state, action) => {
+            state.quoteadditionalinformation = action.payload
+        })
+        builder.addCase(FetchQuoteAddinformation.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(DeleteQuotePaySchedule.fulfilled, (state, action) => {
+            state.quoteadditionalinformation = action.payload
+        })
+        builder.addCase(DeleteQuotePaySchedule.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(CreateQuotePaySchedule.fulfilled, (state, action) => {
+            state.quoteadditionalinformation = action.payload
+        })
+        builder.addCase(CreateQuotePaySchedule.rejected, (state, action) => {
             state.error = action.payload
         })
     }

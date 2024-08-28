@@ -5,72 +5,103 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
 import { DeleteOutline } from '@mui/icons-material';
-import { FetchClientQuote } from '@/app/redux/Project/ProjectSlice';
-import { FetchDefQuotetaxes, FetchProjectProfile } from '@/app/redux/AuthSlice';
+import { CreateQuotePaySchedule, DeleteQuotePaySchedule, FetchClientQuote, FetchQuoteAddinformation, UpdateQuoteAddinformation, UpdateQuotePaySchedule } from '@/app/redux/Project/ProjectSlice';
+import { FetchDefQuotetaxes } from '@/app/redux/AuthSlice';
 
 
 function Page() {
-  const quote = useSelector(store => store.projectData.clientquote)
-  const profile = useSelector(store => store.userData.projectprofile);
+  const quote = useSelector(store => store.projectData.clientquote);
+  const quoteadditionalinformation = useSelector(store => store.projectData.quoteadditionalinformation);
   const taxes = useSelector(store => store.userData.defaultquotetaxes);
   const pathname = usePathname();
   const dispatch = useDispatch();
   const router = useRouter()
   const [payments, setPayments] = useState([]);
-  const [validityDate, setValidityDate] = useState('');
+  const [paymentstatus, setPaymentStatus] = useState(false);
+  const [addinfor, setAddinfo] = useState({});
+  const [addinforstatus, setAddinfoStatus] = useState(false);
+  const [quoteSubTotal, setQuoteSubTotal] = useState(0);
+  const [totalbillamount, settotalbillamount] = useState(0)
+  const pathSegments = pathname.split("/");
+  const slug = pathSegments[pathSegments.length - 2];
 
   const addPayment = () => {
-    setPayments([
-      ...payments,
-      { id: Date.now(), label: "", percentage: 0, amount: 0 },
-    ]);
+    dispatch(CreateQuotePaySchedule({ slug: slug }))
   };
+
 
   const removePayment = (id) => {
-    setPayments(payments.filter((payment) => payment.id !== id));
+    dispatch(DeleteQuotePaySchedule({ slug: slug, id: id }))
   };
 
-  const handleLabelChange = (id, newLabel) => {
+  const handleLabelChange = (id, e) => {
+    setPaymentStatus((true));
     setPayments(
       payments.map((payment) =>
-        payment.id === id ? { ...payment, label: newLabel } : payment
+        payment.id === id ? { ...payment, [e.target.name]: e.target.value } : payment
       )
     );
   };
 
+  const handleAddiDetailsUpdate = () => {
+    if (addinforstatus) {
+      const data = addinfor;
+      delete data.paymentschedule;
+      dispatch(UpdateQuoteAddinformation(data))
+      setAddinfoStatus((false));
+    }
+  }
+
+  const handlePaymentsScheduleUpdate = (id) => {
+    if (paymentstatus) {
+      const data = payments.find(obj => obj.id === id);
+      dispatch(UpdateQuotePaySchedule(data))
+      setPaymentStatus((false));
+    }
+  }
+
+  const handleAddiDetailsChange = (e) => {
+    setAddinfoStatus(true)
+    setAddinfo((prevaddinfo) => (
+      {
+        ...prevaddinfo,
+        [e.target.name]: e.target.value
+      }
+    ))
+  }
+
   useEffect(() => {
     if (Object.keys(quote).length > 0) {
-      console.log('data ava');
       return
     } else {
-      const pathSegments = pathname.split("/");
-      const slug = pathSegments[pathSegments.length - 2];
       dispatch(FetchClientQuote(slug))
+      dispatch(FetchQuoteAddinformation(slug))
+      dispatch(FetchDefQuotetaxes())
     }
   }, [pathname, quote])
 
   useEffect(() => {
-    if (!Object.keys(profile).length) {
-      dispatch(FetchProjectProfile())
-      dispatch(FetchDefQuotetaxes())
-      return
-    }
-    setPayments(profile.paymentschedule)
-  }, [profile])
+    setQuoteSubTotal(quote?.subtotalbill)
+    const quoteSubTotal = quote?.subtotalbill;
+    let value = 0;
+    taxes.forEach(item => {
+      value = value + (item.number / 100) * quoteSubTotal;
+    });
+    settotalbillamount(quoteSubTotal + value)
+  }, [JSON.stringify(quote?.subtotalbill)])
 
   useEffect(() => {
-    if (typeof profile.quotevalidity === 'number' && !isNaN(profile.quotevalidity)) {
-      const currentDate = new Date();
-      const validDate = new Date(currentDate);
-      validDate.setDate(validDate.getDate() + profile.quotevalidity);
-
-      const formattedDate = validDate.toISOString().split('T')[0];
-      setValidityDate(formattedDate);
-    } else {
-      console.warn('Invalid or undefined profile.quotevalidity');
-      // Optionally, you could set a default date or handle this case as needed
+    if (Object.keys(quoteadditionalinformation).length) {
+      setAddinfo(quoteadditionalinformation)
+      setPayments(quoteadditionalinformation.paymentschedule)
     }
-  }, [profile.quotevalidity]);
+  }, [quoteadditionalinformation])
+
+  useEffect(() => {
+    if (totalbillamount) {
+
+    }
+  }, [totalbillamount])
   return (
     <div className='p-8'>
       <div className='p-2 mt-5 mb-5 w-1/2'>
@@ -88,19 +119,23 @@ function Page() {
                 >
                   <input
                     type="text"
-                    value={payment?.name}
-                    onChange={(e) => handleLabelChange(payment?.id, e.target.value)}
+                    value={payment.name}
+                    name='name'
+                    onChange={(e) => handleLabelChange(payment.id, e)}
                     className="flex-1 p-2 border border-gray-300 rounded focus:ring focus:ring-blue-500"
+                    onBlur={() => { handlePaymentsScheduleUpdate(payment.id) }}
                   />
                   <input
                     type="number"
-                    value={payment?.number}
-                    onChange={(e) => null}
+                    name='number'
+                    value={payment.number}
+                    onChange={(e) => handleLabelChange(payment.id, e)}
                     className="w-20 p-2 text-right border border-gray-300 rounded focus:ring focus:ring-blue-500"
+                    onBlur={() => { handlePaymentsScheduleUpdate(payment.id) }}
                   />
-                  <span className="w-28 text-right">${payment?.amount?.toFixed(2)}</span>
+                  <span className="w-28 text-right">${payment.amount.toFixed(2)}</span>
                   <button
-                    onClick={() => removePayment(payment?.id)}
+                    onClick={() => removePayment(payment.id)}
                     className="text-red-500 hover:text-red-700"
                   >
                     <DeleteOutline />
@@ -123,6 +158,10 @@ function Page() {
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Give an estimate date of start and duration"
                 rows="4"
+                name='constructionschedule'
+                value={addinfor?.constructionschedule}
+                onChange={handleAddiDetailsChange}
+                onBlur={handleAddiDetailsUpdate}
               />
             </div>
 
@@ -133,9 +172,12 @@ function Page() {
                 <input
                   type="date"
                   className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={validityDate}
+                  value={addinfor?.quotevalidity}
+                  onChange={handleAddiDetailsChange}
+                  name='quotevalidity'
+                  onBlur={handleAddiDetailsUpdate}
                 />
-                <span className="text-gray-700">Duration: {profile.quotevalidity} days</span>
+                <span className="text-gray-700">Duration: {addinfor?.quotevaliditydays} days</span>
               </div>
               <p className="text-gray-500 text-sm">
                 Your client will be notified by SMS and Email 2 days before and the same day it expires
@@ -148,7 +190,10 @@ function Page() {
               <textarea
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows="6"
-                value={profile?.tc}
+                value={addinfor?.tc}
+                onChange={handleAddiDetailsChange}
+                name='tc'
+                onBlur={handleAddiDetailsUpdate}
               />
               <div className="flex items-center mt-2">
                 <input
@@ -181,18 +226,24 @@ function Page() {
           <h2 className='text-sm text-primary'>Edit on quote %</h2>
           <div className='mb-4 mt-4 flex justify-between'>
             <h2 className='text-gray-500 text-sm'>Subtotal</h2>
-            <p className='text-gray-600 text-sm'>$7865.00</p>
+            <p className='text-gray-600 text-sm'>${quoteSubTotal?.toFixed(2)}</p>
           </div>
-          <div className='mb-4 mt-4 flex justify-between'>
-            <h2 className='text-gray-500 text-sm'>GST</h2>
-            <p className='text-gray-600 text-sm'>$65.00</p>
-          </div>
+          {
+            taxes.map((item, index) => {
+              return (
+                <div className='mb-4 mt-4 flex justify-between' key={index}>
+                  <h2 className='text-gray-500 text-sm'>{item.name} {item.number}%</h2>
+                  <p className='text-gray-600 text-sm'>${((item.number / 100) * quoteSubTotal).toFixed(2)}</p>
+                </div>
+              );
+            })
+          }
           <div className='mb-4 mt-4 flex justify-between'>
             <button className='text-sm text-primary'>Edit taxes</button>
           </div>
           <div className='mb-4 mt-4 flex justify-between'>
             <h2 className=' text-lg font-semibold'>Total</h2>
-            <p className='text-lg font-semibold'>$75445.00</p>
+            <p className='text-lg font-semibold'>${totalbillamount?.toFixed(2)}</p>
           </div>
 
           <button onClick={() => {
@@ -200,7 +251,7 @@ function Page() {
             router.push("customize")
           }} className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next - Customize</button>
           <div className='mb-2 mt-2 flex justify-center items-center'>
-            <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Clint preview - PDF</button>
+            <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Client preview - PDF</button>
           </div>
           <div className='mb-2 mt-2 flex justify-center items-center'>
             <button className='text-sm font-semibold text-primary'>Scope of work (no prices)</button>
