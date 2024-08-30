@@ -93,14 +93,14 @@ function Page() {
   }
 
   useEffect(() => {
-    if (Object.keys(quote).length > 0) {
+    if (Object.keys(quoteadditionalinformation).length > 0) {
       return
     } else {
       dispatch(FetchClientQuote(slug))
       dispatch(FetchQuoteAddinformation(slug))
       dispatch(FetchDefQuotetaxes())
     }
-  }, [pathname, quote])
+  }, [pathname, quoteadditionalinformation])
 
   useEffect(() => {
     setQuoteSubTotal(quote?.subtotalbill)
