@@ -34,6 +34,8 @@ function Page() {
     dispatch(DeleteQuotePaySchedule({ slug: slug, id: id }))
   };
 
+
+
   const handleLabelChange = (id, e) => {
     let amount;
 
@@ -64,7 +66,7 @@ function Page() {
     setPaymentStatus(true);
     setPayments(updatedPayments);
   };
-  
+
   const handleAddiDetailsUpdate = () => {
     if (addinforstatus) {
       const data = addinfor;
@@ -115,7 +117,15 @@ function Page() {
   useEffect(() => {
     if (Object.keys(quoteadditionalinformation).length) {
       setAddinfo(quoteadditionalinformation)
-      setPayments(quoteadditionalinformation.paymentschedule)
+      let pp = quoteadditionalinformation.paymentschedule;
+      const updatedPayments = pp.map((payment) => {
+        return {
+          ...payment,
+          amount: (parseFloat(payment?.number) / 100) * quoteSubTotal
+        }
+      });
+
+      setPayments(updatedPayments)
     }
   }, [quoteadditionalinformation])
 
@@ -124,6 +134,7 @@ function Page() {
 
     }
   }, [totalbillamount])
+
   return (
     <div className='p-8'>
       <div className='p-2 mt-5 mb-5 w-1/2'>

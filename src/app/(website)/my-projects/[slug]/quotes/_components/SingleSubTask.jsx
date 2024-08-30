@@ -203,11 +203,13 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, setTotalPrice, t
             "labour": toNum(localFd?.labour),
             "material": toNum(localFd?.material),
             "markup": toNum(newMarkupValue),
+            "labourtime": localFd?.labour / localFd?.labourperhour,
         }]
 
         setFd({
             ...localFd,
-            markup: newMarkupValue?.toFixed(2)
+            markup: newMarkupValue?.toFixed(2),
+            labourtime: localFd?.labour / localFd?.labourperhour,
         })
 
         dispatch(UpdateSubTask(listOfJson))
@@ -249,7 +251,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, setTotalPrice, t
             "markup": newMarkupValue?.toFixed(2),
             "labour": newLabourValue?.toFixed(2),
             "labourtime": localFd?.labourtime,
-            "labourperhour": localFd?.labourperhour
+            "labourperhour": localFd?.labourperhour,
         }]
 
         setFd({
