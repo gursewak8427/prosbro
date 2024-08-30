@@ -13,15 +13,15 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from 'react-redux';
 import { usePathname } from 'next/navigation';
-import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, PatchClientQuoteTask, PatchQuotes, PatchSubTask, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
+import { CreateSubTask, DeleteClientQuoteTask, DeleteSubTask, FetchClientQuote, PatchClientQuoteTask, PatchQuotes, PatchSubTask, PatchSubTaskWithoutStore, UpdateClientQuoteTask, UpdateSubTask } from '@/app/redux/Project/ProjectSlice';
 import { SingleSubTask } from './SingleSubTask';
 
 const toNum = (val) => parseFloat(val?.toString()?.replaceAll("$", "")) || 0
 
 
 export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeletePopupMain, item, index, isEditable, key }) => {
-    // const [item, setItem] = useState(myItem)
-    const [labourPopup, setLaboutPopup] = useState(false)
+    const [subTaskList, setSubTaskList] = useState([])
+    const [labourPopup, setLabourPopup] = useState(false)
     const [totalPriceChangeModal, setTotalPriceChangeModal] = useState(false)
     const [deletePopupIndex2, setDeletePopupIndex2] = useState(-1)
     const [hourlyRate, setHourlyRate] = useState(75);
@@ -37,8 +37,15 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
 
         setHourlyRate(item?.labourrate)
         setTotalPrice(item?.totalcost)
+        setSubTaskList([...item?.subtasks])
 
     }, [JSON.stringify(item)])
+
+    useEffect(() => {
+        console.log(subTaskList, "--subTaskList");
+        // ISSUE : taskDeatils Not update whenever item has change
+    }, [JSON.stringify(subTaskList)])
+
 
     const [quotetask, setquotetask] = useState({
         id: 0,
@@ -85,7 +92,7 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
             e?.stopPropagation();
         }
 
-        setLaboutPopup(!labourPopup)
+        setLabourPopup(!labourPopup)
     }
 
 
@@ -136,25 +143,57 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
     }
 
     const updateLabourRate = () => {
-        dispatch(PatchClientQuoteTask({
-            "qid": quoteId,
-            "id": item?.id,
-            "labourrate": hourlyRate,
-        }))
 
-        item?.subtasks?.map(subTask => {
+        let finaltotalcost = 0;
+
+        item?.subtasks?.map((subTask, index) => {
+
+            let newLabourRate = toNum(hourlyRate) * toNum(subTask?.labourtime);
+
+            console.log(subTask, "--subTask");
+
+            let totalWithoutMarkup = parseFloat((toNum(subTask?.material) + toNum(subTask?.labour)) * subTask?.quantity); // It is just to calculate new markup
+
+            // Calculate Markup
+            let markupPercentage = toNum(subTask?.markuppercentage) || 0;
+            let newMarkupValue = (markupPercentage / 100) * totalWithoutMarkup;
+
+            let newThisCost = (newMarkupValue + toNum(subTask?.material) * toNum(subTask?.quantity) + newLabourRate * toNum(subTask?.quantity));
+
+            finaltotalcost += toNum(newThisCost)
+
             dispatch(PatchSubTask({
                 "qid": quoteId,
                 "id": subTask?.id,
-                "labour": toNum(hourlyRate) * toNum(subTask?.labourtime),
+                "labour": newLabourRate?.toFixed(2),
                 "labourperhour": hourlyRate,
+                "markup": toNum(newMarkupValue),
+                "totalcost": newThisCost?.toFixed(2)
             }))
+
+            if (index + 1 == item?.subtasks?.length) {
+                dispatch(PatchClientQuoteTask({
+                    "qid": quoteId,
+                    "id": item?.id,
+                    "labourrate": hourlyRate,
+                    "totalcost": finaltotalcost
+                }))
+
+                let updatedSubTotalBill = parseFloat(subtotalbill) - totalPrice + finaltotalcost
+
+                dispatch(PatchQuotes({
+                    "id": quoteId,
+                    "subtotalbill": toNum(updatedSubTotalBill)?.toFixed(2),
+                }))
+            }
         })
 
-        setLaboutPopup(false)
+
+        setLabourPopup(false)
     }
 
     const updateTotalPrice = () => {
+        localStorage.setItem("prosbro_override_total_price", "true")
         dispatch(PatchClientQuoteTask({
             "qid": quoteId,
             "id": item?.id,
@@ -162,12 +201,14 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
         }))
 
         item?.subtasks?.map(subTask => {
-            dispatch(PatchSubTask({
+            dispatch(PatchSubTaskWithoutStore({
                 "qid": quoteId,
                 "id": subTask?.id,
                 "labour": 0,
                 "markup": 0,
+                "markuppercentage": 0,
                 "material": 0,
+                "totalcost": 0,
             }))
         })
         setTotalPriceChangeModal(false)
@@ -228,7 +269,7 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                     </div>
                                     <div className="flex justify-end space-x-4">
                                         <button
-                                            onClick={() => { setHourlyRate(item?.labourrate); setLaboutPopup(false); }}
+                                            onClick={() => { setHourlyRate(item?.labourrate); setLabourPopup(false); }}
                                             className="px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                                         >
                                             Cancel
@@ -292,7 +333,7 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                             <input
                                                 type="text"
                                                 value={`$${totalPrice}`}
-                                                onChange={(e) => setTotalPrice(parseInt(e.target.value?.replaceAll("$", "") || 0))}
+                                                onChange={(e) => setTotalPrice(toNum(e.target.value))}
                                                 className="w-28 p-2 border-b-2 border-gray-400 focus:outline-none"
                                             />
                                             <span className="text-gray-700">/hour</span>
@@ -300,7 +341,7 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                     </div>
                                     <div className="flex justify-end space-x-4">
                                         <button
-                                            onClick={() => setTotalPriceChangeModal(false)}
+                                            onClick={() => { setTotalPrice(item?.totalcost); setTotalPriceChangeModal(false); }}
                                             className="px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                                         >
                                             Cancel
@@ -418,7 +459,7 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                                 <span className='mx-4 font-semibold'>${item?.totalcost}</span>
                         } */}
                         <div className='mx-4 min-w-[150px] bg-gray-200 py-1 px-2 pt-[6px] flex gap-1 rounded-xl justify-center group relative' onClick={(e) => { e.stopPropagation(); setTotalPriceChangeModal(true) }}>
-                            <span>${item?.totalcost}</span>
+                            <span>${totalPrice}</span>
                             {
                                 isEditable &&
                                 <button className='group-hover:block hidden absolute right-4'><EditOutlined className='text-primary text-xl mb-1' /></button>
@@ -444,7 +485,9 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                         </thead>
                         <tbody>
                             {
-                                item?.subtasks?.map((taskDetails, taskIndex) => <SingleSubTask setQuoteSubTotal={setQuoteSubTotal} taskId={item?.id} quoteId={quoteId} subtotalbill={subtotalbill} taskTotalCost={item?.totalcost} setDeletePopup={setDeletePopupIndex2} taskDetails={taskDetails} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
+                                subTaskList?.map((taskDetails, taskIndex) => <SingleSubTask
+                                    key={`${item?.id}-subtask-${taskIndex}`}
+                                    setQuoteSubTotal={setQuoteSubTotal} taskId={item?.id} quoteId={quoteId} subtotalbill={subtotalbill} taskTotalCost={totalPrice} setTotalPrice={setTotalPrice} setDeletePopup={setDeletePopupIndex2} taskDetails={{ ...taskDetails }} taskIndex={taskIndex} isEditable={isEditable} index={index} />)
                             }
                             <Button onClick={() => { addNewSubTask(item.id) }} variant='text' className='font-semibold'><AddIcon /> Add Custom Task</Button>
                         </tbody>

@@ -133,6 +133,16 @@ export const PatchSubTask = createAsyncThunk("PatchSubTask", async (data, { reje
     }
 });
 
+export const PatchSubTaskWithoutStore = createAsyncThunk("PatchSubTaskWithoutStore", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.patch(`${process.env.NEXT_PUBLIC_API_URL}/createsubtask/`, data);
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
 export const UpdateSubTask = createAsyncThunk("UpdateSubTask", async (data, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/createsubtask/`, data);
