@@ -35,14 +35,36 @@ function Page() {
   };
 
   const handleLabelChange = (id, e) => {
-    setPaymentStatus((true));
-    setPayments(
-      payments.map((payment) =>
-        payment.id === id ? { ...payment, [e.target.name]: e.target.value } : payment
-      )
-    );
-  };
+    let amount;
 
+    if (e.target.name === "number") {
+      const numberValue = parseFloat(e.target.value);
+      if (!isNaN(numberValue)) {
+        amount = (numberValue / 100) * quoteSubTotal;
+      }
+    }
+
+    const updatedPayments = payments.map((payment) =>
+      payment.id === id
+        ? {
+          ...payment,
+          [e.target.name]: e.target.value,
+          ...(amount !== undefined && { amount })  // Update amount only if it was calculated
+        }
+        : payment
+    );
+
+    const totalNumber = updatedPayments.reduce((sum, payment) => sum + parseFloat(payment.number || 0), 0);
+
+    if (totalNumber > 100) {
+      alert("The total sum of payment numbers cannot exceed 100.");
+      return;
+    }
+
+    setPaymentStatus(true);
+    setPayments(updatedPayments);
+  };
+  
   const handleAddiDetailsUpdate = () => {
     if (addinforstatus) {
       const data = addinfor;
