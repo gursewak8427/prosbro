@@ -9,6 +9,7 @@ export const Business = () => {
     const profile = useSelector(store => store.userData.busniessprofile);
     const [taxNumbers, setTaxNumbers] = useState([]);
     const [form, setForm] = useState({})
+    const [basicformbtn, setBasicformbtn] = useState(false);
 
     const addTaxNumber = () => {
         setTaxNumbers([...taxNumbers, { name: '', number: '' }]);
@@ -25,6 +26,22 @@ export const Business = () => {
         );
         setTaxNumbers(updatedTaxNumbers);
     };
+
+    const handleChangeBasicform = (e) => {
+        setForm((prevform) => (
+            {
+                ...prevform,
+                [e.target.name]: e.target.value
+            }
+        ));
+        setBasicformbtn(true);
+    }
+    const handleBasicformsubmit = () => {
+
+        const data = form;
+        delete data.tax;
+        console.log(data);
+    }
     useEffect(() => {
         if (!Object.keys(profile).length) {
             dispatch(FetchBusniessProfile())
@@ -49,7 +66,9 @@ export const Business = () => {
                     <input
                         type="text"
                         value={form?.name}
+                        name="name"
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                        onChange={handleChangeBasicform}
                     />
                 </div>
                 <div>
@@ -57,7 +76,9 @@ export const Business = () => {
                     <input
                         type="text"
                         value={form?.address}
+                        name="address"
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                        onChange={handleChangeBasicform}
                     />
                 </div>
                 <div>
@@ -65,11 +86,12 @@ export const Business = () => {
                     <input
                         type="text"
                         value={form?.website}
+                        name="website"
                         className="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                        onChange={handleChangeBasicform}
                     />
                 </div>
             </div>
-            <button className="mt-4 bg-gray-300 text-gray-700 px-3 py-2 rounded-md">Save</button>
         </div>
 
         <div className='w-full p-4 bg-white rounded-lg shadow-md'>
@@ -81,46 +103,11 @@ export const Business = () => {
                     type="text"
                     placeholder="Add your business license number Ex: 8352285ABC31"
                     value={form?.license}
+                    name="license"
                     className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                    onChange={handleChangeBasicform}
                 />
             </div>
-            {taxNumbers.map((tax, index) => (
-                <div key={index} className="flex items-center space-x-4 mb-4">
-                    <div className="w-1/4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Tax Name</label>
-                        <input
-                            type="text"
-                            value={tax.name}
-                            onChange={(e) => handleTaxChange(index, 'name', e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                            placeholder="HST"
-                        />
-                    </div>
-                    <div className="w-1/4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Number</label>
-                        <input
-                            type="text"
-                            value={tax.number}
-                            onChange={(e) => handleTaxChange(index, 'number', e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
-                            placeholder="8584846865X0005"
-                        />
-                    </div>
-                    <button
-                        onClick={() => removeTaxNumber(index)}
-                        className="text-primary hover:text-primary-dark text-sm mt-5"
-                    >
-                        &minus; Remove
-                    </button>
-                </div>
-            ))}
-
-            <button
-                onClick={addTaxNumber}
-                className="text-primary hover:text-primary-dark text-sm mb-6"
-            >
-                + Add tax number
-            </button>
 
             <div className="mb-6 flex items-center space-x-4">
                 <div className="w-1/2">
@@ -153,7 +140,62 @@ export const Business = () => {
                 </div>
             </div>
 
-            <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700">Save</button>
+            <button
+                className={`mt-4  px-3 py-2 rounded-md ${basicformbtn ? 'bg-primary text-white cursor-pointer' : 'bg-gray-300 text-gray-700 cursor-not-allowed'}`}
+                disabled={!basicformbtn}
+                onClick={handleBasicformsubmit}
+            >
+                Save
+            </button>
+        </div>
+
+        <div className='w-full p-4 bg-white rounded-lg shadow-md'>
+            <h2 className="text-2xl font-semibold mb-6">Taxes</h2>
+            {taxNumbers.map((tax, index) => (
+                <div key={index} className="flex items-center space-x-4 mb-4">
+                    <div className="w-1/4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Tax Name</label>
+                        <input
+                            type="text"
+                            value={tax.name}
+                            onChange={(e) => handleTaxChange(index, 'name', e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                            placeholder="HST"
+                        />
+                    </div>
+                    <div className="w-1/4">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Number</label>
+                        <input
+                            type="text"
+                            value={tax.number}
+                            onChange={(e) => handleTaxChange(index, 'number', e.target.value)}
+                            className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+                            placeholder="8584846865X0005"
+                        />
+                    </div>
+                    <button
+                        onClick={() => removeTaxNumber(index)}
+                        className="text-primary hover:text-primary-dark text-sm mt-5"
+
+                    >
+                        &minus; Remove
+                    </button>
+                </div>
+            ))}
+
+            <button
+                onClick={addTaxNumber}
+                className="text-primary hover:text-primary-dark text-sm mb-6"
+            >
+                + Add tax number
+            </button>
+            <div>
+                <button
+                    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                >
+                    Save
+                </button>
+            </div>
         </div>
 
         <div className='w-full p-4 bg-white rounded-lg shadow-md'>
