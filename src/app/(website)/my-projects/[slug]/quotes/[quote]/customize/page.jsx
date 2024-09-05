@@ -25,12 +25,41 @@ import { useRouter } from 'next/navigation';
 import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, Edit, EditOutlined } from '@mui/icons-material';
 import { Switch } from '@mui/material';
 import { CostSummary } from '../../_components/CostSummary';
+import { BusinessModel } from './models/BusinessModel';
+import { BillingAddressModel } from './models/BillingAddressModel';
+import { PersonalModel } from './models/PersonalModel';
+import { ChangeLogoModel } from './models/ChangeLogoModel';
 
 
 
+const amountDisplayTypeOptions = [{
+  label: "Per categories",
+  value: "perCategories"
+}, {
+  label: "Per categories + Task",
+  value: "perCategoriesPlusTask"
+},
+{
+  label: "Subtotal Only",
+  value: "subTotalOnly"
+}]
 
 function Page() {
   const dispatch = useDispatch();
+
+  const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0])
+  const [displayColumns, setDisplayColumns] = useState({
+    quantity: false,
+    materialLabour: false,
+    markup: false,
+  })
+
+  // models
+  const [businessModel, setBusinessModel] = useState(false)
+  const [personalModel, setPersonalModel] = useState(false)
+  const [changeLogoModel, setChangeLogoModel] = useState(false)
+  const [billingAddressModel, setBillingAddressModel] = useState(false)
+
   const router = useRouter()
   const [payments, setPayments] = useState([
     { id: 1, label: "Beginning of project", percentage: 40, amount: 13212.42 },
@@ -57,9 +86,17 @@ function Page() {
     );
   };
 
+  const handleChange = e => {
+    setDisplayColumns({
+      ...displayColumns,
+      [e.target.name]: e.target.checked
+    })
+  }
+
+
   return (
     <div className='p-8'>
-      <div className='flex gap-5 mt-5 mb-5 '>
+      <div className='flex gap-5 mt-5 mb-5 relative items-start justify-start'>
         <div className='w-9/12'>
           <div className="bg-gray-100 rounded-lg">
             {/* Cover image and title section */}
@@ -93,7 +130,9 @@ function Page() {
                 <p className="mt-2">Gurvinder Singh</p>
                 <p>aghreno@gmail.com</p>
                 <p>587-899-3252</p>
-                <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300" onClick={() => {
+                  setPersonalModel(!personalModel)
+                }}>
                   <EditOutlined />
                   Personal information
                 </button>
@@ -101,7 +140,9 @@ function Page() {
               <div className="flex-1 md:flex-grow-0 mb-6 md:mb-0">
                 <p>GST: 733658314RT0001</p>
                 <p>https://www.aghrenovation.ca</p>
-                <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300" onClick={() => {
+                  setBusinessModel(!businessModel)
+                }}>
                   <EditOutlined />
                   Business
                 </button>
@@ -112,7 +153,9 @@ function Page() {
                   alt="Company Logo"
                   className="h-48 w-48 object-contain mb-2"
                 />
-                <button className="ml-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                <button className="ml-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300" onClick={() => {
+                  setChangeLogoModel(!changeLogoModel)
+                }}>
                   <EditOutlined />
                   Change logo
                 </button>
@@ -134,7 +177,9 @@ function Page() {
               <div className="bg-white p-4 rounded-lg shadow-lg">
                 <h3 className="font-semibold">Billing address</h3>
                 <p>Calgary, AB, Canada, Calgary</p>
-                <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300">
+                <button className="mt-4 bg-gray-200 py-2 px-4 rounded-lg hover:bg-gray-300" onClick={() => {
+                  setBillingAddressModel(!billingAddressModel)
+                }}>
                   <EditOutlined />
                   Edit billing address
                 </button>
@@ -142,21 +187,28 @@ function Page() {
             </div>
 
             {/* cost summary */}
-            <CostSummary />
+            <CostSummary amountDisplayType={amountDisplayType} displayColumns={displayColumns} />
           </div>
         </div>
 
-        <div className='w-3/12'>
+        <div className='w-3/12 sticky top-5'>
           <div className="bg-white p-4 rounded-lg shadow-lg w-full mb-4">
             <h3 className="font-semibold mb-4">Display options</h3>
             {/* Amount Dropdown */}
             <div className="mb-4 flex flex-row items-center justify-between">
               <label htmlFor="amount" className="block text-gray-700">Amount</label>
               <select
+                value={amountDisplayType}
+                name='amountDisplayType'
+                onChange={e => setAmountDisplayType(e.target.value)}
                 id="amount"
                 className="mt-1 block bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
-                <option>Per categories</option>
+                {
+                  amountDisplayTypeOptions?.map(option => {
+                    return <option value={option?.value}>{option?.label}</option>
+                  })
+                }
                 {/* Add more options as needed */}
               </select>
             </div>
@@ -165,15 +217,15 @@ function Page() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Quantities</span>
-                <Switch />
+                <Switch name='quantity' defaultChecked={displayColumns?.quantity} onChange={handleChange} />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Material + labor cost</span>
-                <Switch />
+                <Switch name='materialLabour' defaultChecked={displayColumns?.materialLabour} onChange={handleChange} />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Markup amount</span>
-                <Switch />
+                <Switch name='markup' defaultChecked={displayColumns?.markup} onChange={handleChange} />
               </div>
             </div>
           </div>
@@ -214,7 +266,11 @@ function Page() {
           </div>
         </div>
       </div>
-    </div >
+      <BusinessModel isModalOpen={businessModel} setIsModalOpen={setBusinessModel} />
+      <BillingAddressModel isModalOpen={billingAddressModel} setIsModalOpen={setBillingAddressModel} />
+      <PersonalModel isModalOpen={personalModel} setIsModalOpen={setPersonalModel} />
+      <ChangeLogoModel isModalOpen={changeLogoModel} setIsModalOpen={setChangeLogoModel} />
+    </div>
   )
 }
 

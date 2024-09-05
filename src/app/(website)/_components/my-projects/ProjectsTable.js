@@ -15,8 +15,8 @@ function ProjectsTable({ projectlist }) {
   };
 
   const rows = [];
-  if (projectlist.length > 0) {
-    projectlist.forEach(item => {
+  if (projectlist && projectlist?.length > 0) {
+    projectlist?.forEach(item => {
       const tempdata = createData(
         item.reference,
         item.address,

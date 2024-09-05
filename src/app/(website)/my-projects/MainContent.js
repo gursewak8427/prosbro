@@ -310,7 +310,7 @@ const MainContent = () => {
 
 
         {projectlist.length > 0 ? (
-          <ProjectsTable projectlist={projectlist} />
+          <ProjectsTable projectlist={Array.isArray(projectlist) ? projectlist : []} />
         ) : (
           <div className="p-4">
             <img src="https://app.billdr.co/_next/image?url=%2Fassets%2Fimages%2Fempty-project-img.png&w=1920&q=75"></img>

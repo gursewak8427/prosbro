@@ -1,4 +1,4 @@
-export const CostSummary = ({ }) => {
+export const CostSummary = ({ amountDisplayType, displayColumns }) => {
 
     const data = [
         {
@@ -8,7 +8,11 @@ export const CostSummary = ({ }) => {
                 {
                     "title": "General admin fees",
                     "quantity": 1,
-                    "quantityType": "each"
+                    "quantityType": "each",
+                    "material": 200,
+                    "markup": 300,
+                    "labour": 100,
+                    "amount": "$9,120.00"
                 }
             ]
         },
@@ -19,12 +23,20 @@ export const CostSummary = ({ }) => {
                 {
                     "title": "Aluminum roof covering budget & design",
                     "quantity": 1,
-                    "quantityType": "each"
+                    "quantityType": "each",
+                    "material": 200,
+                    "markup": 300,
+                    "labour": 100,
+                    "amount": "2,189.00"
                 },
                 {
                     "title": "Advanced protection of aluminum (New product above the garage with a report)",
                     "quantity": 1,
-                    "quantityType": "each"
+                    "quantityType": "each",
+                    "material": 200,
+                    "markup": 300,
+                    "labour": 100,
+                    "amount": "2,000.00"
                 }
             ]
         },
@@ -397,38 +409,110 @@ export const CostSummary = ({ }) => {
         },
     ]
 
+
+    const getColSpan1 = () => {
+        let colspan = 1;
+        if (displayColumns?.quantity) colspan++;
+        if (displayColumns?.materialLabour) colspan += 2;
+        if (displayColumns?.markup) colspan++;
+
+        return colspan;
+    }
+
     return <div className="mt-4 bg-gray-50">
         <h1 className='my-2 mt-6 font-semibold'>Cost summary</h1>
 
         {/* Header */}
-        <div className="flex justify-between items-center bg-blue-500 text-white p-4 rounded-t-lg">
-            <div className="w-2/3">Task</div>
-            <div className="w-1/6 text-right">Quantity</div>
-            <div className="w-1/6 text-right">Amount</div>
-        </div>
-
-        {/* Task List */}
-        <div className="bg-white rounded-b-lg shadow overflow-hidden">
-            {data.map((item, index) => (
-                <div key={index} className="border-b last:border-none p-4">
-                    <div className="flex justify-between">
-                        <div className="w-2/3 font-semibold">{item.item}</div>
-                        <div className="w-1/6 text-right font-bold">{item.amount}</div>
-                    </div>
-                    {item.taskList && (
-                        <table className="py-2 text-gray-600 w-full">
-                            {item.taskList.map((task, taskIndex) => (
+        {/* flex justify-between items-center bg-blue-500 text-white p-4 rounded-t-lg */}
+        <table className="w-full">
+            <thead className="bg-primary">
+                <th className="text-left text-white p-2 w-2/5">Task</th>
+                {
+                    displayColumns?.quantity && <th className="text-white p-2 text-center">Quantity</th>
+                }
+                {
+                    displayColumns?.materialLabour && <>
+                        <th className="text-white p-2 text-center">Material Cost</th>
+                        <th className="text-white p-2 text-center">Labour Cost</th>
+                    </>
+                }
+                {
+                    displayColumns?.markup && <th className="text-white p-2 text-center">Markup</th>
+                }
+                <th className="text-white text-right p-2 pr-2">Amount</th>
+            </thead>
+            <tbody>
+                {data.map((item, index) => (
+                    <>
+                        <tr>
+                            <td colspan={getColSpan1()} className="font-semibold text-lg pt-4">
+                                {item.item}
+                            </td>
+                            <td className="text-center pr-2">
+                                {
+                                    ["perCategories", "perCategoriesPlusTask"]?.includes(amountDisplayType) && <div className="text-right font-bold py-2">{item.amount}</div>
+                                }
+                            </td>
+                        </tr>
+                        {item.taskList &&
+                            item.taskList.map((task, taskIndex) => (
                                 <tr key={taskIndex} className='w-full py-4 border-b'>
-                                    <td className='w-4/5 py-4'>{task?.title}</td>
-                                    <td>{task?.quantity} {task?.quantityType}</td>
+                                    <td className='py-4'>{task?.title}</td>
+                                    {
+                                        displayColumns?.quantity && <td className='py-4 text-center'>{task?.quantity} {task?.quantityType}</td>
+                                    }
+                                    {
+                                        displayColumns?.materialLabour && <td className='py-4 text-center'>${task?.material || 0}</td>
+                                    }
+                                    {
+                                        displayColumns?.materialLabour && <td className='py-4 text-center'>${task?.labour || 0}</td>
+                                    }
+                                    {
+                                        displayColumns?.markup && <td className='py-4 text-center'>${task?.markup || 0}</td>
+                                    }
+                                    <td className="text-right pr-2">
+                                        {["perCategoriesPlusTask"]?.includes(amountDisplayType) && task?.amount}
+                                    </td>
                                 </tr>
                             ))}
-                        </table>
-                    )}
-                </div>
-            ))}
-        </div>
+                    </>
+                ))}
+            </tbody>
 
+            {/* Task List */}
+            {/* <div className="bg-white rounded-b-lg shadow overflow-hidden">
+                {data.map((item, index) => (
+                    <div key={index} className="border-b last:border-none p-4">
+                        <div className="flex justify-between">
+                            <div className="w-2/3 font-semibold">{item.item}</div>
+                            
+                        </div>
+                        {item.taskList && (
+                            <table className="py-2 text-gray-600 w-full">
+                                {item.taskList.map((task, taskIndex) => (
+                                    <tr key={taskIndex} className='w-full py-4 border-b'>
+                                        <td className='w-2/6 py-4'>{task?.title}</td>
+                                        {
+                                            displayColumns?.quantity && <td className='w-1/6 py-4'>{task?.quantity} {task?.quantityType}</td>
+                                        }
+                                        {
+                                            displayColumns?.materialLabour && <td className='w-1/6 py-4'>{task?.quantity} {task?.quantityType}</td>
+                                        }
+                                        {
+                                            displayColumns?.materialLabour && <td className='w-1/6 py-4'>{task?.quantity} {task?.quantityType}</td>
+                                        }
+                                        <td className="w-1/6 text-right">
+                                            {["perCategoriesPlusTask"]?.includes(amountDisplayType) && task?.amount}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </table>
+                        )}
+                    </div>
+                ))}
+            </div> */}
+
+        </table>
 
         <div className="mt-8 bg-white p-6 rounded-lg shadow-sm flex flex-col">
             <h1 className='font-bold text-xl'>Appliances</h1>

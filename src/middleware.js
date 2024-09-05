@@ -12,13 +12,13 @@ export function middleware(request) {
       }
     }
   } else {
-    if (!authToken) {
-      return NextResponse.redirect(new URL('/authentication/login', request.url));
-    }
-    const expiryDate = new Date(expires);
-    if (expiryDate < new Date()) {
-      return NextResponse.redirect(new URL('/authentication/login', request.url));
-    }
+    // if (!authToken) {
+    //   return NextResponse.redirect(new URL('/authentication/login', request.url));
+    // }
+    // const expiryDate = new Date(expires);
+    // if (expiryDate < new Date()) {
+    //   return NextResponse.redirect(new URL('/authentication/login', request.url));
+    // }
   }
   return NextResponse.next();
 }
