@@ -1,81 +1,11 @@
 import { CloseOutlined, MoreVert } from "@mui/icons-material";
 import RightSidebar from "../../_components/RightSidebar";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const people = [
-    {
-        name: "Gurvinder ",
-        email: "aghreno+test@gmail.com",
-        phoneNumber: "555-1234",
-        role: "Engineer",
-        jobTitle: "Professional Engineer",
-        comapnay: "Contrive Engineering and Project Management Services",
-    },
-];
-
-
-export const ProfessionalTable = () => {
-    const [activeUser, setActiveUser] = useState(-1)
-
-    return <>
-        <div className='bg-gray-300 text-sm rounded-lg inline-block p-1 text-gray-700 px-4'>1 professional</div>
-
-        <div className="w-full overflow-x-auto">
-            <table className="min-w-full bg-white rounded-lg">
-                <thead>
-                    <tr>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Name</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Email</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Phone </th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Role</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Job Title</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Company</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {people.map((item, idx) => (
-                        <tr onClick={() => { setActiveUser(item) }} key={idx} className="border-b text-center cursor-pointer">
-                            <td className="py-4 px-4 flex items-center space-x-3">
-                                <span className="flex items-center justify-center h-8 w-8 text-white font-semibold bg-pink-500 rounded-full">
-                                    {item.name.split(' ').map(word => word[0]).join('')}
-                                </span>
-                                <span className='text-sm font-semibold'>{item.name}</span>
-                            </td>
-                            <td className="py-4 px-4 text-sm text-left text-gray-600">{item.email}</td>
-                            <td className="py-4 px-4 text-sm text-left text-gray-600">{item.phoneNumber}</td>
-                            <td className="py-4 px-4 text-sm text-left text-gray-600">{item.role}</td>
-                            <td className="py-4 px-4 text-sm text-left text-gray-600">{item.jobTitle}</td>
-                            <td className="py-4 px-4 text-sm text-left text-gray-600">{item.comapnay}</td>
-                            <td className="py-4 px-4 text-sm text-right">
-                                <button className='w-8 h-8' onClick={(e) => {
-                                    e.stopPropagation();
-                                }}>
-                                    <MoreVert className='text-lg text-gray-700 hover:text-black' />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-
-        <EditAnProfessional activeUser={activeUser} onClose={() => { setActiveUser(-1) }} />
-    </>
-}
-
-
-const EditAnProfessional = ({ activeUser, onClose }) => {
+export const NewProfessional = ({ isOpen, onClose }) => {
     const router = useRouter();
-    const [isOpen, setIsOpen] = useState(false)
-
-    useEffect(() => {
-        setIsOpen(activeUser !== -1)
-    }, [activeUser])
 
     const handleClose = () => {
-        setIsOpen(false)
         onClose()
     }
 
@@ -95,9 +25,8 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
                             <label className="block text-sm font-medium text-gray-700">Full name</label>
                             <input
                                 type="text"
-                                value="Hemang Parikh"
+                                placeholder="John Doe"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                                readOnly
                             />
                         </div>
 
@@ -106,9 +35,8 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
                             <label className="block text-sm font-medium text-gray-700">Email</label>
                             <input
                                 type="email"
-                                value="contriveeng@gmail.com"
+                                placeholder="Enter an email address"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                                readOnly
                             />
                         </div>
 
@@ -117,7 +45,7 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
                             <label className="block text-sm font-medium text-gray-700">Phone number</label>
                             <input
                                 type="text"
-                                value="(587) 834-5080"
+                                placeholder="(000) 000-0000 "
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                             />
                         </div>
@@ -126,7 +54,7 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Language</label>
                             <select className="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                                <option value="english">English</option>
+                                <option placeholder="english">English</option>
                             </select>
                         </div>
 
@@ -137,7 +65,7 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
                             </label>
                             <input
                                 type="text"
-                                value="Contrive Engineering and Project Management Services"
+                                placeholder="Enter a company name"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                             />
                         </div>
@@ -146,7 +74,7 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Role</label>
                             <select className="mt-1 block w-full border border-gray-300 rounded-md p-2">
-                                <option value="engineer">Engineer</option>
+                                <option placeholder="engineer">Engineer</option>
                             </select>
                         </div>
 
@@ -157,7 +85,7 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
                             </label>
                             <input
                                 type="text"
-                                value="Professional Engineer"
+                                placeholder="Professional Engineer"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                             />
                         </div>

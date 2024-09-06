@@ -1,16 +1,21 @@
 "use client";
 import React, { useState } from 'react';
 import SelectionModal from './SelectionModal';
-import AdminModal from './AdminModal';
 import { ArrowRight, DeleteOutline, MoreVert } from '@mui/icons-material';
 import { Menu, Switch } from '@mui/material';
 import { MenuSection } from '@headlessui/react';
+import { EditAnEmployee } from '../contacts/_tabs/Employees';
+import { AlertRemoveUser } from '../contacts/_tabs/Administrators';
+import { NewEmployee } from '../contacts/_components/NewEmployee';
+import { NewAdmin } from '../contacts/_components/NewAdmin';
 
 
 
 const MainContent = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+    const [activeUser, setActiveUser] = useState(-1);
+    const [activeAdmin, setActiveAdmin] = useState(-1);
+    const [addTeamType, setAddTeamType] = useState(null)
 
     const singlePeople = [
         {
@@ -110,7 +115,10 @@ const MainContent = () => {
                                 <td className="py-4 px-4 text-sm text-left">{item.role}</td>
                                 <td className="py-4 px-4 text-sm text-right">
                                     {
-                                        ["admin"]?.includes(item?.role?.toLocaleLowerCase()) && <button className='hover:bg-red-400 w-8 h-8 rounded-full transition duration-500'>
+                                        ["admin"]?.includes(item?.role?.toLocaleLowerCase()) && <button className='hover:bg-red-400 w-8 h-8 rounded-full transition duration-500' onClick={(e) => {
+                                            e.stopPropagation();
+                                            setActiveAdmin(item)
+                                        }}>
                                             <DeleteOutline className='text-red-400 hover:text-white transition duration-500' />
                                         </button>
                                     }
@@ -155,7 +163,7 @@ const MainContent = () => {
                     </thead>
                     <tbody>
                         {people.map((item, idx) => (
-                            <tr key={idx} className="border-b text-center">
+                            <tr onClick={() => { setActiveUser(item) }} key={idx} className="border-b text-center cursor-pointer">
                                 <td className="py-4 px-4 text-sm text-left flex items-center space-x-3">
                                     <span className="flex items-center justify-center h-8 w-8 text-white font-semibold bg-pink-500 rounded-full">
                                         {item.name.split(' ').map(word => word[0]).join('')}
@@ -184,8 +192,23 @@ const MainContent = () => {
                     </tbody>
                 </table>
             </div>
-            <SelectionModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} isAdminModalOpen={isAdminModalOpen} setIsAdminModalOpen={setIsAdminModalOpen} />
-            <AdminModal isModalOpen={isAdminModalOpen} setIsModalOpen={setIsAdminModalOpen} />
+            <SelectionModal show={isModalOpen} onClose={() => {
+                setIsModalOpen(false)
+            }} onSelect={(selected) => {
+                setAddTeamType(selected)
+                setIsModalOpen(false)
+            }} />
+
+            <EditAnEmployee activeUser={activeUser} onClose={() => { setActiveUser(-1) }} />
+            <AlertRemoveUser isOpen={activeAdmin !== -1} onCancel={() => {
+                setActiveAdmin(-1)
+            }} onConfirm={() => {
+                toast.success("Admin Removed Successfully")
+                setActiveAdmin(-1)
+            }} />
+
+            <NewEmployee isOpen={addTeamType === "employee"} onClose={() => setAddTeamType(null)} />
+            <NewAdmin isOpen={addTeamType === "admin"} onClose={() => setAddTeamType(null)} />
         </div>
     );
 }

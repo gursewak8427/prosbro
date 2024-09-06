@@ -4,122 +4,17 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Checkbox, FormControlLabel, Box, Switch } from "@mui/material";
 
-const people = [
-    {
-        name: "Gurvinder ",
-        currentStatus: "Clocked In",
-        phoneNumber: "555-1234",
-        jobTitle: "Owner",
-        smsReminder: true
-    },
-    {
-        name: "Princepal Singh",
-        currentStatus: "Clocked Out",
-        phoneNumber: "555-5678",
-        jobTitle: "Supervisor",
-        smsReminder: false
-    },
-    {
-        name: "Rupundrapal Singh",
-        currentStatus: "Clocked Out",
-        phoneNumber: "555-8765",
-        jobTitle: "-",
-        smsReminder: true
-    },
-    {
-        name: "Ajmer Dhillon",
-        currentStatus: "Clocked in",
-        phoneNumber: "555-4321",
-        jobTitle: "-",
-        smsReminder: false
-    },
-    {
-        name: "Gagandeep Singh",
-        currentStatus: "Clocked Out",
-        phoneNumber: "555-9876",
-        jobTitle: "-",
-        smsReminder: true
-    }
-];
 
-
-export const EmployeeTable = () => {
-    const [activeUser, setActiveUser] = useState(-1)
-
-    return <>
-        <div className='bg-gray-300 text-sm rounded-lg inline-block p-1 text-gray-700 px-4'>7 members</div>
-
-        <div className="w-full overflow-x-auto">
-            <table className="min-w-full bg-white rounded-lg">
-                <thead>
-                    <tr>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Name</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Current Status</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Phone Number</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">Job Title</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700">SMS Reminder</th>
-                        <th className="py-3 px-4 border-b text-left text-gray-700"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {people.map((item, idx) => (
-                        <tr onClick={() => { setActiveUser(item) }} key={idx} className="border-b text-center cursor-pointer">
-                            <td className="py-4 px-4 text-sm text-left flex items-center space-x-3">
-                                <span className="flex items-center justify-center h-8 w-8 text-white font-semibold bg-pink-500 rounded-full">
-                                    {item.name.split(' ').map(word => word[0]).join('')}
-                                </span>
-                                <span>{item.name}</span>
-                            </td>
-                            <td className="py-4 px-4 text-sm text-left">{item.currentStatus}</td>
-                            <td className="py-4 px-4 text-sm text-left">{item.phoneNumber}</td>
-                            <td className="py-4 px-4 text-sm text-left">{item.jobTitle}</td>
-                            <td className="py-4 px-4 text-sm text-left flex flex-row gap-1 items-center">
-                                <p className='text-gray-500'>{item.smsReminder ? 'ON' : 'OFF'}</p>
-                                <Switch defaultChecked={item?.smsReminder} />
-                                <p className='text-gray-700 capitalize'>
-                                    {
-                                        ["mon", "tue", "wed"]?.join(", ")
-                                    }
-                                </p>
-                            </td>
-                            <td className="py-4 px-4 text-sm text-right">
-                                <button className='w-8 h-8' onClick={(e) => {
-                                    e.stopPropagation();
-                                }}>
-                                    <MoreVert className='text-lg text-gray-700 hover:text-black' />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-
-        <EditAnEmployee activeUser={activeUser} onClose={() => { setActiveUser(-1) }} />
-    </>
-}
-
-
-export const EditAnEmployee = ({ activeUser, onClose }) => {
+export const NewEmployee = ({ isOpen, onClose }) => {
     const router = useRouter();
-    const [isOpen, setIsOpen] = useState(false)
-    const [smsReminders, setSmsReminders] = useState(false);
-
-    useEffect(() => {
-        setIsOpen(activeUser !== -1)
-    }, [activeUser])
-
-    const handleClose = () => {
-        setIsOpen(false)
-        onClose()
-    }
+    const [smsReminders, setSmsReminders] = useState(false)
 
     return (<>
-        <RightSidebar isOpen={isOpen} onClose={handleClose}>
+        <RightSidebar isOpen={isOpen} onClose={onClose}>
             <div className="w-full h-screen relative">
                 <div className="flex justify-between items-center p-6">
-                    <h2 className="text-2xl font-semibold">Edit Member</h2>
-                    <button onClick={handleClose} className="text-gray-600 hover:text-gray-900">
+                    <h2 className="text-2xl font-semibold">New Member</h2>
+                    <button onClick={onClose} className="text-gray-600 hover:text-gray-900">
                         <CloseOutlined />
                     </button>
                 </div>
@@ -130,7 +25,6 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
                             <label className="block text-sm font-medium text-gray-700">Full name</label>
                             <input
                                 type="text"
-                                value="Gurvinder"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                                 readOnly
                             />
@@ -141,7 +35,6 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
                             <label className="block text-sm font-medium text-gray-700">Phone number</label>
                             <input
                                 type="text"
-                                value="(587) 899-3252"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                                 readOnly
                             />
@@ -152,7 +45,6 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
                             <label className="block text-sm font-medium text-gray-700">Job title <span className="text-gray-500">(Optional)</span></label>
                             <input
                                 type="text"
-                                value="Owner"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                             />
                         </div>
@@ -162,7 +54,6 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
                             <label className="block text-sm font-medium text-gray-700">Hourly rate <span className="text-gray-500">(Optional)</span></label>
                             <input
                                 type="text"
-                                value="$25/h"
                                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
                             />
                         </div>
@@ -201,6 +92,7 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
 
                 <div className="flex flex-row justify-end space-x-4 w-full absolute bottom-0 bg-white p-4">
                     <button
+                        onClick={onClose}
                         className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                     >
                         Cancel
@@ -217,11 +109,11 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
 
 const TimeScheduler = () => {
     const [checkedDays, setCheckedDays] = useState({
-        Monday: true,
-        Tuesday: true,
-        Wednesday: true,
-        Thursday: true,
-        Friday: true,
+        Monday: false,
+        Tuesday: false,
+        Wednesday: false,
+        Thursday: false,
+        Friday: false,
         Saturday: false,
         Sunday: false,
     });

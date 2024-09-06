@@ -3,18 +3,22 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@
 import { Fragment } from 'react';
 import { CloseOutlined } from '@mui/icons-material';
 
-function SelectionModal({ isModalOpen, setIsModalOpen, setIsAdminModalOpen }) {
-    const [selected, setSelected] = useState({ option1: false, option2: false })
-    const [btn, setBtn] = useState(false)
-    const submitHandle = () => {
-        if (selected.option1) {
-            setIsModalOpen(false)
-            setIsAdminModalOpen(true)
-        }
+function SelectionModal({ show, onClose, onSelect }) {
+    const [select, setSelect] = useState(-1)
+
+    const handleClose = () => {
+        onClose()
+        setSelect(-1)
     }
+
+    const handleSelect = () => {
+        onSelect(select)
+        setSelect(-1)
+    }
+
     return (
-        <Transition appear show={isModalOpen} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={() => { setIsModalOpen(false); setSelected({ option1: false, option2: false }); setBtn(false) }}>
+        <Transition appear show={show} as={Fragment}>
+            <Dialog as="div" className="relative z-10" onClose={handleClose}>
                 <TransitionChild
                     as={Fragment}
                     enter="ease-out duration-300"
@@ -41,27 +45,21 @@ function SelectionModal({ isModalOpen, setIsModalOpen, setIsAdminModalOpen }) {
                             <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-2xl font-semibold">  Add a team member</h2>
-                                    <button onClick={() => setIsModalOpen(false)} className="text-gray-600 hover:text-gray-900">
+                                    <button onClick={handleClose} className="text-gray-600 hover:text-gray-900">
                                         <CloseOutlined />
                                     </button>
                                 </div>
                                 <div className="mt-4 p-2 ">
                                     <div
-                                        className={`p-4 py-6 text-center   ${selected.option1 ? 'bg-indigo-100 border-primary' : ''} cursor-pointer rounded-lg border  duration-200 w-full mb-4`}
-                                        onClick={() => {
-                                            setSelected({ option1: true, option2: false });
-                                            setBtn(true)
-                                        }}
+                                        className={`py-6 p-4 text-center cursor-pointer rounded-lg border  duration-200 w-full mb-4 ${select == "admin" ? "bg-primary-soft border border-primary" : ""}`}
+                                        onClick={() => setSelect("admin")}
                                     >
                                         <h4 className="text-xl font-semibold text-gray-700 mb-2">Administrator <span className='text-sm bg-slate-300/80 px-4 p-2 text-gray-700 rounded-xl'>1/6</span></h4>
                                         <p className="text-sm">Full access</p>
                                     </div>
                                     <div
-                                        className={`p-4 py-6 text-center ${selected.option2 ? 'bg-indigo-100 border-primary' : ''} cursor-pointer rounded-lg border duration-200 w-full mb-4`}
-                                        onClick={() => {
-                                            setSelected({ option1: false, option2: true });
-                                            setBtn(true)
-                                        }}
+                                        className={`py-6 p-4 text-center cursor-pointer rounded-lg border  duration-200 w-full mb-4 ${select == "employee" ? "bg-primary-soft border border-primary" : ""}`}
+                                        onClick={() => setSelect("employee")}
                                     >
                                         <h4 className="text-xl font-semibold text-gray-700 mb-2">Employee/Subcontractor</h4>
                                         <p className="text-xs">Access to employee portal (Tasks, timesheet, daily logs)</p>
@@ -69,13 +67,13 @@ function SelectionModal({ isModalOpen, setIsModalOpen, setIsAdminModalOpen }) {
                                 </div>
                                 <div className="flex flex-row justify-end space-x-4 w-full">
                                     <button
-                                        onClick={() => { setIsModalOpen(false); setSelected({ option1: false, option2: false }); setBtn(false) }}
+                                        onClick={handleClose}
                                         className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                                     >
                                         Cancel
                                     </button>
                                     <button
-                                        onClick={submitHandle}
+                                        onClick={handleSelect}
                                         className="w-1/2 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">
                                         Confirm
                                     </button>
