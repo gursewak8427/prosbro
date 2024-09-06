@@ -4,7 +4,8 @@ import { Fragment } from 'react';
 import { CloseOutlined } from '@mui/icons-material';
 import { Business } from '@/app/(website)/settings/_tabs/business';
 
-export const ChangeLogoModel = ({ isModalOpen, setIsModalOpen, }) => {
+export const TitleEditModel = ({ isModalOpen, setIsModalOpen, }) => {
+
 
 
     useEffect(() => {
@@ -42,26 +43,27 @@ export const ChangeLogoModel = ({ isModalOpen, setIsModalOpen, }) => {
                     >
                         <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                             <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-2xl font-semibold">Change Logo</h2>
+                                <h2 className="text-2xl font-semibold">Edit title</h2>
                                 <button onClick={() => setIsModalOpen(false)} className="text-gray-600 hover:text-gray-900">
                                     <CloseOutlined />
                                 </button>
                             </div>
-                            <div className='my-4 flex items-center justify-center'>
-                                <img
-                                    src="https://via.placeholder.com/150" // Replace with your logo URL
-                                    alt="Company Logo"
-                                    className="h-48 w-48 object-contain mb-2"
-                                />
+                            <div className='my-4 flex flex-col gap-3'>
+                                <div className="w-full">
+                                    <label className='font-semibold text-sm text-gray-700' htmlFor="">Title</label>
+                                    <input type="text" placeholder='Enter Title' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-full' />
+                                </div>
+                                <div className="w-full">
+                                    <label className='font-semibold text-sm text-gray-700' htmlFor="">Description</label>
+                                    <textarea rows={3} placeholder='Enter Description' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-full' />
+                                </div>
                             </div>
                             <div className="flex flex-row justify-end space-x-4 w-full">
-                                <input type="file" className='hidden' name="changepicture" id='changepicture' />
-                                <label
-                                    htmlFor='changepicture'
-                                    className="w-1/2 px-4 py-2 text-center border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
+                                <button
+                                    className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                                 >
-                                    Change Picture
-                                </label>
+                                    Cancel
+                                </button>
                                 <button
                                     className="w-1/2 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">
                                     Confirm

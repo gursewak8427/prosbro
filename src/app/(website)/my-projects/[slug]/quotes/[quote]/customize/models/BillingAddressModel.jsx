@@ -1,10 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { Fragment } from 'react';
 import { CloseOutlined } from '@mui/icons-material';
 import { Business } from '@/app/(website)/settings/_tabs/business';
 
 export const BillingAddressModel = ({ isModalOpen, setIsModalOpen, }) => {
+
+
+    useEffect(() => {
+        if (isModalOpen) {
+            document.documentElement.style.overflow = "hidden";
+        } else {
+            document.documentElement.style.overflow = "auto";
+        }
+    }, [isModalOpen])
+
     return <Transition appear show={isModalOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => { setIsModalOpen(false); }}>
             <TransitionChild

@@ -29,6 +29,8 @@ import { BusinessModel } from './models/BusinessModel';
 import { BillingAddressModel } from './models/BillingAddressModel';
 import { PersonalModel } from './models/PersonalModel';
 import { ChangeLogoModel } from './models/ChangeLogoModel';
+import { TitleEditModel } from './models/TitleEditModel';
+import { CoverImageModel } from './models/CoverImageModel';
 
 
 
@@ -47,7 +49,7 @@ const amountDisplayTypeOptions = [{
 function Page() {
   const dispatch = useDispatch();
 
-  const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0])
+  const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0]?.value)
   const [displayColumns, setDisplayColumns] = useState({
     quantity: false,
     materialLabour: false,
@@ -58,7 +60,9 @@ function Page() {
   const [businessModel, setBusinessModel] = useState(false)
   const [personalModel, setPersonalModel] = useState(false)
   const [changeLogoModel, setChangeLogoModel] = useState(false)
+  const [coverImageModel, setCoverImageModel] = useState(false)
   const [billingAddressModel, setBillingAddressModel] = useState(false)
+  const [titleEditModel, setTitleEditModel] = useState(false)
 
   const router = useRouter()
   const [payments, setPayments] = useState([
@@ -111,12 +115,16 @@ function Page() {
                   Kitchen Remodel - Standard
                 </h1>
                 <p className="text-gray-200">Renovation of a standard low to mid-end kitchen</p>
-                <button className="mt-4 bg-white text-gray-800 py-2 px-4 rounded-lg shadow hover:bg-gray-100">
+                <button className="mt-4 bg-white text-gray-800 py-2 px-4 rounded-lg shadow hover:bg-gray-100" onClick={() => {
+                  setTitleEditModel(!titleEditModel)
+                }}>
                   <EditOutlined />
                   Edit title
                 </button>
               </div>
-              <button className="absolute top-4 right-4 bg-white text-gray-800 py-1 px-3 rounded-lg shadow hover:bg-gray-100">
+              <button className="absolute top-4 right-4 bg-white text-gray-800 py-1 px-3 rounded-lg shadow hover:bg-gray-100" onClick={() => {
+                setCoverImageModel(!coverImageModel)
+              }}>
                 <EditOutlined />
                 Edit cover image
               </button>
@@ -270,6 +278,8 @@ function Page() {
       <BillingAddressModel isModalOpen={billingAddressModel} setIsModalOpen={setBillingAddressModel} />
       <PersonalModel isModalOpen={personalModel} setIsModalOpen={setPersonalModel} />
       <ChangeLogoModel isModalOpen={changeLogoModel} setIsModalOpen={setChangeLogoModel} />
+      <TitleEditModel isModalOpen={titleEditModel} setIsModalOpen={setTitleEditModel} />
+      <CoverImageModel isModalOpen={coverImageModel} setIsModalOpen={setCoverImageModel} />
     </div>
   )
 }

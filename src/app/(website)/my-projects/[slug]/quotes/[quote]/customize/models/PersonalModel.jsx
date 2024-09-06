@@ -1,10 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { Fragment } from 'react';
 import { CloseOutlined } from '@mui/icons-material';
 import { Business } from '@/app/(website)/settings/_tabs/business';
 
 export const PersonalModel = ({ isModalOpen, setIsModalOpen, }) => {
+
+
+
+    useEffect(() => {
+        if (isModalOpen) {
+            document.documentElement.style.overflow = "hidden";
+        } else {
+            document.documentElement.style.overflow = "auto";
+        }
+    }, [isModalOpen])
+
     return <Transition appear show={isModalOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => { setIsModalOpen(false); }}>
             <TransitionChild
@@ -39,15 +50,32 @@ export const PersonalModel = ({ isModalOpen, setIsModalOpen, }) => {
                             </div>
                             <div className='my-4 flex flex-col gap-3'>
                                 <div className="w-full">
+                                    <label className='font-semibold text-sm text-gray-700' htmlFor="">Name</label>
                                     <input type="text" placeholder='Name' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-full' />
                                 </div>
                                 <div className="w-full flex flex-row gap-3">
-                                    <input type="text" placeholder='Email' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-1/2' />
-                                    <input type="text" placeholder='Secondary Email' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-1/2' />
+                                    <div className="flex flex-col w-1/2">
+                                        <label className='font-semibold text-sm text-gray-700' htmlFor="">Email</label>
+                                        <input type="text" placeholder='Email' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-full' />
+                                    </div>
+                                    <div className="flex flex-col w-1/2">
+                                        <label className='font-semibold text-sm text-gray-700' htmlFor="">Secondary Email</label>
+                                        <input type="text" placeholder='Secondary Email' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-full' />
+                                    </div>
                                 </div>
                                 <div className="w-full flex flex-row gap-3">
-                                    <input type="text" placeholder='Phone' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-1/2' />
-                                    <input type="text" placeholder='Language' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-1/2' />
+                                    <div className="flex flex-col w-1/2">
+                                        <label className='font-semibold text-sm text-gray-700' htmlFor="">Phone</label>
+                                        <input type="text" placeholder='Phone' className='border border-gray-400 rounded-lg p-2 text-gray-500 w-full' />
+                                    </div>
+                                    <div className="flex flex-col w-1/2">
+                                        <label className='font-semibold text-sm text-gray-700' htmlFor="">Language</label>
+                                        <select name="" id="" className="mt-1 block bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                            <option value="">Select Lanaguage</option>
+                                            <option value="">English</option>
+                                            <option value="">Hindi</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex flex-row justify-start space-x-4 w-full">

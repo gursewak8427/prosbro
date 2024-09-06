@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { CloseOutlined } from '@mui/icons-material';
 import { Business } from '@/app/(website)/settings/_tabs/business';
 
-export const ChangeLogoModel = ({ isModalOpen, setIsModalOpen, }) => {
+export const CoverImageModel = ({ isModalOpen, setIsModalOpen, }) => {
 
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export const ChangeLogoModel = ({ isModalOpen, setIsModalOpen, }) => {
                     >
                         <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                             <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-2xl font-semibold">Change Logo</h2>
+                                <h2 className="text-2xl font-semibold">Change Cover Image</h2>
                                 <button onClick={() => setIsModalOpen(false)} className="text-gray-600 hover:text-gray-900">
                                     <CloseOutlined />
                                 </button>

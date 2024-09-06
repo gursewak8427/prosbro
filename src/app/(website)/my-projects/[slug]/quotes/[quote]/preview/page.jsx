@@ -28,6 +28,19 @@ import { TaskItems } from '../../_components/TaskItems';
 import { CostSummary } from '../../_components/CostSummary';
 
 
+
+const amountDisplayTypeOptions = [{
+  label: "Per categories",
+  value: "perCategories"
+}, {
+  label: "Per categories + Task",
+  value: "perCategoriesPlusTask"
+},
+{
+  label: "Subtotal Only",
+  value: "subTotalOnly"
+}]
+
 const VIEW_TYPES = {
   CLIENT: "client",
   YOUR: "your"
@@ -35,6 +48,14 @@ const VIEW_TYPES = {
 
 function Page() {
   const dispatch = useDispatch();
+
+  const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0]?.value)
+  const [displayColumns, setDisplayColumns] = useState({
+    quantity: false,
+    materialLabour: false,
+    markup: false,
+  })
+
   const router = useRouter()
   const [viewType, setViewType] = useState(VIEW_TYPES?.CLIENT) // CLIENT, YOUR
   const [payments, setPayments] = useState([
@@ -62,13 +83,21 @@ function Page() {
     );
   };
 
+
+  const handleChange = e => {
+    setDisplayColumns({
+      ...displayColumns,
+      [e.target.name]: e.target.checked
+    })
+  }
+
   return (
     <div className='p-8'>
       <div className='flex flex-row items-center'>
         <Button onClick={() => setViewType(VIEW_TYPES?.CLIENT)} variant='text' className={`${viewType == VIEW_TYPES.CLIENT && "font-bold border-b-2 border-black"} mr-3 cursor-pointer text-black`}>Client View</Button>
         <Button onClick={() => setViewType(VIEW_TYPES?.YOUR)} variant='text' className={`${viewType == VIEW_TYPES.YOUR && "font-bold border-b-2 border-black"} cursor-pointer text-black`}>Your View</Button>
       </div>
-      <div className='flex gap-5 mt-5 mb-5'>
+      <div className='flex gap-5 mt-5 mb-5 relative items-start justify-start'>
         <div className='w-9/12'>
           <div className="bg-gray-100 rounded-lg">
             {
@@ -134,21 +163,28 @@ function Page() {
           }
           {
             viewType == VIEW_TYPES.CLIENT &&
-            <CostSummary isEditable={false} />
+            <CostSummary isEditable={false} amountDisplayType={amountDisplayType} displayColumns={displayColumns} />
           }
         </div>
 
-        <div className='w-3/12'>
+        <div className='w-3/12 sticky top-5'>
           <div className="bg-white p-4 rounded-lg shadow-lg w-full mb-4">
             <h3 className="font-semibold mb-4">Display options</h3>
             {/* Amount Dropdown */}
             <div className="mb-4 flex flex-row items-center justify-between">
               <label htmlFor="amount" className="block text-gray-700">Amount</label>
               <select
+                value={amountDisplayType}
+                name='amountDisplayType'
+                onChange={e => setAmountDisplayType(e.target.value)}
                 id="amount"
                 className="mt-1 block bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
-                <option>Per categories</option>
+                {
+                  amountDisplayTypeOptions?.map(option => {
+                    return <option value={option?.value}>{option?.label}</option>
+                  })
+                }
                 {/* Add more options as needed */}
               </select>
             </div>
@@ -157,19 +193,18 @@ function Page() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Quantities</span>
-                <Switch />
+                <Switch name='quantity' defaultChecked={displayColumns?.quantity} onChange={handleChange} />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Material + labor cost</span>
-                <Switch />
+                <Switch name='materialLabour' defaultChecked={displayColumns?.materialLabour} onChange={handleChange} />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Markup amount</span>
-                <Switch />
+                <Switch name='markup' defaultChecked={displayColumns?.markup} onChange={handleChange} />
               </div>
             </div>
           </div>
-
           <div className='bg-white py-4 px-4 rounded-lg shadow-md'>
             <h2 className='font-semibold text-sm'>Markup on quote</h2>
             <h2 className='text-sm text-primary'>Edit on quote %</h2>
