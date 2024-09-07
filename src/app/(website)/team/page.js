@@ -2,14 +2,19 @@
 import React, { useState } from 'react';
 import SelectionModal from './SelectionModal';
 import { ArrowRight, DeleteOutline, MoreVert } from '@mui/icons-material';
-import { Menu, Switch } from '@mui/material';
+import { Menu, } from '@mui/material';
 import { MenuSection } from '@headlessui/react';
 import { EditAnEmployee } from '../contacts/_tabs/Employees';
 import { AlertRemoveUser } from '../contacts/_tabs/Administrators';
 import { NewEmployee } from '../contacts/_components/NewEmployee';
 import { NewAdmin } from '../contacts/_components/NewAdmin';
+import CustomMenu from '../_components/CustomMenu';
+import { DeleteAlert } from '../_components/Alerts/DeleteAlert';
+import { toast } from 'react-toastify';
 
 
+import Switch, { switchClasses } from '@mui/joy/Switch';
+import { switchStyles } from '@/app/utils';
 
 const MainContent = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,36 +38,36 @@ const MainContent = () => {
     const people = [
         {
             name: "Gurvinder ",
-            currentStatus: "Clocked In",
-            phoneNumber: "555-1234",
+            currentStatus: true,
+            phoneNumber: "(587) 555-1234",
             jobTitle: "Owner",
             smsReminder: true
         },
         {
             name: "Princepal Singh",
-            currentStatus: "Clocked Out",
-            phoneNumber: "555-5678",
+            currentStatus: false,
+            phoneNumber: "(587) 555-5678",
             jobTitle: "Supervisor",
             smsReminder: false
         },
         {
             name: "Rupundrapal Singh",
-            currentStatus: "Clocked Out",
-            phoneNumber: "555-8765",
+            currentStatus: false,
+            phoneNumber: "(587) 555-8765",
             jobTitle: "-",
             smsReminder: true
         },
         {
             name: "Ajmer Dhillon",
-            currentStatus: "Clocked in",
-            phoneNumber: "555-4321",
+            currentStatus: true,
+            phoneNumber: "(587) 555-4321",
             jobTitle: "-",
             smsReminder: false
         },
         {
             name: "Gagandeep Singh",
-            currentStatus: "Clocked Out",
-            phoneNumber: "555-9876",
+            currentStatus: false,
+            phoneNumber: "(587) 555-9876",
             jobTitle: "-",
             smsReminder: true
         }
@@ -96,10 +101,10 @@ const MainContent = () => {
                 <table className="min-w-full bg-white rounded-lg ">
                     <thead>
                         <tr>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">Name</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">Email</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">Role</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700"></th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">Name</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">Email</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">Role</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -153,12 +158,12 @@ const MainContent = () => {
                 <table className="min-w-full bg-white rounded-lg">
                     <thead>
                         <tr>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">Name</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">Current Status</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">Phone Number</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">Job Title</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700">SMS Reminder</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-700"></th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">Name</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">Current Status</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">Phone Number</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">Job Title</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500">SMS Reminder</th>
+                            <th className="py-3 px-4 border-b text-left text-sm text-gray-500"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -170,12 +175,19 @@ const MainContent = () => {
                                     </span>
                                     <span>{item.name}</span>
                                 </td>
-                                <td className="py-4 px-4 text-sm text-left">{item.currentStatus}</td>
+                                <td className="py-4 px-4 text-sm text-left">
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-2 h-2 rounded-full ${item?.currentStatus ? "bg-green-400" : "bg-red-400"}`}></div>
+                                        <span>{item?.currentStatus ? "Clocked In" : "Clocked Out"}</span>
+                                    </div>
+                                </td>
                                 <td className="py-4 px-4 text-sm text-left">{item.phoneNumber}</td>
                                 <td className="py-4 px-4 text-sm text-left">{item.jobTitle}</td>
                                 <td className="py-4 px-4 text-sm text-left flex flex-row gap-1 items-center">
-                                    <p className='text-gray-500'>{item.smsReminder ? 'ON' : 'OFF'}</p>
-                                    <Switch defaultChecked={item?.smsReminder} />
+                                    <p className='text-gray-500 min-w-10'>{item.smsReminder ? 'ON' : 'OFF'}</p>
+                                    <div className="min-w-12">
+                                        <Switch onClick={(e) => e?.stopPropagation()} defaultChecked={item?.smsReminder} sx={switchStyles} />
+                                    </div>
                                     <p className='text-gray-700 capitalize'>
                                         {
                                             ["mon", "tue", "wed"]?.join(", ")
@@ -183,9 +195,14 @@ const MainContent = () => {
                                     </p>
                                 </td>
                                 <td className="py-4 px-4 text-sm text-right">
-                                    <button className='w-8 h-8'>
+                                    <CustomMenu menuItems={[
+                                        { label: 'Send Clock-in & daily-log SMS', onClick: () => console.log('clicked') },
+                                        { label: 'Edit user', onClick: () => setActiveUser(item) },
+                                        { label: 'View app', onClick: () => console.log('clicked') },
+                                        { label: 'Remove user', onClick: () => console.log('clicked'), className: "text-red-400 hover:text-red-500" },
+                                    ]}>
                                         <MoreVert className='text-lg text-gray-700 hover:text-black' />
-                                    </button>
+                                    </CustomMenu>
                                 </td>
                             </tr>
                         ))}
@@ -200,12 +217,15 @@ const MainContent = () => {
             }} />
 
             <EditAnEmployee activeUser={activeUser} onClose={() => { setActiveUser(-1) }} />
-            <AlertRemoveUser isOpen={activeAdmin !== -1} onCancel={() => {
-                setActiveAdmin(-1)
-            }} onConfirm={() => {
-                toast.success("Admin Removed Successfully")
-                setActiveAdmin(-1)
-            }} />
+            <DeleteAlert
+                title="Delete"
+                description="Are you sure you want to delete this admin ? This process cannot be undone."
+                isOpen={activeAdmin !== -1}
+                onCancel={() => setActiveAdmin(-1)}
+                onConfirm={() => {
+                    toast.success("Admin Removed Successfully")
+                    setActiveAdmin(-1)
+                }} />
 
             <NewEmployee isOpen={addTeamType === "employee"} onClose={() => setAddTeamType(null)} />
             <NewAdmin isOpen={addTeamType === "admin"} onClose={() => setAddTeamType(null)} />

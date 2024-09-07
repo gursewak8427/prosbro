@@ -75,17 +75,15 @@ function SlugQuote() {
                                 </td>
                                 <td className="py-4 px-4 text-sm text-center">${item.totalbill}</td>
                                 <td className="py-4 px-4 text-sm text-right">
-                                    <div className='w-8 h-8'>
-                                        <CustomMenu menuItems={[
-                                            { label: 'Share', onClick: () => console.log('Profile clicked') },
-                                            { label: 'Mark as sent', onClick: () => console.log('My account clicked') },
-                                            { label: 'Mark as signed', onClick: () => console.log('Logout clicked') },
-                                            { label: 'Download PDF', onClick: () => console.log('Logout clicked') },
-                                            { label: 'Delete', onClick: () => setDeletePopup(item.id), className: "text-red-500 hover:text-red-700" },
-                                        ]}>
-                                            <MoreVert className='text-lg text-gray-700 hover:text-black' />
-                                        </CustomMenu>
-                                    </div>
+                                    <CustomMenu menuItems={[
+                                        { label: 'Share', onClick: () => console.log('Profile clicked') },
+                                        { label: 'Mark as sent', onClick: () => console.log('My account clicked') },
+                                        { label: 'Mark as signed', onClick: () => console.log('Logout clicked') },
+                                        { label: 'Download PDF', onClick: () => console.log('Logout clicked') },
+                                        { label: 'Delete', onClick: () => setDeletePopup(item.id), className: "text-red-500 hover:text-red-700" },
+                                    ]}>
+                                        <MoreVert className='text-lg text-gray-700 hover:text-black' />
+                                    </CustomMenu>
                                 </td>
                             </tr>
                         ))}

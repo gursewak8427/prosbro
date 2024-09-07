@@ -2,7 +2,9 @@ import { CloseOutlined, MoreVert } from "@mui/icons-material";
 import RightSidebar from "../../_components/RightSidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Checkbox, FormControlLabel, Box, Switch } from "@mui/material";
+import { Checkbox, FormControlLabel, Box } from "@mui/material";
+import { Switch } from "@mui/joy";
+import { switchStyles } from "@/app/utils";
 
 
 export const NewEmployee = ({ isOpen, onClose }) => {
@@ -69,7 +71,9 @@ export const NewEmployee = ({ isOpen, onClose }) => {
                         <span className="text-sm font-medium text-gray-700 mr-2">SMS reminders</span>
                         <div className="flex items-center">
                             <span className="mr-2 text-sm">ON</span>
-                            <Switch defaultChecked={smsReminders} onChange={() => setSmsReminders(!smsReminders)} />
+                            <div className="min-w-12">
+                                <Switch onClick={(e) => e?.stopPropagation()} defaultChecked={smsReminders} onChange={() => setSmsReminders(!smsReminders)} sx={switchStyles} />
+                            </div>
                         </div>
                     </div>
 

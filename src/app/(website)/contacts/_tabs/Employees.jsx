@@ -2,41 +2,45 @@ import { CloseOutlined, MoreVert } from "@mui/icons-material";
 import RightSidebar from "../../_components/RightSidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Checkbox, FormControlLabel, Box, Switch } from "@mui/material";
+import { Checkbox, FormControlLabel, Box } from "@mui/material";
+import { Switch } from "@mui/joy";
+import { switchStyles } from "@/app/utils";
+import CustomMenu from "../../_components/CustomMenu";
+
 
 const people = [
     {
         name: "Gurvinder ",
-        currentStatus: "Clocked In",
-        phoneNumber: "555-1234",
+        currentStatus: true,
+        phoneNumber: "(587) 555-1234",
         jobTitle: "Owner",
         smsReminder: true
     },
     {
         name: "Princepal Singh",
-        currentStatus: "Clocked Out",
-        phoneNumber: "555-5678",
+        currentStatus: false,
+        phoneNumber: "(587) 555-5678",
         jobTitle: "Supervisor",
         smsReminder: false
     },
     {
         name: "Rupundrapal Singh",
-        currentStatus: "Clocked Out",
-        phoneNumber: "555-8765",
+        currentStatus: false,
+        phoneNumber: "(587) 555-8765",
         jobTitle: "-",
         smsReminder: true
     },
     {
         name: "Ajmer Dhillon",
-        currentStatus: "Clocked in",
-        phoneNumber: "555-4321",
+        currentStatus: true,
+        phoneNumber: "(587) 555-4321",
         jobTitle: "-",
         smsReminder: false
     },
     {
         name: "Gagandeep Singh",
-        currentStatus: "Clocked Out",
-        phoneNumber: "555-9876",
+        currentStatus: false,
+        phoneNumber: "(587) 555-9876",
         jobTitle: "-",
         smsReminder: true
     }
@@ -44,6 +48,7 @@ const people = [
 
 
 export const EmployeeTable = () => {
+    const router = useRouter();
     const [activeUser, setActiveUser] = useState(-1)
 
     return <>
@@ -63,19 +68,26 @@ export const EmployeeTable = () => {
                 </thead>
                 <tbody>
                     {people.map((item, idx) => (
-                        <tr onClick={() => { setActiveUser(item) }} key={idx} className="border-b text-center cursor-pointer">
+                        <tr onClick={() => { setActiveUser(item) }} key={idx} className="border-b text-center cursor-pointer hover:bg-gray-100">
                             <td className="py-4 px-4 text-sm text-left flex items-center space-x-3">
                                 <span className="flex items-center justify-center h-8 w-8 text-white font-semibold bg-pink-500 rounded-full">
                                     {item.name.split(' ').map(word => word[0]).join('')}
                                 </span>
                                 <span>{item.name}</span>
                             </td>
-                            <td className="py-4 px-4 text-sm text-left">{item.currentStatus}</td>
+                            <td className="py-4 px-4 text-sm text-left">
+                                <div className="flex items-center gap-2">
+                                    <div className={`w-2 h-2 rounded-full ${item?.currentStatus ? "bg-green-400" : "bg-red-400"}`}></div>
+                                    <span>{item?.currentStatus ? "Clocked In" : "Clocked Out"}</span>
+                                </div>
+                            </td>
                             <td className="py-4 px-4 text-sm text-left">{item.phoneNumber}</td>
                             <td className="py-4 px-4 text-sm text-left">{item.jobTitle}</td>
                             <td className="py-4 px-4 text-sm text-left flex flex-row gap-1 items-center">
-                                <p className='text-gray-500'>{item.smsReminder ? 'ON' : 'OFF'}</p>
-                                <Switch defaultChecked={item?.smsReminder} />
+                                <p className='text-gray-500 min-w-8'>{item.smsReminder ? 'ON' : 'OFF'}</p>
+                                <div className="min-w-12 flex items-center justify-center">
+                                    <Switch onClick={(e) => { e?.stopPropagation() }} defaultChecked={item?.smsReminder} sx={switchStyles} />
+                                </div>
                                 <p className='text-gray-700 capitalize'>
                                     {
                                         ["mon", "tue", "wed"]?.join(", ")
@@ -83,11 +95,14 @@ export const EmployeeTable = () => {
                                 </p>
                             </td>
                             <td className="py-4 px-4 text-sm text-right">
-                                <button className='w-8 h-8' onClick={(e) => {
-                                    e.stopPropagation();
-                                }}>
+                                <CustomMenu menuItems={[
+                                    { label: 'Send Clock-in & daily-log SMS', onClick: () => console.log('clicked') },
+                                    { label: 'Edit user', onClick: () => setActiveUser(item) },
+                                    { label: 'View app', onClick: () => console.log('clicked') },
+                                    { label: 'Remove user', onClick: () => console.log('clicked'), className: "text-red-400 hover:text-red-500" },
+                                ]}>
                                     <MoreVert className='text-lg text-gray-700 hover:text-black' />
-                                </button>
+                                </CustomMenu>
                             </td>
                         </tr>
                     ))}
@@ -178,7 +193,9 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
                         <span className="text-sm font-medium text-gray-700 mr-2">SMS reminders</span>
                         <div className="flex items-center">
                             <span className="mr-2 text-sm">ON</span>
-                            <Switch defaultChecked={smsReminders} onChange={() => setSmsReminders(!smsReminders)} />
+                            <div className="min-w-12">
+                                <Switch onClick={(e) => e?.stopPropagation()} defaultChecked={smsReminders} onChange={() => setSmsReminders(!smsReminders)} sx={switchStyles} />
+                            </div>
                         </div>
                     </div>
 
@@ -201,6 +218,7 @@ export const EditAnEmployee = ({ activeUser, onClose }) => {
 
                 <div className="flex flex-row justify-end space-x-4 w-full absolute bottom-0 bg-white p-4">
                     <button
+                        onClick={() => handleClose()}
                         className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                     >
                         Cancel

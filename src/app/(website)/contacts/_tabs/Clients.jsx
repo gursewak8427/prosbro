@@ -2,6 +2,7 @@ import { CloseOutlined, MoreVert } from "@mui/icons-material";
 import RightSidebar from "../../_components/RightSidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import CustomMenu from "../../_components/CustomMenu";
 
 
 const people = [
@@ -52,7 +53,7 @@ const people = [
 
 
 export const ClientsTable = () => {
-
+    const router = useRouter()
     const [activeUser, setActiveUser] = useState(-1)
 
     return <>
@@ -82,11 +83,12 @@ export const ClientsTable = () => {
                             <td className="py-4 px-4 text-sm text-left">{item.phoneNumber}</td>
                             <td className="py-4 px-4 text-sm text-left">{item.relatedprojects}</td>
                             <td className="py-4 px-4 text-sm text-right">
-                                <button className='w-8 h-8' onClick={(e) => {
-                                    e.stopPropagation();
-                                }}>
+                                <CustomMenu menuItems={[
+                                    { label: 'Edit', onClick: () => setActiveUser(item) },
+                                    { label: 'Create new project', onClick: () => { router.push(`/my-projects/new/project-creation`) } },
+                                ]}>
                                     <MoreVert className='text-lg text-gray-700 hover:text-black' />
-                                </button>
+                                </CustomMenu>
                             </td>
                         </tr>
                     ))}
@@ -217,6 +219,7 @@ const EditAnClient = ({ activeUser, onClose }) => {
                 </div>
                 <div className="flex flex-row justify-end space-x-4 w-full absolute bottom-0 bg-white p-4">
                     <button
+                        onClick={handleClose}
                         className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                     >
                         Cancel

@@ -2,6 +2,7 @@ import { CloseOutlined, MoreVert } from "@mui/icons-material";
 import RightSidebar from "../../_components/RightSidebar";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import CustomMenu from "../../_components/CustomMenu";
 
 const people = [
     {
@@ -36,7 +37,7 @@ export const ProfessionalTable = () => {
                 </thead>
                 <tbody>
                     {people.map((item, idx) => (
-                        <tr onClick={() => { setActiveUser(item) }} key={idx} className="border-b text-center cursor-pointer">
+                        <tr onClick={() => { setActiveUser(item) }} key={idx} className="border-b text-center cursor-pointer hover:bg-gray-100">
                             <td className="py-4 px-4 flex items-center space-x-3">
                                 <span className="flex items-center justify-center h-8 w-8 text-white font-semibold bg-pink-500 rounded-full">
                                     {item.name.split(' ').map(word => word[0]).join('')}
@@ -49,11 +50,12 @@ export const ProfessionalTable = () => {
                             <td className="py-4 px-4 text-sm text-left text-gray-600">{item.jobTitle}</td>
                             <td className="py-4 px-4 text-sm text-left text-gray-600">{item.comapnay}</td>
                             <td className="py-4 px-4 text-sm text-right">
-                                <button className='w-8 h-8' onClick={(e) => {
-                                    e.stopPropagation();
-                                }}>
+                                <CustomMenu menuItems={[
+                                    { label: 'Edit', onClick: () => setActiveUser(item) },
+                                    { label: 'Delete', onClick: () => { }, className: "text-red-400 hover:text-red-500" },
+                                ]}>
                                     <MoreVert className='text-lg text-gray-700 hover:text-black' />
-                                </button>
+                                </CustomMenu>
                             </td>
                         </tr>
                     ))}
@@ -166,6 +168,7 @@ const EditAnProfessional = ({ activeUser, onClose }) => {
 
                 <div className="flex flex-row justify-end space-x-4 w-full absolute bottom-0 bg-white p-4">
                     <button
+                        onClick={handleClose}
                         className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
                     >
                         Cancel

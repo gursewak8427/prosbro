@@ -2,6 +2,7 @@ import React, { useEffect, Fragment, useState } from 'react'
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
 import { CloseOutlined, DeleteOutline } from '@mui/icons-material';
 import { toast } from 'react-toastify';
+import { DeleteAlert } from '../../_components/Alerts/DeleteAlert';
 
 const people = [
     {
@@ -35,7 +36,7 @@ export const AdminstratorsTable = () => {
                 </thead>
                 <tbody>
                     {people.map((item, idx) => (
-                        <tr key={idx} className="border-b text-center cursor-pointer">
+                        <tr key={idx} className="border-b text-center">
                             <td className="py-4 px-4 flex items-center space-x-3">
                                 <span className="flex items-center justify-center h-8 w-8 text-white font-semibold bg-pink-500 rounded-full">
                                     {item.name.split(' ').map(word => word[0]).join('')}
@@ -60,70 +61,81 @@ export const AdminstratorsTable = () => {
             </table>
         </div>
 
-        <AlertRemoveUser isOpen={activeUser !== -1} onCancel={() => {
+        {/* <AlertRemoveUser isOpen={activeUser !== -1} onCancel={() => {
             setActiveUser(-1)
         }} onConfirm={() => {
             toast.success("User Removed Successfully")
             setActiveUser(-1)
-        }} />
+        }} /> */}
+
+        <DeleteAlert
+            title="Delete"
+            description="Are you sure you want to delete this admin ? This process cannot be undone."
+            isOpen={activeUser !== -1}
+            onCancel={() => setActiveUser(-1)}
+            onConfirm={() => {
+                toast.success("Admin Removed Successfully")
+                setActiveUser(-1)
+            }} />
+
     </>
 }
 
-export const AlertRemoveUser = ({ isOpen, onCancel, onConfirm }) => {
+// export const AlertRemoveUser = ({ isOpen, onCancel, onConfirm }) => {
 
-    return <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={onCancel}>
-            <TransitionChild
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-            >
-                <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </TransitionChild>
+//     return <Transition appear show={isOpen} as={Fragment}>
+//         <Dialog as="div" className="relative z-10" onClose={onCancel}>
+//             <TransitionChild
+//                 as={Fragment}
+//                 enter="ease-out duration-300"
+//                 enterFrom="opacity-0"
+//                 enterTo="opacity-100"
+//                 leave="ease-in duration-200"
+//                 leaveFrom="opacity-100"
+//                 leaveTo="opacity-0"
+//             >
+//                 <div className="fixed inset-0 bg-black bg-opacity-25" />
+//             </TransitionChild>
 
-            <div className="fixed inset-0 overflow-y-auto">
-                <div className="flex min-h-full items-center justify-center p-4 text-center">
-                    <TransitionChild
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0 scale-95"
-                        enterTo="opacity-100 scale-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100 scale-100"
-                        leaveTo="opacity-0 scale-95"
-                    >
-                        <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
-                            <div className="flex justify-between items-center mb-4 p-6">
-                                <h2 className="text-lg font-semibold">Are you sure you want to delete this user ?</h2>
-                                <button onClick={onCancel} className="text-gray-600 hover:text-gray-900">
-                                    <CloseOutlined />
-                                </button>
-                            </div>
-                            <div className="w-full h-[40px]">
+//             <div className="fixed inset-0 overflow-y-auto">
+//                 <div className="flex min-h-full items-center justify-center p-4 text-center">
+//                     <TransitionChild
+//                         as={Fragment}
+//                         enter="ease-out duration-300"
+//                         enterFrom="opacity-0 scale-95"
+//                         enterTo="opacity-100 scale-100"
+//                         leave="ease-in duration-200"
+//                         leaveFrom="opacity-100 scale-100"
+//                         leaveTo="opacity-0 scale-95"
+//                     >
+//                         <DialogPanel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all">
+//                             <div className="flex justify-between items-center mb-4 p-6">
+//                                 <h2 className="text-lg font-semibold">Are you sure you want to delete this user ?</h2>
+//                                 <button onClick={onCancel} className="text-gray-600 hover:text-gray-900">
+//                                     <CloseOutlined />
+//                                 </button>
+//                             </div>
+//                             <div className="w-full h-[40px]">
 
-                            </div>
-                            <div className="flex flex-row justify-end space-x-4 w-full absolute bottom-0 bg-white p-4">
-                                <button
-                                    className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
-                                    onClick={onCancel}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    className="w-1/2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                                    onClick={onConfirm}
-                                >
-                                    Remvoe User
-                                </button>
-                            </div>
-                        </DialogPanel>
-                    </TransitionChild>
-                </div>
-            </div>
-        </Dialog>
-    </Transition>
-}
+//                             </div>
+//                             <div className="flex flex-row justify-end space-x-4 w-full absolute bottom-0 bg-white p-4">
+//                                 <button
+//                                     className="w-1/2 px-4 py-2 border border-indigo-500 text-indigo-500 rounded hover:bg-indigo-50"
+//                                     onClick={onCancel}
+//                                 >
+//                                     Cancel
+//                                 </button>
+//                                 <button
+//                                     className="w-1/2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+//                                     onClick={onConfirm}
+//                                 >
+//                                     Remvoe User
+//                                 </button>
+//                             </div>
+//                         </DialogPanel>
+//                     </TransitionChild>
+//                 </div>
+//             </div>
+//         </Dialog>
+//     </Transition>
+// }
