@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
@@ -19,9 +19,9 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, Edit, EditOutlined } from '@mui/icons-material';
 import { Switch } from '@mui/material';
 import { CostSummary } from '../../_components/CostSummary';
@@ -31,6 +31,7 @@ import { PersonalModel } from './models/PersonalModel';
 import { ChangeLogoModel } from './models/ChangeLogoModel';
 import { TitleEditModel } from './models/TitleEditModel';
 import { CoverImageModel } from './models/CoverImageModel';
+import { FetchClientQuoteOptions } from '@/app/redux/Project/ProjectSlice';
 
 
 
@@ -48,6 +49,13 @@ const amountDisplayTypeOptions = [{
 
 function Page() {
   const dispatch = useDispatch();
+  const pathname = usePathname();
+
+  const quote = useSelector(store => store.projectData.clientquote);
+  const taxes = useSelector(store => store.userData.defaultquotetaxes);
+
+  const pathSegments = pathname.split("/");
+  const slug = pathSegments[pathSegments.length - 2];
 
   const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0]?.value)
   const [displayColumns, setDisplayColumns] = useState({
@@ -97,6 +105,9 @@ function Page() {
     })
   }
 
+  useEffect(()=>{
+    dispatch(FetchClientQuoteOptions(slug))
+  },[])
 
   return (
     <div className='p-8'>
@@ -265,7 +276,7 @@ function Page() {
               router.push("preview")
             }} className='w-full bg-primary text-white py-2 rounded-lg hover:bg-indigo-700 mb-4'>Next - Preview</button>
             <div className='mb-2 mt-2 flex justify-center items-center'>
-              <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Clint preview - PDF</button>
+              <button className='text-sm font-semibold text-primary'><RemoveRedEyeIcon /> Client preview - PDF</button>
             </div>
             <div className='mb-2 mt-2 flex justify-center items-center'>
               <button className='text-sm font-semibold text-primary'>Scope of work (no prices)</button>
