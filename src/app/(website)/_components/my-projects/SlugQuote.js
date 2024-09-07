@@ -1,16 +1,23 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import AddIcon from '@mui/icons-material/Add';
 import { useDispatch, useSelector } from 'react-redux';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FetchQuotes, quoteslistAction } from '@/app/redux/Project/ProjectSlice';
 import Link from 'next/link';
 import { showToastPromise, updateToast } from '@/app/redux/toastSlice';
 import axiosInstance from '@/app/redux/AxiosInstance';
+import { MoreVert } from '@mui/icons-material';
+import CustomMenu from '../CustomMenu';
+import { DeleteAlert } from '../Alerts/DeleteAlert';
 
 function SlugQuote() {
     const dispatch = useDispatch();
     const pathname = usePathname();
+
+    const [deletePopup, setDeletePopup] = useState(null)
+
+    const router = useRouter();
     const data = useSelector(store => store.projectData.quoteslist)
     const toastId = useSelector((state) => state.toast.toastId);
     const segments = pathname.split('/');
@@ -42,57 +49,59 @@ function SlugQuote() {
     useEffect(() => {
         dispatch(FetchQuotes(slug))
     }, [])
+
     return (
         <div className='flex flex-col gap-5 p-4'>
-            <div className="flex items-center justify-between">
-                <div className='flex justify-start gap-4'>
-                    <div className='min-w-[250px] bg-white  px-5 py-3 rounded-lg border-2 border-l-primary'>
-                        <p className='text-gray-500'>CONTRACT VALUE</p>
-                        <h1 className='text-lg font-semibold '>$280,608.33</h1>
-                    </div>
-                    <div className='min-w-[250px] bg-white  px-5 py-3 rounded-lg border-2 border-l-orange-600'>
-                        <p className='text-gray-500'>PAID TO DATE</p>
-                        <h1 className='text-lg font-semibold '>$0</h1>
-                    </div>
-                    <div className='min-w-[250px] bg-white  px-5 py-3 rounded-lg border-2 border-l-green-600'>
-                        <p className='text-gray-500'>BALANCE</p>
-                        <h1 className='text-lg font-semibold '>$280,608.33</h1>
-                    </div>
-                </div>
-
-                <div className='flex items-center gap-4 my-2 justify-end'>
-                    {/* <div className='text-primary mt-5 mb-5'>
-                        <h1 className='flex items-center gap-2 hover:text-gray-500 cursor-pointer'><span><SummarizeIcon /> </span> View contract</h1>
-                    </div> */}
-                    <div>
-                        <button className='font-semibold px-4 py-2 border border-gray-400 rounded-lg bg-white hover:bg-gray-200'><span><AddIcon /> </span>Create Quote</button>
-                    </div>
-                </div>
-            </div>
-
             <div className="overflow-x-auto rounded-lg">
-                <table className="min-w-full bg-white">
+                <table className="min-w-full bg-white rounded-lg ">
                     <thead>
                         <tr>
-                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-100">Title</th>
-                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-100">Last Edited Date</th>
-                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-100">Status</th>
-                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-100">Amount</th>
+                            <th className="py-3 px-4 border-b text-left text-gray-400">Title</th>
+                            <th className="py-3 px-4 border-b text-left text-gray-400">Last Edited Date</th>
+                            <th className="py-3 px-4 border-b text-center text-gray-400">Status</th>
+                            <th className="py-3 px-4 border-b text-center text-gray-400">Amount</th>
+                            <th className="py-3 px-4 border-b text-left text-gray-400"></th>
                         </tr>
                     </thead>
                     <tbody>
                         {data.map((item, index) => (
-                            <tr key={index}>
-                                <td className="py-2 text-center px-4 border-b border-gray-200"><Link href={`/my-projects/${slug}/quotes/${item.slug}/edit`}>{item.name}</Link></td>
-                                <td className="py-2 text-center px-4 border-b border-gray-200">{item.updatedAt}</td>
-                                <td className="py-2 text-center px-4 border-b border-gray-200">{item.status}</td>
-                                <td className="py-2 text-center px-4 border-b border-gray-200" onClick={() => { handleDelete(item.id) }}>$ {item.totalbill}</td>
+                            <tr onClick={() => router.push(`/my-projects/${slug}/quotes/${item.slug}/edit`)} key={index} className='cursor-pointer hover:bg-gray-100 border'>
+                                <td className="py-4 px-4 text-sm text-left">{item.name}</td>
+                                <td className="py-4 px-4 text-sm text-left">{new Date(item.updatedAt)?.toLocaleDateString()}</td>
+                                <td className="py-4 px-4 text-sm text-left">
+                                    <div className="bg-gray-200 text-center px-2 py-1 rounded-md capitalize">
+                                        {item.status}
+                                    </div>
+                                </td>
+                                <td className="py-4 px-4 text-sm text-center">${item.totalbill}</td>
+                                <td className="py-4 px-4 text-sm text-right">
+                                    <div className='w-8 h-8'>
+                                        <CustomMenu menuItems={[
+                                            { label: 'Share', onClick: () => console.log('Profile clicked') },
+                                            { label: 'Mark as sent', onClick: () => console.log('My account clicked') },
+                                            { label: 'Mark as signed', onClick: () => console.log('Logout clicked') },
+                                            { label: 'Download PDF', onClick: () => console.log('Logout clicked') },
+                                            { label: 'Delete', onClick: () => setDeletePopup(item.id), className: "text-red-500 hover:text-red-700" },
+                                        ]}>
+                                            <MoreVert className='text-lg text-gray-700 hover:text-black' />
+                                        </CustomMenu>
+                                    </div>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-        </div>
+            <DeleteAlert
+                title="Delete"
+                description="Are you sure you want to delete this quote ? This process cannot be undone."
+                isOpen={deletePopup !== null}
+                onCancel={() => setDeletePopup(null)}
+                onConfirm={() => {
+                    handleDelete(deletePopup)
+                    setDeletePopup(null)
+                }} />
+        </div >
     )
 }
 
