@@ -13,6 +13,8 @@ const initialState = {
     quoteslist: [],
     categorieslist: [],
     quoteadditionalinformation: {},
+    quotereview:[],
+    quoteoptions:{},
 }
 
 // Utility function to process error and convert to string
@@ -253,6 +255,36 @@ export const UpdateQuotePaySchedule = createAsyncThunk("UpdateQuotePaySchedule",
     }
 });
 
+export const FetchClientQuoteReview = createAsyncThunk("FetchClientQuoteReview", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/clientquotecustomize/?slug=${data}`,)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const FetchClientQuoteOptions = createAsyncThunk("FetchClientQuoteOptions", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/clientquoteoptions/?slug=${data}`,)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
+export const UpdateClientQuoteOptions = createAsyncThunk("UpdateClientQuoteOptions", async (data, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/clientquoteoptions/`,data)
+        return response.data;
+    } catch (error) {
+        const processederror = processError(error.response?.data || error.message)
+        return rejectWithValue(processederror);
+    }
+});
+
 
 const Slice = createSlice({
     name: "projectslice",
@@ -373,6 +405,18 @@ const Slice = createSlice({
             state.quoteadditionalinformation = action.payload
         })
         builder.addCase(CreateQuotePaySchedule.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(FetchClientQuoteReview.fulfilled, (state, action) => {
+            state.quotereview = action.payload
+        })
+        builder.addCase(FetchClientQuoteReview.rejected, (state, action) => {
+            state.error = action.payload
+        })
+        builder.addCase(FetchClientQuoteOptions.fulfilled, (state, action) => {
+            state.quoteoptions = action.payload
+        })
+        builder.addCase(FetchClientQuoteOptions.rejected, (state, action) => {
             state.error = action.payload
         })
     }

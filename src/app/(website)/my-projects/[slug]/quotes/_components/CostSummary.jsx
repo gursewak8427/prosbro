@@ -1,5 +1,32 @@
-export const CostSummary = ({ amountDisplayType, displayColumns }) => {
+import { FetchDefQuotetaxes } from "@/app/redux/AuthSlice";
+import { FetchClientQuote, FetchClientQuoteReview, FetchQuoteAddinformation } from "@/app/redux/Project/ProjectSlice";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
+export const CostSummary = ({ amountDisplayType, displayColumns }) => {
+    const dispatch = useDispatch();
+    const pathname = usePathname();
+
+    const pathSegments = pathname.split("/");
+    const slug = pathSegments[pathSegments.length - 2];
+
+    const quotereview = useSelector(store => store.projectData.quotereview);
+    const quoteadditionalinformation = useSelector(store => store.projectData.quoteadditionalinformation);
+
+    useEffect(() => {
+        dispatch(FetchClientQuoteReview(slug))
+    }, [])
+
+    useEffect(() => {
+        if (Object.keys(quoteadditionalinformation).length > 0) {
+            return
+        } else {
+            dispatch(FetchClientQuote(slug))
+            dispatch(FetchQuoteAddinformation(slug))
+            dispatch(FetchDefQuotetaxes())
+        }
+    }, [pathname, quoteadditionalinformation])
     const data = [
         {
             "item": "General conditions",

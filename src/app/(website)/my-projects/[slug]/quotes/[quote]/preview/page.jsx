@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
@@ -19,13 +19,15 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, EditOutlined } from '@mui/icons-material';
 import { Button, Switch, Tab, Tabs } from '@mui/material';
 import { TaskItems } from '../../_components/TaskItems';
 import { CostSummary } from '../../_components/CostSummary';
+import { FetchClientQuote, FetchClientQuoteOptions, FetchClientQuoteReview, FetchQuoteAddinformation } from '@/app/redux/Project/ProjectSlice';
+import { FetchDefQuotetaxes } from '@/app/redux/AuthSlice';
 
 
 
@@ -48,6 +50,15 @@ const VIEW_TYPES = {
 
 function Page() {
   const dispatch = useDispatch();
+  const pathname = usePathname();
+
+  const quote = useSelector(store => store.projectData.clientquote);
+  const quotereview = useSelector(store => store.projectData.quotereview);
+  const quoteadditionalinformation = useSelector(store => store.projectData.quoteadditionalinformation);
+  const taxes = useSelector(store => store.userData.defaultquotetaxes);
+
+  const pathSegments = pathname.split("/");
+  const slug = pathSegments[pathSegments.length - 2];
 
   const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0]?.value)
   const [displayColumns, setDisplayColumns] = useState({
@@ -91,6 +102,23 @@ function Page() {
     })
   }
 
+  useEffect(() => {
+    dispatch(FetchClientQuoteOptions(slug))
+  }, [])
+
+  useEffect(() => {
+    dispatch(FetchClientQuoteReview(slug))
+  }, [])
+
+  useEffect(() => {
+    if (Object.keys(quoteadditionalinformation).length > 0) {
+      return
+    } else {
+      dispatch(FetchClientQuote(slug))
+      dispatch(FetchQuoteAddinformation(slug))
+      dispatch(FetchDefQuotetaxes())
+    }
+  }, [pathname, quoteadditionalinformation])
   return (
     <div className='p-8'>
       <div className='flex flex-row items-center'>
