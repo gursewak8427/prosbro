@@ -35,16 +35,14 @@ function ProjectsTable({ projectlist }) {
     <>
       <div className="overflow-x-auto min-h-[50vh] bg-white rounded-2xl flex flex-col justify-between">
         <table className="min-w-full table-fixed">
-          <thead>
-            <tr className="border-b">
-              <th className="p-4 text-gray-500 text-sm font-semibold w-24 text-left">Ref #</th>
-              <th className="p-4 text-gray-500 text-sm font-semibold w-1/4 text-left">Address & Client</th>
-              <th className="p-4 text-gray-500 text-sm font-semibold w-36 text-left">Tag</th>
-              <th className="p-4 text-gray-500 text-sm font-semibold w-32 text-left">Created on</th>
-              <th className="p-4 text-gray-500 text-sm font-semibold w-28 text-right">Project size</th>
-              <th className="p-4 text-gray-500 text-sm font-semibold w-24 text-center">Status</th>
-            </tr>
-          </thead>
+          <tr className="border-b">
+            <th className="p-4 text-gray-500 text-sm font-semibold w-24 text-left">Ref #</th>
+            <th className="p-4 text-gray-500 text-sm font-semibold w-1/4 text-left">Address & Client</th>
+            <th className="p-4 text-gray-500 text-sm font-semibold w-36 text-left">Tag</th>
+            <th className="p-4 text-gray-500 text-sm font-semibold w-32 text-left">Created on</th>
+            <th className="p-4 text-gray-500 text-sm font-semibold w-28 text-right">Project size</th>
+            <th className="p-4 text-gray-500 text-sm font-semibold w-24 text-center">Status</th>
+          </tr>
           <tbody>
             {rows.map((row, index) => (
               <tr onClick={() => {

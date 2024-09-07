@@ -54,15 +54,13 @@ function SlugQuote() {
         <div className='flex flex-col gap-5 p-4'>
             <div className="overflow-x-auto rounded-lg">
                 <table className="min-w-full bg-white rounded-lg ">
-                    <thead>
-                        <tr>
-                            <th className="py-3 px-4 border-b text-left text-gray-400">Title</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-400">Last Edited Date</th>
-                            <th className="py-3 px-4 border-b text-center text-gray-400">Status</th>
-                            <th className="py-3 px-4 border-b text-center text-gray-400">Amount</th>
-                            <th className="py-3 px-4 border-b text-left text-gray-400"></th>
-                        </tr>
-                    </thead>
+                    <tr>
+                        <th className="py-3 px-4 border-b text-left text-gray-400">Title</th>
+                        <th className="py-3 px-4 border-b text-left text-gray-400">Last Edited Date</th>
+                        <th className="py-3 px-4 border-b text-center text-gray-400">Status</th>
+                        <th className="py-3 px-4 border-b text-center text-gray-400">Amount</th>
+                        <th className="py-3 px-4 border-b text-left text-gray-400"></th>
+                    </tr>
                     <tbody>
                         {data.map((item, index) => (
                             <tr onClick={() => router.push(`/my-projects/${slug}/quotes/${item.slug}/edit`)} key={index} className='cursor-pointer hover:bg-gray-100 border'>

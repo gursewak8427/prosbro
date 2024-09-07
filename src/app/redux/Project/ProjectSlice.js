@@ -13,8 +13,8 @@ const initialState = {
     quoteslist: [],
     categorieslist: [],
     quoteadditionalinformation: {},
-    quotereview:[],
-    quoteoptions:{},
+    quotereview: [],
+    quoteoptions: {},
 }
 
 // Utility function to process error and convert to string
@@ -277,7 +277,7 @@ export const FetchClientQuoteOptions = createAsyncThunk("FetchClientQuoteOptions
 
 export const UpdateClientQuoteOptions = createAsyncThunk("UpdateClientQuoteOptions", async (data, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/clientquoteoptions/`,data)
+        const response = await axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/clientquoteoptions/`, data)
         return response.data;
     } catch (error) {
         const processederror = processError(error.response?.data || error.message)

@@ -11,6 +11,7 @@ export const CostSummary = ({ amountDisplayType, displayColumns }) => {
     const pathSegments = pathname.split("/");
     const slug = pathSegments[pathSegments.length - 2];
 
+    const quote = useSelector(store => store.projectData.clientquote);
     const quotereview = useSelector(store => store.projectData.quotereview);
     const quoteadditionalinformation = useSelector(store => store.projectData.quoteadditionalinformation);
 
@@ -27,421 +28,422 @@ export const CostSummary = ({ amountDisplayType, displayColumns }) => {
             dispatch(FetchDefQuotetaxes())
         }
     }, [pathname, quoteadditionalinformation])
-    const data = [
-        {
-            "item": "General conditions",
-            "amount": "$9,120.00",
-            "taskList": [
-                {
-                    "title": "General admin fees",
-                    "quantity": 1,
-                    "quantityType": "each",
-                    "material": 200,
-                    "markup": 300,
-                    "labour": 100,
-                    "amount": "$9,120.00"
-                }
-            ]
-        },
-        {
-            "item": "Plans and permitting",
-            "amount": "$4,189.00",
-            "taskList": [
-                {
-                    "title": "Aluminum roof covering budget & design",
-                    "quantity": 1,
-                    "quantityType": "each",
-                    "material": 200,
-                    "markup": 300,
-                    "labour": 100,
-                    "amount": "2,189.00"
-                },
-                {
-                    "title": "Advanced protection of aluminum (New product above the garage with a report)",
-                    "quantity": 1,
-                    "quantityType": "each",
-                    "material": 200,
-                    "markup": 300,
-                    "labour": 100,
-                    "amount": "2,000.00"
-                }
-            ]
-        },
-        {
-            "item": "Multitrade",
-            "quantity": "1 each",
-            "amount": "$1,720.35",
-            "taskList": [
-                {
-                    "title": "Coordinate and enable management",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Insurance and license fees",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Site supervision and management",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Prepare the floor areas to install the fittings of each",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Demolition",
-            "quantity": "1 each",
-            "amount": "$1,752.36",
-            "taskList": [
-                {
-                    "title": "Remove and dispose wood ceilings",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Remove and dispose drywall ceilings",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Cutting the wooden channels (remove old wood ceiling drainage, switch/plug-in identity outlets, etc.)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Structural wood",
-            "quantity": "1 each",
-            "amount": "$971.11",
-            "taskList": [
-                {
-                    "title": "Supply and install 2x4 SPF channel wood for 2’ High",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install 2x4 SPF channel wood for 1’ High",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Flooring",
-            "quantity": "1 each",
-            "amount": "$112.64",
-            "taskList": [
-                {
-                    "title": "Supply and install hardwood flooring at kitchen (overall 48x16 - 32x12 sqft)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Painting",
-            "quantity": "1 each",
-            "amount": "$90.35",
-            "taskList": [
-                {
-                    "title": "Supply and install painting 2 doors + 2 front side walls",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install painting 2 doors + 2 inside walls",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install painting 2 front side walls",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install painting 2 inside walls",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Electrical",
-            "quantity": "1 each",
-            "amount": "$5,599.60",
-            "taskList": [
-                {
-                    "title": "Supply and install 10x 14.5W energy efficient recessed light fixture",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install 12x 14.5W energy efficient recessed light fixture",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install new kitchen & bathroom electrical wires to budget constraint (3 outlets)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install new outlets, light switches, and plates",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install 14x 15W energy efficient recessed light fixture",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install existing standard light switches & plates (2 outlets)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install new dining chandelier light fixture & wire (2 outlets)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install existing standard electrical outlet and wall charger",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Doors and windows",
-            "quantity": "1 each",
-            "amount": "$1,270.00",
-            "taskList": [
-                {
-                    "title": "Supply and install windows - install window in bedroom & bathroom 22x24 - supply & install change hinge door with",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install front door window - change 2x windows with white aluminum frame",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Plumbing",
-            "quantity": "1 each",
-            "amount": "$2,578.99",
-            "taskList": [
-                {
-                    "title": "Supply and install kitchen sink with garbage disposal (in new location)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install washing machine & dryer - new location 1 each (change 2x)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install new location, sink - basement",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install all plumbing lines + kitchen island plumbing",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "HVAC",
-            "quantity": "1 each",
-            "amount": "$1,056.06",
-            "taskList": [
-                {
-                    "title": "Supply and install ventilation over hood fan",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install heat recovery system - install new air vent + exhaust outlet",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install new heater at basement",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Walls - interior",
-            "quantity": "1 each",
-            "amount": "$556.41",
-            "taskList": [
-                {
-                    "title": "Supply and install Gypcrete flooring at kitchen (8’ height max - supply & install 12 studs)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Walls - insulation",
-            "quantity": "1 each",
-            "amount": "$1,209.86",
-            "taskList": [
-                {
-                    "title": "Supply and install new soundproofing insulation",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install Gypcrete 12” insulation panels at new wood partition walls (overall size 32.5 x 12 sqft)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Ceiling",
-            "quantity": "1 each",
-            "amount": "$74.06",
-            "taskList": [
-                {
-                    "title": "Supply and install 1/2” TPI ceiling drywall",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Ceiling - insulation",
-            "quantity": "1 each",
-            "amount": "$208.50",
-            "taskList": [
-                {
-                    "title": "Supply and install new flooring insulation & install a sound insulation membrane at living room ceiling",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Kitchen fixtures",
-            "quantity": "1 each",
-            "amount": "$518.00",
-            "taskList": [
-                {
-                    "title": "Supply and install kitchen island new above the counter",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Kitchen cabinetry",
-            "quantity": "1 each",
-            "amount": "$3,717.00",
-            "taskList": [
-                {
-                    "title": "Install cabinetry and island - L-shape (36”x 30”)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install base cabinet and island refrigerator wall",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install fridge panel and kitchen island cooktop",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install glass upper cabinet + lower drawers + island & island drawers",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install island cabinet (approx 22” x 30”)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install island + hood fan",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Install kitchen island with base cabinet, sink, dishwasher, and garbage disposal",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-        {
-            "item": "Kitchen countertops",
-            "quantity": "1 each",
-            "amount": "$2,805.00",
-            "taskList": [
-                {
-                    "title": "Supply and install quartz countertops (26” linear foot countertop)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install granite island countertop (12” x 16” granite top)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install backsplash (4.5 sqft)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install waterfall countertop island (26 linear ft, 16 ft by 16 ft)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install new single basin sink (undermount)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install faucet 1 each (4 ft 4)",
-                    "quantity": 1,
-                    "quantityType": "each"
-                },
-                {
-                    "title": "Supply and install faucet + disposal air switch",
-                    "quantity": 1,
-                    "quantityType": "each"
-                }
-            ]
-        },
-    ]
+
+    // const data = [
+    //     {
+    //         "item": "General conditions",
+    //         "amount": "$9,120.00",
+    //         "taskList": [
+    //             {
+    //                 "title": "General admin fees",
+    //                 "quantity": 1,
+    //                 "quantityType": "each",
+    //                 "material": 200,
+    //                 "markup": 300,
+    //                 "labour": 100,
+    //                 "amount": "$9,120.00"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Plans and permitting",
+    //         "amount": "$4,189.00",
+    //         "taskList": [
+    //             {
+    //                 "title": "Aluminum roof covering budget & design",
+    //                 "quantity": 1,
+    //                 "quantityType": "each",
+    //                 "material": 200,
+    //                 "markup": 300,
+    //                 "labour": 100,
+    //                 "amount": "2,189.00"
+    //             },
+    //             {
+    //                 "title": "Advanced protection of aluminum (New product above the garage with a report)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each",
+    //                 "material": 200,
+    //                 "markup": 300,
+    //                 "labour": 100,
+    //                 "amount": "2,000.00"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Multitrade",
+    //         "quantity": "1 each",
+    //         "amount": "$1,720.35",
+    //         "taskList": [
+    //             {
+    //                 "title": "Coordinate and enable management",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Insurance and license fees",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Site supervision and management",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Prepare the floor areas to install the fittings of each",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Demolition",
+    //         "quantity": "1 each",
+    //         "amount": "$1,752.36",
+    //         "taskList": [
+    //             {
+    //                 "title": "Remove and dispose wood ceilings",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Remove and dispose drywall ceilings",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Cutting the wooden channels (remove old wood ceiling drainage, switch/plug-in identity outlets, etc.)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Structural wood",
+    //         "quantity": "1 each",
+    //         "amount": "$971.11",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install 2x4 SPF channel wood for 2’ High",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install 2x4 SPF channel wood for 1’ High",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Flooring",
+    //         "quantity": "1 each",
+    //         "amount": "$112.64",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install hardwood flooring at kitchen (overall 48x16 - 32x12 sqft)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Painting",
+    //         "quantity": "1 each",
+    //         "amount": "$90.35",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install painting 2 doors + 2 front side walls",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install painting 2 doors + 2 inside walls",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install painting 2 front side walls",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install painting 2 inside walls",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Electrical",
+    //         "quantity": "1 each",
+    //         "amount": "$5,599.60",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install 10x 14.5W energy efficient recessed light fixture",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install 12x 14.5W energy efficient recessed light fixture",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install new kitchen & bathroom electrical wires to budget constraint (3 outlets)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install new outlets, light switches, and plates",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install 14x 15W energy efficient recessed light fixture",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install existing standard light switches & plates (2 outlets)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install new dining chandelier light fixture & wire (2 outlets)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install existing standard electrical outlet and wall charger",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Doors and windows",
+    //         "quantity": "1 each",
+    //         "amount": "$1,270.00",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install windows - install window in bedroom & bathroom 22x24 - supply & install change hinge door with",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install front door window - change 2x windows with white aluminum frame",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Plumbing",
+    //         "quantity": "1 each",
+    //         "amount": "$2,578.99",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install kitchen sink with garbage disposal (in new location)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install washing machine & dryer - new location 1 each (change 2x)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install new location, sink - basement",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install all plumbing lines + kitchen island plumbing",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "HVAC",
+    //         "quantity": "1 each",
+    //         "amount": "$1,056.06",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install ventilation over hood fan",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install heat recovery system - install new air vent + exhaust outlet",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install new heater at basement",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Walls - interior",
+    //         "quantity": "1 each",
+    //         "amount": "$556.41",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install Gypcrete flooring at kitchen (8’ height max - supply & install 12 studs)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Walls - insulation",
+    //         "quantity": "1 each",
+    //         "amount": "$1,209.86",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install new soundproofing insulation",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install Gypcrete 12” insulation panels at new wood partition walls (overall size 32.5 x 12 sqft)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Ceiling",
+    //         "quantity": "1 each",
+    //         "amount": "$74.06",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install 1/2” TPI ceiling drywall",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Ceiling - insulation",
+    //         "quantity": "1 each",
+    //         "amount": "$208.50",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install new flooring insulation & install a sound insulation membrane at living room ceiling",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Kitchen fixtures",
+    //         "quantity": "1 each",
+    //         "amount": "$518.00",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install kitchen island new above the counter",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Kitchen cabinetry",
+    //         "quantity": "1 each",
+    //         "amount": "$3,717.00",
+    //         "taskList": [
+    //             {
+    //                 "title": "Install cabinetry and island - L-shape (36”x 30”)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install base cabinet and island refrigerator wall",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install fridge panel and kitchen island cooktop",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install glass upper cabinet + lower drawers + island & island drawers",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install island cabinet (approx 22” x 30”)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install island + hood fan",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Install kitchen island with base cabinet, sink, dishwasher, and garbage disposal",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         "item": "Kitchen countertops",
+    //         "quantity": "1 each",
+    //         "amount": "$2,805.00",
+    //         "taskList": [
+    //             {
+    //                 "title": "Supply and install quartz countertops (26” linear foot countertop)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install granite island countertop (12” x 16” granite top)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install backsplash (4.5 sqft)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install waterfall countertop island (26 linear ft, 16 ft by 16 ft)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install new single basin sink (undermount)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install faucet 1 each (4 ft 4)",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             },
+    //             {
+    //                 "title": "Supply and install faucet + disposal air switch",
+    //                 "quantity": 1,
+    //                 "quantityType": "each"
+    //             }
+    //         ]
+    //     },
+    // ]
 
 
     const getColSpan1 = () => {
         let colspan = 1;
-        if (displayColumns?.quantity) colspan++;
-        if (displayColumns?.materialLabour) colspan += 2;
-        if (displayColumns?.markup) colspan++;
+        if (displayColumns?.quantities) colspan++;
+        if (displayColumns?.markupamount) colspan++;
+        if (displayColumns?.materialpluslabourcost) colspan += 2;
 
         return colspan;
     }
@@ -452,54 +454,55 @@ export const CostSummary = ({ amountDisplayType, displayColumns }) => {
         {/* Header */}
         {/* flex justify-between items-center bg-blue-500 text-white p-4 rounded-t-lg */}
         <table className="w-full">
-            <thead className="bg-primary">
-                <th className="text-left text-white p-2 w-2/5">Task</th>
-                {
-                    displayColumns?.quantity && <th className="text-white p-2 text-center">Quantity</th>
-                }
-                {
-                    displayColumns?.materialLabour && <>
-                        <th className="text-white p-2 text-center">Material Cost</th>
-                        <th className="text-white p-2 text-center">Labour Cost</th>
-                    </>
-                }
-                {
-                    displayColumns?.markup && <th className="text-white p-2 text-center">Markup</th>
-                }
-                <th className="text-white text-right p-2 pr-2">Amount</th>
+            <thead>
+                <tr>
+                    <th className="text-left text-white p-2 w-2/5">Task</th>
+                    {
+                        displayColumns?.quantities && <th className="text-white p-2 text-center">Quantity</th>
+                    }
+                    {
+                        displayColumns?.materialpluslabourcost && <>
+                            <th className="text-white p-2 text-center">Material Cost</th>
+                            <th className="text-white p-2 text-center">Labour Cost</th>
+                        </>
+                    }
+                    {
+                        displayColumns?.markupamount && <th className="text-white p-2 text-center">Markup</th>
+                    }
+                    <th className="text-white text-right p-2 pr-2">Amount</th>
+                </tr>
             </thead>
             <tbody>
-                {data.map((item, index) => (
+                {quotereview?.map((item, index) => (
                     <>
                         <tr>
                             <td colspan={getColSpan1()} className="font-semibold text-lg pt-4">
-                                {item.item}
+                                {item.task?.name}
                             </td>
                             <td className="text-center pr-2">
                                 {
-                                    ["perCategories", "perCategoriesPlusTask"]?.includes(amountDisplayType) && <div className="text-right font-bold py-2">{item.amount}</div>
+                                    ["perCategories", "perCategoriesPlusTask"]?.includes(amountDisplayType) && <div className="text-right font-bold py-2">${item.totalcost}</div>
                                 }
                             </td>
                         </tr>
-                        {item.taskList &&
-                            item.taskList.map((task, taskIndex) => (
+                        {item.subtasks &&
+                            item.subtasks.map((task, taskIndex) => (
                                 <tr key={taskIndex} className='w-full py-4 border-b'>
-                                    <td className='py-4'>{task?.title}</td>
+                                    <td className='py-4'>{task?.name}</td>
                                     {
-                                        displayColumns?.quantity && <td className='py-4 text-center'>{task?.quantity} {task?.quantityType}</td>
+                                        displayColumns?.quantities && <td className='py-4 text-center'>{task?.quantity} {task?.quantitytype}</td>
                                     }
                                     {
-                                        displayColumns?.materialLabour && <td className='py-4 text-center'>${task?.material || 0}</td>
+                                        displayColumns?.materialpluslabourcost && <td className='py-4 text-center'>${task?.material || 0}</td>
                                     }
                                     {
-                                        displayColumns?.materialLabour && <td className='py-4 text-center'>${task?.labour || 0}</td>
+                                        displayColumns?.materialpluslabourcost && <td className='py-4 text-center'>${task?.labour || 0}</td>
                                     }
                                     {
-                                        displayColumns?.markup && <td className='py-4 text-center'>${task?.markup || 0}</td>
+                                        displayColumns?.markupamount && <td className='py-4 text-center'>${task?.markup || 0}</td>
                                     }
-                                    <td className="text-right pr-2">
-                                        {["perCategoriesPlusTask"]?.includes(amountDisplayType) && task?.amount}
-                                    </td>
+
+                                    {["perCategoriesPlusTask"]?.includes(amountDisplayType) && <td className="text-right pr-2">${task?.totalcost}</td>}
                                 </tr>
                             ))}
                     </>
@@ -547,7 +550,7 @@ export const CostSummary = ({ amountDisplayType, displayColumns }) => {
                 <div className="w-1/3">
                     <div className="flex justify-between items-center mb-3">
                         <div className="text-gray-700">Subtotal:</div>
-                        <div className="text-gray-700">$108,264.80</div>
+                        <div className="text-gray-700">${quote?.subtotalbill}</div>
                     </div>
                     <div className="flex justify-between items-center mb-3">
                         <div className="text-gray-700">GST 5%:</div>
@@ -567,21 +570,23 @@ export const CostSummary = ({ amountDisplayType, displayColumns }) => {
             <h1 className='text-xl'>Payment schedule</h1>
             <div className="flex flex-row justify-start mt-2">
                 <table className="w-1/3">
-                    <tr className="">
-                        <td className="text-gray-700">Beginning of project</td>
-                        <td className="text-gray-700">40%</td>
-                        <td className="text-gray-700">$15,108.80</td>
-                    </tr>
-                    <tr className="">
-                        <td className="text-gray-700">Middle of project</td>
-                        <td className="text-gray-700">40%</td>
-                        <td className="text-gray-700">$15,108.80</td>
-                    </tr>
-                    <tr className="">
-                        <td className="text-gray-700">End of project</td>
-                        <td className="text-gray-700">20%</td>
-                        <td className="text-gray-700">$15,108.80</td>
-                    </tr>
+                    <tbody>
+                        <tr className="">
+                            <td className="text-gray-700">Beginning of project</td>
+                            <td className="text-gray-700">40%</td>
+                            <td className="text-gray-700">$15,108.80</td>
+                        </tr>
+                        <tr className="">
+                            <td className="text-gray-700">Middle of project</td>
+                            <td className="text-gray-700">40%</td>
+                            <td className="text-gray-700">$15,108.80</td>
+                        </tr>
+                        <tr className="">
+                            <td className="text-gray-700">End of project</td>
+                            <td className="text-gray-700">20%</td>
+                            <td className="text-gray-700">$15,108.80</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>

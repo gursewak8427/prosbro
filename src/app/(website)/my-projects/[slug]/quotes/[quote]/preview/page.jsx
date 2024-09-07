@@ -23,11 +23,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
 import { usePathname, useRouter } from 'next/navigation';
 import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, EditOutlined } from '@mui/icons-material';
-import { Button, Switch, Tab, Tabs } from '@mui/material';
+import { Button, Tab, Tabs } from '@mui/material';
 import { TaskItems } from '../../_components/TaskItems';
 import { CostSummary } from '../../_components/CostSummary';
-import { FetchClientQuote, FetchClientQuoteOptions, FetchClientQuoteReview, FetchQuoteAddinformation } from '@/app/redux/Project/ProjectSlice';
+import { FetchClientQuote, FetchClientQuoteOptions, FetchClientQuoteReview, FetchQuoteAddinformation, UpdateClientQuoteOptions } from '@/app/redux/Project/ProjectSlice';
 import { FetchDefQuotetaxes } from '@/app/redux/AuthSlice';
+import { switchStyles } from '@/app/utils';
+import { Switch } from '@mui/joy';
 
 
 
@@ -56,15 +58,16 @@ function Page() {
   const quotereview = useSelector(store => store.projectData.quotereview);
   const quoteadditionalinformation = useSelector(store => store.projectData.quoteadditionalinformation);
   const taxes = useSelector(store => store.userData.defaultquotetaxes);
+  const quoteoptions = useSelector(store => store.projectData.quoteoptions);
 
   const pathSegments = pathname.split("/");
   const slug = pathSegments[pathSegments.length - 2];
 
   const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0]?.value)
   const [displayColumns, setDisplayColumns] = useState({
-    quantity: false,
-    materialLabour: false,
-    markup: false,
+    quantities: false,
+    materialpluslabourcost: false,
+    markupamount: false,
   })
 
   const router = useRouter()
@@ -75,31 +78,24 @@ function Page() {
     { id: 3, label: "End of project", percentage: 20, amount: 6606.21 },
   ]);
 
-  const addPayment = () => {
-    setPayments([
-      ...payments,
-      { id: Date.now(), label: "", percentage: 0, amount: 0 },
-    ]);
-  };
-
-  const removePayment = (id) => {
-    setPayments(payments.filter((payment) => payment.id !== id));
-  };
-
-  const handleLabelChange = (id, newLabel) => {
-    setPayments(
-      payments.map((payment) =>
-        payment.id === id ? { ...payment, label: newLabel } : payment
-      )
-    );
-  };
+  useEffect(() => {
+    setDisplayColumns({ ...quoteoptions })
+    setAmountDisplayType(quoteoptions?.amount)
+  }, [JSON.stringify(quoteoptions)])
 
 
-  const handleChange = e => {
+
+  const handleChange = (e, name) => {
     setDisplayColumns({
       ...displayColumns,
-      [e.target.name]: e.target.checked
+      [name]: e.target.checked
     })
+    console.log({ quoteoptions });
+
+    dispatch(UpdateClientQuoteOptions({
+      id: quoteoptions?.id,
+      [name]: e.target.checked
+    }))
   }
 
   useEffect(() => {
@@ -204,13 +200,20 @@ function Page() {
               <select
                 value={amountDisplayType}
                 name='amountDisplayType'
-                onChange={e => setAmountDisplayType(e.target.value)}
+                onChange={e => {
+                  setAmountDisplayType(e.target.value)
+                  dispatch(UpdateClientQuoteOptions({
+                    id: quoteoptions?.id,
+                    amount: e.target.value
+                  }))
+                }
+                }
                 id="amount"
                 className="mt-1 block bg-gray-100 border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
                 {
-                  amountDisplayTypeOptions?.map(option => {
-                    return <option value={option?.value}>{option?.label}</option>
+                  amountDisplayTypeOptions?.map((option, index) => {
+                    return <option key={`option-${index}`} value={option?.value}>{option?.label}</option>
                   })
                 }
                 {/* Add more options as needed */}
@@ -221,15 +224,15 @@ function Page() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Quantities</span>
-                <Switch name='quantity' defaultChecked={displayColumns?.quantity} onChange={handleChange} />
+                <Switch checked={displayColumns?.quantities} onChange={(e) => handleChange(e, "quantities")} sx={switchStyles} />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Material + labor cost</span>
-                <Switch name='materialLabour' defaultChecked={displayColumns?.materialLabour} onChange={handleChange} />
+                <Switch checked={displayColumns?.materialpluslabourcost} onChange={(e) => handleChange(e, "materialpluslabourcost")} sx={switchStyles} />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gray-700">Markup amount</span>
-                <Switch name='markup' defaultChecked={displayColumns?.markup} onChange={handleChange} />
+                <Switch checked={displayColumns?.markupamount} onChange={(e) => handleChange(e, "markupamount")} sx={switchStyles} />
               </div>
             </div>
           </div>
@@ -272,7 +275,7 @@ function Page() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

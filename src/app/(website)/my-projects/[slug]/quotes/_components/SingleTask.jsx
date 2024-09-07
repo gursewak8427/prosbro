@@ -476,12 +476,14 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
                 <div className='w-full'>
                     <table className='w-full'>
                         <thead className='border-b border-gray-400'>
-                            <td className='p-1 text-sm'>Task</td>
-                            <td className='p-1 text-sm text-center'>Quantity</td>
-                            <td className='p-1 text-sm text-center'>Material</td>
-                            <td className='p-1 text-sm text-center'>Labour</td>
-                            <td className='p-1 text-sm text-center'>Markup</td>
-                            <td className='p-1 text-sm text-right'>Total</td>
+                            <tr>
+                                <th className='p-1 text-sm'>Task</th>
+                                <th className='p-1 text-sm text-center'>Quantity</th>
+                                <th className='p-1 text-sm text-center'>Material</th>
+                                <th className='p-1 text-sm text-center'>Labour</th>
+                                <th className='p-1 text-sm text-center'>Markup</th>
+                                <th className='p-1 text-sm text-right'>Total</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {
