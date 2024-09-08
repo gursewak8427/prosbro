@@ -327,7 +327,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, setTotalPrice, t
             {
                 isEditable ?
                     <div className="flex flex-col items-center">
-                        <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>{fd?.materialprice}</label>
+                        <label htmlFor="" className='bg-slate-200 text-xs w-32 text-center px-2 py-1 rounded'>{fd?.materialprice}</label>
                         <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='$1' name='material' defaultValue={fd?.material} onBlur={handleChange} />
                         <p className='text-sm mt-2'>/{qtyType}</p>
                     </div> :
@@ -385,7 +385,7 @@ export const SingleSubTask = ({ setQuoteSubTotal, subtotalbill, setTotalPrice, t
         <td className='p-1 py-4'>
             {
                 isEditable ? <div className="flex flex-col items-center">
-                    <label htmlFor="" className='bg-slate-400 text-xs w-32 text-center px-2 py-1 rounded'>${fd?.markup}</label>
+                    <label htmlFor="" className='bg-slate-200 text-xs w-32 text-center px-2 py-1 rounded'>${fd?.markup}</label>
                     <input type="text" className="border text-center rounded py-1 w-12 mt-2" placeholder='0%' name='markuppercentage' defaultValue={fd?.markuppercentage} onBlur={handleChange} />
                 </div> :
                     <div className="flex flex-row justify-center">

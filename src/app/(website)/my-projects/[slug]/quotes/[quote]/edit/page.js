@@ -85,7 +85,7 @@ function Page() {
     }
   }, [profile])
   return (
-    <div className='p-8'>
+    <div className='p-8 flex flex-col gap-4'>
       {/* Category Popup */}
       <Transition appear show={categoryPopup} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={() => setcategoryPopup(false)}>
@@ -161,8 +161,8 @@ function Page() {
         </Dialog>
       </Transition>
 
-      <div className='p-2 mt-5 mb-5 w-1/2'>
-        <h1 className='text-3xl font-bold mb-2'>
+      <div className='w-1/2 flex flex-col gap-3'>
+        <h1 className='text-3xl font-black tracking-tight'>
           <input
             className='w-full bg-transparent'
             type="text"
@@ -175,7 +175,7 @@ function Page() {
         </h1>
         <p className='text-gray-600 '>
           <input
-            className='w-full bg-transparent'
+            className='w-full bg-transparent text-md'
             type="text"
             name="description"
             id="description"
@@ -184,22 +184,23 @@ function Page() {
             onBlur={updateQuotename}
           />
         </p>
+        <div className='flex items-center'>
+          <div className='cursor-pointer hover:text-primary-dark text-primary border-r-2 border-gray-400 pr-2 flex flex-row items-center justify-center'><PersonIcon className='text-gray-500 mr-1' /> {quote?.client?.name}</div>
+          {/* <div className='cursor-pointer hover:text-primary-dark text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><LocationOnIcon className='text-gray-500 mr-1' /><Link href={'/'}>Location</Link></div> */}
+          <div className='cursor-pointer hover:text-primary-dark text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><EmailIcon className='text-gray-500 mr-1' /> {quote?.client?.email}</div>
+          <div className='cursor-pointer hover:text-primary-dark text-primary px-2 flex flex-row items-center justify-center'><CallIcon className='text-gray-500 mr-1' /> {quote?.client?.mobile} </div>
+        </div>
       </div>
 
-      <div className='flex mr-2 '>
-        <div className='text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><PersonIcon className='text-gray-500 mr-1' /> {quote?.client?.name}</div>
-        {/* <div className='text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><LocationOnIcon className='text-gray-500 mr-1' /><Link href={'/'}>Location</Link></div> */}
-        <div className='text-primary border-r-2 border-gray-400 px-2 flex flex-row items-center justify-center'><EmailIcon className='text-gray-500 mr-1' /> {quote?.client?.email}</div>
-        <div className='text-primary px-2 flex flex-row items-center justify-center'><CallIcon className='text-gray-500 mr-1' /> {quote?.client?.mobile} </div>
-      </div>
 
-      <div className='flex gap-5 mt-5 mb-5 '>
+
+      <div className='flex gap-5 mt-6 items-start justify-start relative'>
         <div className='w-9/12'>
           <div className='flex justify-between items-center'>
-            <div className='flex justify-between gap-5'>
-              <button onClick={() => setcategoryPopup(true)} className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><AddIcon /> Add a category</button>
-              <button className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><BookIcon /> Save as new template</button>
-              <button className='px-2 py-1 border border-gray-500 rounded-lg text-sm text-gray-600 hover:bg-gray-100'><PaidIcon /> Sub. price request</button>
+            <div className='flex justify-between gap-4'>
+              <button onClick={() => setcategoryPopup(true)} className='px-4 py-2 border border-gray-700 rounded-xl text-sm text-gray-700 bg-white shadow-md hover:bg-gray-200'><AddIcon /> Add a category</button>
+              <button className='px-4 py-2 border border-gray-700 rounded-xl text-sm text-gray-700 bg-white shadow-md hover:bg-gray-200'><BookIcon /> Save as new template</button>
+              <button className='px-4 py-2 border border-gray-700 rounded-xl text-sm text-gray-700 bg-white shadow-md hover:bg-gray-200'><PaidIcon /> Sub. price request</button>
             </div>
             <div>
               <button className='text-sm text-primary'><KeyboardArrowDownIcon />Expand all </button>
@@ -208,8 +209,7 @@ function Page() {
           </div>
           <TaskItems setQuoteSubTotal={setQuoteSubTotal} quoteId={quote?.id} subtotalbill={quote?.subtotalbill} data={quote?.tasks} isEditable={true} />
         </div>
-
-        <div className="w-3/12 flex flex-col p-4">
+        <div className="w-3/12 flex flex-col p-2 sticky top-5">
           <div className='w-full bg-white py-4 px-4 rounded-lg shadow-md h-96'>
             <h2 className='font-semibold text-sm'>Markup on quote</h2>
             <h2 className='text-sm text-primary'>Edit on quote %</h2>

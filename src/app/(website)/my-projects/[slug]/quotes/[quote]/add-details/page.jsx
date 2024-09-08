@@ -4,9 +4,11 @@ import ErrorIcon from '@mui/icons-material/Error';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useDispatch, useSelector } from 'react-redux';
 import { usePathname, useRouter } from 'next/navigation';
-import { DeleteOutline } from '@mui/icons-material';
+import { DeleteOutline, Upload } from '@mui/icons-material';
 import { CreateQuotePaySchedule, DeleteQuotePaySchedule, FetchClientQuote, FetchQuoteAddinformation, UpdateQuoteAddinformation, UpdateQuotePaySchedule } from '@/app/redux/Project/ProjectSlice';
 import { FetchDefQuotetaxes } from '@/app/redux/AuthSlice';
+import { Card } from '@mui/material';
+import { FaPlus } from 'react-icons/fa';
 
 
 function Page() {
@@ -137,33 +139,30 @@ function Page() {
 
   return (
     <div className='p-8'>
-      <div className='p-2 mt-5 mb-5 w-1/2'>
-        <h1 className='font-bold mb-2'>Payment Schedule</h1>
-      </div>
-
-      <div className='flex gap-5 mt-5 mb-5 '>
+      <div className='flex gap-5'>
         <div className='w-9/12'>
-          <div className="bg-gray-100 p-4 rounded-lg">
-            <div className="bg-white p-4">
+          <div className="rounded-lg shadow-sm space-y-6 flex flex-col gap-4">
+            <Card className="bg-white p-4 flex flex-col gap-3 items-start justify-start">
+              <h1 className='text-md font-bold'>Payment Schedule</h1>
               {payments.map((payment, index) => (
                 <div
                   key={index}
-                  className="flex w-3/4 items-center mb-3 space-x-2 border rounded p-2 "
+                  className="flex w-3/4 items-center space-x-2 rounded"
                 >
                   <input
                     type="text"
                     value={payment.name}
                     name='name'
                     onChange={(e) => handleLabelChange(payment.id, e)}
-                    className="flex-1 p-2 border border-gray-300 rounded focus:ring focus:ring-blue-500"
+                    className="flex-1 p-2 px-4 border border-gray-300 rounded outline-primary"
                     onBlur={() => { handlePaymentsScheduleUpdate(payment.id) }}
                   />
                   <input
-                    type="number"
+                    type="text"
                     name='number'
-                    value={payment.number}
+                    value={`${payment.number}`}
                     onChange={(e) => handleLabelChange(payment.id, e)}
-                    className="w-20 p-2 text-right border border-gray-300 rounded focus:ring focus:ring-blue-500"
+                    className="w-20 p-2 border border-gray-300 rounded outline-primary text-center"
                     onBlur={() => { handlePaymentsScheduleUpdate(payment.id) }}
                   />
                   <span className="w-28 text-right">${payment.amount.toFixed(2)}</span>
@@ -177,18 +176,18 @@ function Page() {
               ))}
               <button
                 onClick={addPayment}
-                className="mt-3 p-2 bg-gray-200 rounded hover:bg-gray-300"
+                className="p-2 bg-white border-2 border-gray-300 rounded hover:bg-gray-200 flex items-center gap-2"
               >
-                + Add payment
+                <FaPlus />
+                <span>Add payment</span>
               </button>
-            </div>
-          </div>
-          <div className="bg-gray-50 p-6 rounded-lg shadow-sm space-y-6">
+            </Card>
+
             {/* Construction Schedule */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Construction schedule</label>
+            <Card className="bg-white p-4 flex flex-col gap-3 items-start justify-start">
+              <h1 className='text-md font-bold'>Construction schedule</h1>
               <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-primary"
                 placeholder="Give an estimate date of start and duration"
                 rows="4"
                 name='constructionschedule'
@@ -196,15 +195,15 @@ function Page() {
                 onChange={handleAddiDetailsChange}
                 onBlur={handleAddiDetailsUpdate}
               />
-            </div>
+            </Card>
 
             {/* Quote Validity */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Quote validity</label>
+            <Card className="bg-white p-4 flex flex-col gap-3 items-start justify-start">
+              <h1 className='text-md font-bold'>Quote validity</h1>
               <div className="flex items-center space-x-4 mb-2">
                 <input
                   type="date"
-                  className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="p-3 border border-gray-300 rounded-lg focus:outline-primary"
                   value={addinfor?.quotevalidity}
                   onChange={handleAddiDetailsChange}
                   name='quotevalidity'
@@ -215,42 +214,43 @@ function Page() {
               <p className="text-gray-500 text-sm">
                 Your client will be notified by SMS and Email 2 days before and the same day it expires
               </p>
-            </div>
+            </Card>
 
             {/* Terms and Conditions */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Terms and conditions</label>
+            <Card className="bg-white p-4 flex flex-col gap-3 items-start justify-start">
+              <h1 className='text-md font-bold'>Terms and conditions</h1>
               <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-primary"
                 rows="6"
                 value={addinfor?.tc}
                 onChange={handleAddiDetailsChange}
                 name='tc'
                 onBlur={handleAddiDetailsUpdate}
               />
-              <div className="flex items-center mt-2">
+              <div className="flex items-center mt-2 select-none">
                 <input
                   type="checkbox"
                   id="save-template"
                   className="form-checkbox h-4 w-4 text-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="save-template" className="ml-2 text-gray-700">Save conditions as template</label>
+                <label htmlFor="save-template" className="ml-2 text-gray-700 cursor-pointer">Save conditions as template</label>
               </div>
-            </div>
+            </Card>
 
             {/* Attached Documents */}
-            <div>
-              <label className="block text-gray-700 font-medium mb-2">Attached documents</label>
+            <Card className="bg-white p-4 flex flex-col gap-3 items-start justify-start">
+              <h1 className='text-md font-bold'>Attached documents</h1>
               <input type="file" name="attachement-file" id="attachement-file-id" hidden />
-              <label htmlFor='attachement-file-id' className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex justify-center items-center text-gray-400 cursor-pointer">
-                <div className="text-center">
-                  <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path>
-                  </svg>
-                  <p>+ Drop new files or click to import</p>
+              <label htmlFor='attachement-file-id' className="w-full border-2 border-dashed border-gray-300 rounded-lg p-6 flex justify-center items-center text-gray-400 cursor-pointer">
+                <div className="text-center flex flex-col gap-3 items-center justify-center">
+                  <Upload className='text-gray-400 text-[40px]'/>
+                  <div className='flex items-center gap-2'>
+                    <FaPlus />
+                    <span>Drop new files or click to import</span>
+                  </div>
                 </div>
               </label>
-            </div>
+            </Card>
           </div>
         </div>
 

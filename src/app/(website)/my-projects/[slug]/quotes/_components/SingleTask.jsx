@@ -360,7 +360,6 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
             </Dialog>
         </Transition>
 
-
         {/* Delete Popup SubTask*/}
         <Transition appear show={deletePopupIndex2 != -1} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={(e) => handleDeletePopup(-1, e)}>
@@ -420,8 +419,7 @@ export const SingleTask = ({ setQuoteSubTotal, subtotalbill, quoteId, setDeleteP
             </Dialog>
         </Transition>
 
-
-        <Accordion>
+        <Accordion className='rounded-xl bg-white shadow-none border-2 border-gray-200 py-2'>
             <AccordionSummary
                 expandIcon={<KeyboardArrowDownIcon className='text-primary' />}
                 aria-controls="panel1-content"

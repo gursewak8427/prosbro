@@ -47,7 +47,7 @@ export default function QuoteLayout({ children }) {
                                     router.back()
                                     break;
                             }
-                        }} className='text-lg font-semibold'><ArrowBackIosIcon /> Back</button>
+                        }} className='text-sm font-semibold'><ArrowBackIosIcon /> Back</button>
                     }
                 </div>
 
@@ -59,7 +59,7 @@ export default function QuoteLayout({ children }) {
                             return (
                                 <Step key={label} {...stepProps} className='flex flex-col'>
                                     <StepLabel {...labelProps}>
-                                        <div className='font-semibold'>
+                                        <div className='font-semibold text-sm'>
                                             {label}
                                         </div>
                                     </StepLabel>
@@ -69,7 +69,7 @@ export default function QuoteLayout({ children }) {
                     </Stepper>
                 </div>
                 <div className='text-primary'>
-                    <button className='text-lg font-semibold'>Save and exit</button>
+                    <button className='text-sm font-semibold'>Save and exit</button>
                 </div>
             </div>
             <hr className='mt-4' />
