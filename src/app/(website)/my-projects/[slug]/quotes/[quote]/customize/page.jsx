@@ -114,9 +114,9 @@ function Page() {
             {/* Cover image and title section */}
             <div className="relative bg-white rounded-lg overflow-hidden shadow-lg mb-8">
               <img
-                src="https://via.placeholder.com/1200x400" // Replace with your image URL
+                src="https://res.cloudinary.com/dzq7uzhji/image/upload/cover_exterior" // Replace with your image URL
                 alt="Cover"
-                className="w-full h-56 object-cover"
+                className="w-full h-[320px] object-cover"
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
                 <h1 className="text-white text-2xl md:text-3xl font-bold">

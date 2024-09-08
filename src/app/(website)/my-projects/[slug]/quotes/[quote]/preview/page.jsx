@@ -23,13 +23,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { nextQuoteStepperFormIndex } from '@/app/redux/CommonSlice';
 import { usePathname, useRouter } from 'next/navigation';
 import { Bookmark, BookmarkAdd, BookmarkBorderOutlined, BookmarkOutlined, ContentCopy, CopyAll, DeleteOutline, EditOutlined } from '@mui/icons-material';
-import { Button, Tab, Tabs } from '@mui/material';
+import { Box, Button, Tab, Tabs } from '@mui/material';
 import { TaskItems } from '../../_components/TaskItems';
 import { CostSummary } from '../../_components/CostSummary';
 import { FetchClientQuote, FetchClientQuoteOptions, FetchClientQuoteReview, FetchQuoteAddinformation, UpdateClientQuoteOptions } from '@/app/redux/Project/ProjectSlice';
 import { FetchDefQuotetaxes } from '@/app/redux/AuthSlice';
 import { switchStyles } from '@/app/utils';
 import { Switch } from '@mui/joy';
+import { TaskItemsView } from '../../_components/TaskItemsView';
 
 
 
@@ -118,8 +119,8 @@ function Page() {
   return (
     <div className='p-8'>
       <div className='flex flex-row items-center'>
-        <Button onClick={() => setViewType(VIEW_TYPES?.CLIENT)} variant='text' className={`${viewType == VIEW_TYPES.CLIENT && "font-bold border-b-2 border-black"} mr-3 cursor-pointer text-black`}>Client View</Button>
-        <Button onClick={() => setViewType(VIEW_TYPES?.YOUR)} variant='text' className={`${viewType == VIEW_TYPES.YOUR && "font-bold border-b-2 border-black"} cursor-pointer text-black`}>Your View</Button>
+        <Box onClick={() => setViewType(VIEW_TYPES?.CLIENT)} className={`text-sm  pb-1 ${viewType == VIEW_TYPES.CLIENT ? "font-bold border-b-4 border-primary" : "border-b-4 border-transparent"} mr-3 cursor-pointer text-black`}>Client View</Box>
+        <Box onClick={() => setViewType(VIEW_TYPES?.YOUR)} className={`text-sm  pb-1 ${viewType == VIEW_TYPES.YOUR ? "font-bold border-b-4 border-primary" : "border-b-4 border-transparent"} cursor-pointer text-black`}>Your View</Box>
       </div>
       <div className='flex gap-5 mt-5 mb-5 relative items-start justify-start'>
         <div className='w-9/12'>
@@ -128,9 +129,9 @@ function Page() {
               viewType == VIEW_TYPES.CLIENT &&
               <div className="relative bg-white rounded-lg overflow-hidden shadow-lg mb-8">
                 <img
-                  src="https://via.placeholder.com/1200x400" // Replace with your image URL
+                  src="https://res.cloudinary.com/dzq7uzhji/image/upload/cover_exterior" // Replace with your image URL
                   alt="Cover"
-                  className="w-full h-56 object-cover"
+                  className="w-full h-[320px] object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
                   <h1 className="text-white text-2xl md:text-3xl font-bold">
@@ -164,7 +165,7 @@ function Page() {
             </div>
 
             {/* Client, Project Address, and Billing Address section */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white p-4 rounded-lg shadow-lg">
                 <h3 className="font-semibold">Client</h3>
                 <p>test</p>
@@ -183,12 +184,9 @@ function Page() {
           </div>
           {
             viewType == VIEW_TYPES.YOUR &&
-            <TaskItems isEditable={false} />
+            <TaskItemsView data={quote?.tasks} />
           }
-          {
-            viewType == VIEW_TYPES.CLIENT &&
-            <CostSummary isEditable={false} amountDisplayType={amountDisplayType} displayColumns={displayColumns} />
-          }
+          <CostSummary isEditable={false} amountDisplayType={amountDisplayType} displayColumns={displayColumns} isYourView={viewType == VIEW_TYPES.YOUR} />
         </div>
 
         <div className='w-3/12 sticky top-5'>
