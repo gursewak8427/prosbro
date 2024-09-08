@@ -1,5 +1,7 @@
 "use client"
 import { FetchBusniessProfile } from "@/app/redux/AuthSlice";
+import axiosInstance from "@/app/redux/AxiosInstance";
+import { showToastPromise, updateToast } from "@/app/redux/toastSlice";
 import { AccountBalance, Check, CheckCircleRounded } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,9 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 export const Business = () => {
     const dispatch = useDispatch();
     const profile = useSelector(store => store.userData.busniessprofile);
+    const toastId = useSelector((state) => state.toast.toastId);
     const [taxNumbers, setTaxNumbers] = useState([]);
     const [form, setForm] = useState({})
     const [basicformbtn, setBasicformbtn] = useState(false);
+    const [taxformbtn, setTaxformbtn] = useState(false);
 
     const addTaxNumber = () => {
         setTaxNumbers([...taxNumbers, { name: '', number: '' }]);
@@ -25,6 +29,7 @@ export const Business = () => {
             i === index ? { ...tax, [field]: value } : tax
         );
         setTaxNumbers(updatedTaxNumbers);
+        setTaxformbtn(true);
     };
 
     const handleChangeBasicform = (e) => {
@@ -36,11 +41,88 @@ export const Business = () => {
         ));
         setBasicformbtn(true);
     }
-    const handleBasicformsubmit = () => {
-
+    const handleBasicformsubmit = async () => {
         const data = form;
         delete data.tax;
-        console.log(data);
+        delete data.icon;
+
+        const requestPromise = axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/fetchbusniessprofile/`, data)
+
+        dispatch(showToastPromise({
+            promise: requestPromise,
+            messages: {
+                pending: 'Updating Busniess Profile...',
+                success: 'Busniess Profile Updated Successfully!',
+                error: 'Failed to update please contact service team!!!',
+            }
+        }));
+
+        try {
+            // Optionally update the toast
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Data loaded!', type: 'success', isLoading: false }
+            }));
+        } catch (error) {
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Failed to load data!', type: 'error', isLoading: false }
+            }));
+        }
+    }
+
+    const handletaxdeleted = async (id) => {
+
+        const requestPromise = axiosInstance.delete(`${process.env.NEXT_PUBLIC_API_URL}/busniesstaxprofile/?id=${id}`)
+
+        dispatch(showToastPromise({
+            promise: requestPromise,
+            messages: {
+                pending: 'Deleting tax entry...',
+                success: 'Tax Entry Deleted Successfully!',
+                error: 'Failed to delete please contact service team!!!',
+            }
+        }));
+
+        try {
+            // Optionally update the toast
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Data loaded!', type: 'success', isLoading: false }
+            }));
+        } catch (error) {
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Failed to load data!', type: 'error', isLoading: false }
+            }));
+        }
+    }
+
+    const handletaxaaddupdate = async () => {
+
+        const requestPromise = axiosInstance.put(`${process.env.NEXT_PUBLIC_API_URL}/busniesstaxprofile/`, taxNumbers)
+
+        dispatch(showToastPromise({
+            promise: requestPromise,
+            messages: {
+                pending: 'Adding tax entry...',
+                success: 'Tax Entry Added Successfully!',
+                error: 'Failed to add please contact service team!!!',
+            }
+        }));
+
+        try {
+            // Optionally update the toast
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Data loaded!', type: 'success', isLoading: false }
+            }));
+        } catch (error) {
+            dispatch(updateToast({
+                toastId,
+                options: { render: 'Failed to load data!', type: 'error', isLoading: false }
+            }));
+        }
     }
     useEffect(() => {
         if (!Object.keys(profile).length) {
@@ -174,7 +256,7 @@ export const Business = () => {
                         />
                     </div>
                     <button
-                        onClick={() => removeTaxNumber(index)}
+                        onClick={() => { tax?.name ? handletaxdeleted(tax.id) & removeTaxNumber(index) : removeTaxNumber(index); }}
                         className="text-primary hover:text-primary-dark text-sm mt-5"
 
                     >
@@ -191,14 +273,16 @@ export const Business = () => {
             </button>
             <div>
                 <button
-                    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                    className={`px-3 py-2 rounded-md ${taxformbtn ? 'bg-primary text-white cursor-pointer' : 'bg-gray-300 text-gray-700 cursor-not-allowed'}`}
+                    disabled={!taxformbtn}
+                    onClick={handletaxaaddupdate}
                 >
                     Save
                 </button>
             </div>
-        </div>
+        </div >
 
-        <div className='w-full p-4 bg-white rounded-lg shadow-md'>
+        {/* <div className='w-full p-4 bg-white rounded-lg shadow-md'>
             <h2 className="text-2xl font-semibold mb-6">Bank account</h2>
             <div className="p-4 bg-green-200 bg-opacity-45 border border-green-400 rounded-lg text-sm flex flex-col gap-2">
                 <div className="flex items-center gap-1">
@@ -214,7 +298,7 @@ export const Business = () => {
                 </div>
                 <a href="#" className="text-gray-700 underline">Edit</a>
             </div>
-        </div>
+        </div> */}
     </>)
 }
 

@@ -60,6 +60,7 @@ function Page() {
   const slug = pathSegments[pathSegments.length - 2];
 
   const [amountDisplayType, setAmountDisplayType] = useState(amountDisplayTypeOptions[0]?.value)
+  const [fd, setFd] = useState({ name: quote?.name, description: quote?.description, id: quote?.id })
   const [displayColumns, setDisplayColumns] = useState({
     quantities: false,
     materialpluslabourcost: false,
@@ -104,6 +105,12 @@ function Page() {
     dispatch(FetchClientQuoteOptions(slug))
   }, [])
 
+  useEffect(() => {
+    if (Object.keys(quote).length) {
+      setFd({ name: quote?.name, description: quote?.description, id: quote?.id })
+    }
+  }, [quote])
+
 
 
   return (
@@ -120,9 +127,9 @@ function Page() {
               />
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center flex-col">
                 <h1 className="text-white text-2xl md:text-3xl font-bold">
-                  Kitchen Remodel - Standard
+                  {fd?.name}
                 </h1>
-                <p className="text-gray-200">Renovation of a standard low to mid-end kitchen</p>
+                <p className="text-gray-200">{fd?.description}</p>
                 <button className="mt-4 bg-white text-gray-800 py-2 px-4 rounded-lg shadow hover:bg-gray-100" onClick={() => {
                   setTitleEditModel(!titleEditModel)
                 }}>
@@ -130,12 +137,12 @@ function Page() {
                   Edit title
                 </button>
               </div>
-              <button className="absolute top-4 right-4 bg-white text-gray-800 py-1 px-3 rounded-lg shadow hover:bg-gray-100" onClick={() => {
+              {/* <button className="absolute top-4 right-4 bg-white text-gray-800 py-1 px-3 rounded-lg shadow hover:bg-gray-100" onClick={() => {
                 setCoverImageModel(!coverImageModel)
               }}>
                 <EditOutlined />
                 Edit cover image
-              </button>
+              </button> */}
             </div>
 
             {/* Company and Project details section */}
@@ -292,7 +299,7 @@ function Page() {
       <BillingAddressModel isModalOpen={billingAddressModel} setIsModalOpen={setBillingAddressModel} />
       <PersonalModel isModalOpen={personalModel} setIsModalOpen={setPersonalModel} />
       <ChangeLogoModel isModalOpen={changeLogoModel} setIsModalOpen={setChangeLogoModel} />
-      <TitleEditModel isModalOpen={titleEditModel} setIsModalOpen={setTitleEditModel} />
+      <TitleEditModel isModalOpen={titleEditModel} setIsModalOpen={setTitleEditModel} setFd={setFd} fd={fd} />
       <CoverImageModel isModalOpen={coverImageModel} setIsModalOpen={setCoverImageModel} />
     </div>
   )

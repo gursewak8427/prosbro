@@ -33,6 +33,7 @@ export const FetchBusniessProfile = createAsyncThunk("FetchBusniessProfile", asy
     }
 });
 
+
 export const FetchProjectProfile = createAsyncThunk("FetchProjectProfile", async (data, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get(`${process.env.NEXT_PUBLIC_API_URL}/fetchprojectprofile/`)
