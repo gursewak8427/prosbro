@@ -536,7 +536,6 @@ export const CostSummary = ({ amountDisplayType, displayColumns, isYourView }) =
         }
 
 
-
         <div className="bg-white p-6 rounded-lg shadow-sm flex flex-col">
             <h1 className='font-bold text-lg text-gray-700'>Payment schedule</h1>
             <div className="flex flex-row justify-start mt-2">

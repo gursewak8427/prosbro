@@ -1,36 +1,163 @@
 "use client";
-import React, { useState, Fragment } from 'react';
+import React, { useEffect, Fragment, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import MenuIcon from "@mui/icons-material/Menu";
+import GridViewIcon from "@mui/icons-material/GridView";
+import MapIcon from "@mui/icons-material/Map";
+import { useDispatch, useSelector } from "react-redux";
+import { Fetchprojects, TotalProjects } from "@/app/redux/Project/ProjectSlice";
+import { useRouter, useSearchParams } from "next/navigation";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ClearIcon from '@mui/icons-material/Clear';
+import { KeyboardArrowUp } from "@mui/icons-material";
 import { Dialog, Transition } from '@headlessui/react';
+import { BilldrQuotes } from "./_tabs/BilldrQuotes";
+import { MyQuotes } from "./_tabs/MyQuotes";
+import { MyCostCatalog } from "./_tabs/MyCostCatalog";
+import { MyCategories } from "./_tabs/MyCategories";
+import { CostCodes } from "./_tabs/CostCodes";
+import { BilldrSchedules } from "./_tabs/BilldrSchedules";
+import { MySchedules } from "./_tabs/MySchedules";
 
 export default function Templates() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selected, setSelected] = useState("");
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    let _tab = searchParams.get("tab")
+
+    console.log({ _tab })
+
+    useEffect(() => {
+        if (_tab) setSelected(_tab)
+    }, [_tab])
+
+    useEffect(() => updateUrl(), [selected])
+
+    const updateUrl = () => {
+        const newUrl = `${window.location.pathname}?tab=${selected}`;
+        window.history.pushState({ path: newUrl }, "", newUrl);
+    };
+
+    const renderTab = () => {
+        switch (selected) {
+            case "builderquotes": return <BilldrQuotes />
+            case "myquotes": return <MyQuotes />
+            case "mycostcatalog": return <MyCostCatalog />
+            case "mycategories": return <MyCategories />
+            case "costcodes": return <CostCodes />
+            case "billdrschedules": return <BilldrSchedules />
+            case "myschedules": return <MySchedules />
+        }
+    }
 
     return (
-        <div className='p-6 flex-1 bg-gray-200 shadow-md'>
-            <div>
-                <h1 className="text-3xl font-bold">Templates</h1>
-                <div className='mt-5 mb-5'>
-                    <ul className=' w-8/12 flex gap-4 border border-b-gray-400'>
-                        <li className='text-gray-700 border-2 border-b-primary'>Billdr templates</li>
-                        <li className='text-gray-700'>My templates</li>
-                        <li className='text-gray-700'>My cost catalog</li>
-                        <li className='text-gray-700'>Categories</li>
-                    </ul>
+        <div className="p-8 h-full min-h-screen flex-1 bg-gray-200 shadow-md">
+            <h1 className="mb-9 flex items-center gap-4 leading-9 whitespace-nowrap text-[2rem] font-bold">Templates & costs</h1>
+
+            {/* Tab List */}
+            <div className="flex flex-col gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-center">
+                    <div className="border-b border-gray-300 w-full md:w-auto">
+                        <ul className="flex flex-wrap gap-4 text-gray-800 text-sm font-medium">
+                            <li
+                                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "builderquotes"
+                                    ? "text-indigo-500 border-primary"
+                                    : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
+                                    }`}
+                                onClick={() => {
+                                    setSelected("builderquotes");
+                                }}
+                            >
+                                Builder quotes
+                            </li>
+                            <li
+                                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "myquotes"
+                                    ? "text-indigo-500 border-primary"
+                                    : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
+                                    }`}
+                                onClick={() => {
+                                    setSelected("myquotes");
+                                }}
+                            >
+                                My quotes
+                            </li>
+
+                            <li
+                                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "mycostcatalog"
+                                    ? "text-indigo-500 border-primary"
+                                    : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
+                                    }`}
+                                onClick={() => {
+                                    setSelected("mycostcatalog");
+                                }}
+                            >
+                                My cost catalog
+                            </li>
+                            <li
+                                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "mycategories"
+                                    ? "text-indigo-500 border-primary"
+                                    : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
+                                    }`}
+                                onClick={() => {
+                                    setSelected("mycategories");
+                                }}
+                            >
+                                My categories
+                            </li>
+                            <li
+                                className={`cursor-pointer border-b-2 pb-2 transition-colors duration-200 ${selected === "costcodes"
+                                    ? "text-indigo-500 border-primary"
+                                    : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
+                                    }`}
+                                onClick={() => {
+                                    setSelected("costcodes");
+                                }}
+                            >
+                                Cost codes
+                            </li>
+                            <li
+                                className={`cursor-pointer  border-b-2  pb-2 transition-colors duration-200   ${selected === "billdrschedules"
+                                    ? "text-indigo-500 border-primary"
+                                    : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
+                                    }`}
+                                onClick={() => {
+                                    setSelected("billdrschedules");
+                                }}
+                            >
+                                Billdr schedules
+                            </li>
+                            <li
+                                className={`cursor-pointer  border-b-2  pb-2 transition-colors duration-200   ${selected === "myschedules"
+                                    ? "text-indigo-500 border-primary"
+                                    : "hover:text-indigo-500 text-gray-600 font-normal border-transparent hover:border-gray-600"
+                                    }`}
+                                onClick={() => {
+                                    setSelected("myschedules");
+                                }}
+                            >
+                                My schedules
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-            <div className='flex'>
+            <div className="flex flex-col">
+                {renderTab()}
+            </div>
+            {/* <div className='flex'>
                 <button
                     className="text-white px-4 py-2 rounded-lg bg-primary hover:bg-indigo-700 duration-200 ml-auto"
                     onClick={() => setIsModalOpen(true)}
                 >
                     + Create a new template
                 </button>
-            </div>
+            </div> */}
 
-            <div className='mt-5 mb-5'>
+            {/* <div className='mt-5 mb-5'>
                 <div className='flex flex-wrap gap-4'>
-                    {/* Template cards */}
                     {[
                         {
                             imgSrc: "https://th.bing.com/th/id/OIP.PUuevUFoxDO5lRMcQBdQnAHaE8?w=280&h=187&c=7&r=0&o=5&pid=1.7",
@@ -81,7 +208,7 @@ export default function Templates() {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> */}
 
             <Transition appear show={isModalOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
