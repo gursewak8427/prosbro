@@ -13,9 +13,9 @@ function page() {
   const dispatch = useDispatch();
   const toastId = useSelector((state) => state.toast.toastId);
   const [activeTab, setActiveTab] = useState('base_template')
-  const [selectedtempletes, setSelectedtempletes] = useState([])
   const [btnstatus, setBtnstatus] = useState(false)
   const [data, setData] = useState([])
+  const [selectedtempletes, setSelectedtempletes] = useState([])
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams()
@@ -103,10 +103,12 @@ function page() {
       setBtnstatus(false)
     }
   }, [selectedtempletes])
+
   useEffect(() => {
     fetchdata(template_tab);
     setActiveTab(template_tab)
   }, [template_tab])
+
   return (
     <>
       <div className='p-6 flex-1 min-h-[85vh] max-h-[85vh] overflow-auto bg-gray-200 shadow-md'>
